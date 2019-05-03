@@ -35,66 +35,65 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         //SAME CLASS YEAR
-        Text(
-          'Class of ${Session.instance.user.classYear}',
-          style: Style.titleStyle,
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
+
         Users.getList(
             follower: false,
             class_year: Session.instance.user.classYear,
-            builder: (List<User> users) => UserCardList(list: users)),
+            builder: (List<User> users) => users.length > 0
+                ? Column(children: <Widget>[
+                    Text(
+                      'Class of ${Session.instance.user.classYear}',
+                      style: Style.titleStyle,
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    UserCardList(list: users),
+                  ])
+                : Container()),
         //SAME MAJOR/MINOR
-        null != Session.instance.user.major
-            ? Text(
-                '${Session.instance.user.major.name} or ${Session.instance.user.minor.name}',
-                style: Style.titleStyle,
-              )
-            : Container(),
-        null != Session.instance.user.major
-            ? SizedBox(
-                height: 20.0,
-              )
-            : Container(),
         null != Session.instance.user.major
             ? Users.getList(
                 follower: false,
                 major_id: Session.instance.user.major.id,
                 minor_id: Session.instance.user.minor.id,
-                builder: (List<User> users) => UserCardList(list: users))
+                builder: (List<User> users) => users.length > 0
+                    ? Column(children: [
+                        Text(
+                          '${Session.instance.user.major.name} or ${Session.instance.user.minor.name}',
+                          style: Style.titleStyle,
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        UserCardList(list: users)
+                      ])
+                    : Container())
             : Container(),
         //SAME SCHOOL
         null != Session.instance.user.school
-            ? Text(
+            ? Users.getList(
+    follower: false,
+    school_id: Session.instance.user.school.id,
+    builder: (List<User> users) => users.length  > 0 ? Column(children : [Text(
                 'Most popular at ${Session.instance.user.school.name}',
                 style: Style.titleStyle,
-              )
-            : Container(),
-        null != Session.instance.user.school
-            ? SizedBox(
+              ), SizedBox(
                 height: 20.0,
-              )
-            : Container(),
-        null != Session.instance.user.school
-            ? Users.getList(
-                follower: false,
-                school_id: Session.instance.user.school.id,
-                builder: (List<User> users) => UserCardList(list: users))
-            : Container(),
+              ),UserCardList(list: users)])
+            : Container()) : Container(),
         //SAME UNIVERSITY
-        Text(
+        Users.getList(
+            follower: false,
+            university_id: Session.instance.user.university.id,
+            builder: (List<User> users) => users.length > 0 ? Column(children : [Text(
           'Most popular at ${Session.instance.user.university.name}',
           style: Style.titleStyle,
         ),
         SizedBox(
           height: 20.0,
         ),
-        Users.getList(
-            follower: false,
-            university_id: Session.instance.user.university.id,
-            builder: (List<User> users) => UserCardList(list: users)),
+        UserCardList(list: users)]) : Container()),
         Hashtags.followed(
             builder: (List<Hashtag> followed) => followed.length == 0
                 ? Container()
@@ -111,13 +110,18 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                         Expanded(
                             child: Dropdown<Hashtag>(
                           icon: Container(
-                            padding: EdgeInsets.only(top : 4),
+                            padding: EdgeInsets.only(top: 4),
                             decoration: BoxDecoration(
                                 color: Style.genZPurple,
-                                borderRadius: BorderRadius.all(Radius.circular(25))),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25))),
                             width: 30,
                             height: 30,
-                            child: Text("#", style: Style.whiteTitle, textAlign: TextAlign.center,),
+                            child: Text(
+                              "#",
+                              style: Style.whiteTitle,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           value: hashtag ?? followed[0],
                           items: followed
@@ -146,16 +150,16 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                     ],
                   )),
         //ALL PLATFORM
-        Text(
+        Users.getList(
+            follower: false,
+            builder: (List<User> users) => users.length > 0 ? Column(children : [Text(
           'Most popular on TWIC',
           style: Style.titleStyle,
         ),
         SizedBox(
           height: 20.0,
         ),
-        Users.getList(
-            follower: false,
-            builder: (List<User> users) => UserCardList(list: users)),
+        UserCardList(list: users)]) : Container()),
       ],
     );
   }
