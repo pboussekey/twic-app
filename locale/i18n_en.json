@@ -1,0 +1,56 @@
+{
+  "welcome": {
+    "step1": {
+      "title": "Discover a Community",
+      "description": "Connect with students at your school and other universities to follow interesting content, build your network, and launch campus activities and projects."
+    },
+    "step2": {
+      "title": "Explore Similar Interests",
+      "description": "Follow your #interests to find out what your peers are thinking and doing about the topics you care about most."
+    },
+    "step3": {
+      "title": "Share Your Passion",
+      "description": "Make posts to share your ideas about any topic, and #tag it so that your community can join in the conversation."
+    },
+    "step4": {
+      "title": "Built on Trust",
+      "description": "TWIC is a secure environment. All of your data on TWIC is encrypted, and none of your data is stored, shared, or sold to anyone."
+    }
+  },
+  "join": {
+    "title": "Join the community",
+    "description": "Find your school below to start creating your TWIC profile.",
+    "schools_placeholder": "Select your school",
+    "email_placeholder": "School email",
+    "pwd_placeholder": "Password",
+    "proceed":"Proceed"
+  },
+  "login": {
+    "title": "Log into your community",
+    "description": "First time using TWIC? Join us here.",
+    "email_placeholder": "School email",
+    "pwd_placeholder": "Password",
+    "proceed":"Login",
+    "forgot_pwd": "I forgot my password."
+  },
+  "forgot_pwd": {
+    "title": "I forgot my password",
+    "description": "First time using TWIC? Join us here.",
+    "email_placeholder": "School email",
+    "proceed":"Send Instructions to reset"
+  },
+  "slider": {
+    "actions": {
+      "next": "Next",
+      "previous": "Previous",
+      "done": "Done"
+    }
+  },
+  "errors":{
+    "empty_email": "You must provide an email",
+    "invalid_email": "You must provide a valid email",
+    "empty_pwd": "You must provide a password",
+    "user_not_found": "User not found",
+    "invalid_pwd": "Invalid password"
+  }
+}
