@@ -10,9 +10,15 @@ export 'package:graphql_flutter/graphql_flutter.dart';
 
 Future<ValueNotifier<GraphQLClient>> getClient() async {
   Session session = Session.instance;
-  HttpLink link = HttpLink(
-      uri: '${DotEnv().env['API_URL']}/api',
-      headers: <String, String>{'Authorization': 'Bearer ${session.token}'});
+  HttpLink httpLink = HttpLink(
+      uri: '${DotEnv().env['API_URL']}/api'
+  );
+
+  final AuthLink authLink = AuthLink(
+    getToken: () => 'Bearer ${session.token}'
+  );
+
+  final Link link = authLink.concat(httpLink as Link);
   return ValueNotifier<GraphQLClient>(
     GraphQLClient(
       link: link,
@@ -35,7 +41,7 @@ Widget query<T extends AbstractModel>(
           document: query.replaceAll('\n', ' '),
           variables: params,
           fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache),
-      builder: (QueryResult result) {
+      builder: (QueryResult result, { VoidCallback refetch }) {
         if (result.loading) {
           return whileLoading ?? Container();
         }
@@ -53,7 +59,7 @@ Mutation mutation(
       options: MutationOptions(
         document: query.replaceAll('\n', ' '),
       ),
-      onCompleted: onCompleted != null ? (QueryResult result) => onCompleted(result) : null,
+      onCompleted: onCompleted != null ? (dynamic result) => onCompleted(result) : null,
       builder: (
         RunMutation runMutation,
         QueryResult result,

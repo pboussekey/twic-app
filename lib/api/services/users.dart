@@ -19,7 +19,7 @@ class Users {
                 nbPosts
                 classYear
                 degree
-                avatar{ name bucketname token }
+                avatar{ id name bucketname token }
                 major{ id name }
                 minor{ id name }
                 school { id, name, university{ id name logo { name bucketname token } } }

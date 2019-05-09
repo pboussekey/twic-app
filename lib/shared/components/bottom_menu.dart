@@ -4,10 +4,11 @@ import 'package:twic_app/pages/home.dart';
 import 'package:twic_app/pages/profile/profile.dart';
 import 'package:twic_app/pages/discover/discover.dart';
 import 'package:twic_app/pages/chat/conversations.dart';
-import 'package:twic_app/pages/create.dart';
+import 'package:twic_app/pages/posts/create.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/api/models/post.dart';
 
 enum ButtonEnum { Home, Discover, Create, Profile, Chat }
 
@@ -67,7 +68,7 @@ class BottomMenu extends StatelessWidget {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => Create())),
+                      builder: (BuildContext context) => CreatePost())),
             ),
             IconButton(
               icon: Avatar(

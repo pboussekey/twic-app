@@ -1,28 +1,21 @@
 import 'abstract_model.dart';
 import 'package:twic_app/api/models/twic_file.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+
+part 'hashtag.g.dart';
+
+@JsonSerializable()
 class Hashtag extends AbstractModel {
-  int id;
   String name;
   int nbfollowers;
+  @JsonKey(fromJson: AbstractModel.parseBool)
   bool followed;
   TwicFile picture;
 
-  Hashtag.fromJson(Map<String, dynamic> data) {
-    id = int.parse(data['id']);
-    nbfollowers = data['nbfollowers'] ?? 0;
-    name = data['name'];
-    followed = data['followed'] ?? false;
-    if (null != data['picture']) {
-      picture = TwicFile.fromJson(data['picture']);
-    }
-  }
+  Hashtag({id, this.name, this.nbfollowers, this.followed, this.picture}) : super(id : id);
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'followed': followed,
-        'nbfollowers': nbfollowers,
-        'picture': null != picture ? picture.toJson() : null,
-      };
+  factory Hashtag.fromJson(Map<String, dynamic> json) => _$HashtagFromJson(json);
+  Map<String, dynamic> toJson() => _$HashtagToJson(this);
+
 }

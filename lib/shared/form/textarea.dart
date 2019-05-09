@@ -24,16 +24,21 @@ class Textarea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return Container(
+      padding: EdgeInsets.only(bottom : 5.0, right: 10.0, left : 10.0),
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(6.0)), color: color),
+        child :
+        TextFormField(
       key: key,
+
       decoration: InputDecoration(
-        fillColor: color,
+
         border: InputBorder.none,
       ),
       controller: controller,
       onSaved: onSaved,
       maxLength: maxLength,
       validator: validator,
-    );
+    ));
   }
 }

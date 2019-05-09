@@ -48,7 +48,6 @@ class OnboardingClassYear extends OnboardingContentState {
       }
       index++;
     }
-    ;
 
     return Column(
       children: lines,
@@ -109,14 +108,14 @@ class OnboardingClassYear extends OnboardingContentState {
                         onPressed: () => setState(() {
                               runMutation({
                                 'degree': 'GRADUATE',
-                                'major_id' : 0,
-                                'minor_id' : 0,
+                                'major_id': 0,
+                                'minor_id': 0,
                                 'school_id': Session.instance.user.university.id
                               });
                               Session.update({
                                 'degree': 'GRADUATE',
-                                'major' : null,
-                                'minor' : null,
+                                'major': null,
+                                'minor': null,
                                 'school':
                                     Session.instance.user.university.toJson()
                               });

@@ -3,7 +3,6 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/pages/welcome/presentation.dart';
 import 'package:twic_app/pages/home.dart';
 import 'package:twic_app/pages/onboarding/onboarding.dart';
-import 'package:twic_app/pages/welcome/presentation.dart';
 import 'package:twic_app/pages/welcome/welcome.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,7 +36,8 @@ Map<ConnectionState, Widget> states = {
   ConnectionState.Logged: Home(),
 };
 
-class TwicApp extends StatelessWidget {
+class TwicApp extends StatelessWidget{
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -68,4 +68,5 @@ class TwicApp extends StatelessWidget {
       home: states[state],
     );
   }
+
 }

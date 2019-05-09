@@ -1,20 +1,18 @@
 import 'abstract_model.dart';
 import 'package:twic_app/api/models/user.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+
+part 'message.g.dart';
+
+@JsonSerializable()
 class Message extends AbstractModel {
-  int id;
   String text;
   User user;
   DateTime createdAt;
 
-  Message.fromJson(Map<String, dynamic> data) {
-    id = data['id'] is int ? data['id'] : int.parse(data['id']);
-    text = data['text'];
-    if(null != data['createdAt']){
-      createdAt = DateTime.parse(data['createdAt']).toLocal();
-    }
-    if (null != data['user']) {
-      user = User.fromJson(data['user']);
-    }
-  }
+  Message({id, this.text, this.user, this.createdAt}) : super(id : id);
+
+  factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
+  Map<String, dynamic> toJson() => _$MessageToJson(this);
 }

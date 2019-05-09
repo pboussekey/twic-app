@@ -12,8 +12,9 @@ class Avatar extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    print("AVATAR $size");
     return null != this.file
-        ? RoundPicture(picture: this.file.href(), width: size, height: size,)
+        ? RoundPicture(picture: this.file.href(), width: size, height: size, radius: size,)
         : Icon(
       Icons.account_circle,
       color: Style.grey,

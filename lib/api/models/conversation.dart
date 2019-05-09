@@ -1,22 +1,20 @@
 import 'abstract_model.dart';
 import 'package:twic_app/api/models/user.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'conversation.g.dart';
+
+@JsonSerializable()
 class Conversation extends AbstractModel {
-  int id;
+
+
   String name;
   String last;
   List<User> users = [];
   DateTime lastDate;
 
-  Conversation.fromJson(Map<String, dynamic> data) {
-    id = data['id'] is int ? data['id'] : int.parse(data['id']);
-    name = data['name'];
-    last = data['last'];
-    if(null != data['lastDate']){
-      lastDate = DateTime.parse(data['lastDate']);
-    }
-    if(null != data['users']){
-      data['users'].forEach((user) => users.add(User.fromJson(user)));
-    }
-  }
+  Conversation({id, this.name, this.last, this.lastDate, this.users}) : super(id : id);
+
+  factory Conversation.fromJson(Map<String, dynamic> json) => _$ConversationFromJson(json);
+  Map<String, dynamic> toJson() => _$ConversationToJson(this);
 }

@@ -21,10 +21,10 @@ class Feed extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
-              Post post = posts[0];
+              Post post = posts[index];
               return new PostWidget(post: post);
             },
-            itemCount: 10,
+            itemCount: posts.length,
           );
         });
   }

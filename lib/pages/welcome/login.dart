@@ -114,7 +114,7 @@ class LoginFormState extends State<LoginForm> {
                   Link(
                     text: translations.text('login.forgot_pwd'),
                     style: Style.lightText,
-                    onPressed: (BuildContext context) => ForgotPassword(),
+                    href: (BuildContext context) => ForgotPassword(),
                   ),
                   Align(
                       alignment: Alignment.topRight,

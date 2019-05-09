@@ -1,15 +1,18 @@
 import 'package:twic_app/api/models/school.dart';
 import 'package:twic_app/api/models/twic_file.dart';
 import 'package:twic_app/api/models/field.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'abstract_model.dart';
 
+part 'user.g.dart';
+
+@JsonSerializable()
 class User extends AbstractModel {
-  int id;
   String firstname;
   String lastname;
   TwicFile avatar;
-  School _school;
+  School s;
   Field major;
   Field minor;
   bool isActive;
@@ -18,49 +21,31 @@ class User extends AbstractModel {
   int nbFollowers;
   int nbFollowings;
   int nbPosts;
+  @JsonKey(fromJson: AbstractModel.parseBool)
   bool followed;
 
-  School get university => _school.university ?? _school;
+  School get university => s.university ?? s;
 
-  School get school => null != _school.university ? _school : null;
+  set school(School school) => s = school;
 
-  User.fromJson(Map<String, dynamic> data) {
-    id = data['id'] is int ? data['id'] : int.parse(data['id']);
-    firstname = data['firstname'];
-    lastname = data['lastname'];
-    isActive = data['isActive'] ?? false;
-    classYear = data['classYear'];
-    degree = data['degree'];
-    nbFollowers = data['nbFollowers'] ?? 0;
-    nbFollowings = data['nbFollowings'] ?? 0;
-    nbPosts = data['nbPosts'] ?? 0;
-    followed = data['followed'] ?? false;
-    if (null != data['avatar']) {
-      avatar = TwicFile.fromJson(data['avatar']);
-    }
-    if (null != data['school']) {
-      _school = School.fromJson(data['school']);
-    }
-    if (null != data['major']) {
-      major = Field.fromJson(data['major']);
-    }
-    if (null != data['minor']) {
-      minor = Field.fromJson(data['minor']);
-    }
-  }
+  School get school => null != s.university ? s : null;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'firstname': firstname,
-        'lastname': lastname,
-        'isActive': isActive,
-        'nbFollowers': nbFollowers,
-        'followed': followed,
-        'classYear': classYear,
-        'degree': degree,
-        'avatar': null != avatar ? avatar.toJson() : null,
-        'school': null != _school ? _school.toJson() : null,
-        'major': null != major ? major.toJson() : null,
-        'minor': null != minor ? minor.toJson() : null
-      };
+  User({id,
+    this.followed,
+    this.isActive,
+    this.avatar,
+    this.s,
+    this.classYear,
+    this.degree,
+    this.firstname,
+    this.lastname,
+    this.major,
+    this.minor,
+    this.nbFollowers,
+    this.nbFollowings,
+    this.nbPosts}) : super(id: id);
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }

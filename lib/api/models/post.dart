@@ -1,32 +1,34 @@
 import 'package:twic_app/api/models/user.dart';
 import 'abstract_model.dart';
 import 'twic_file.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class Post extends AbstractModel{
-  int id;
+part 'post.g.dart';
+
+@JsonSerializable()
+class Post extends AbstractModel {
   String content;
+  String privacy;
   DateTime createdAt;
   int nbComments;
   int nbLikes;
+  @JsonKey(fromJson: AbstractModel.parseBool)
   bool isLiked;
   User user;
   List<TwicFile> files = [];
 
+  Post(
+      {id,
+      this.content,
+      this.privacy,
+      this.files,
+      this.createdAt,
+      this.nbLikes,
+      this.user,
+      this.isLiked,
+      this.nbComments}) : super(id : id);
 
-  Post.fromJson(Map<String, dynamic> data) {
-    id = data['id'];
-    content = data['content'];
-    nbComments = data['nbComments'];
-    nbLikes = data['nbLikes'];
-    isLiked = data['isLiked'] == 1;
-    if(null != data['createdAt']){
-      createdAt = DateTime.parse(data['createdAt']).toLocal();
-    }
-    if (null != data['user']) {
-      user = User.fromJson(data['user']);
-    }
-    if(null != data['files']){
-      data['files'].forEach((file) => this.files.add(TwicFile.fromJson(file)));
-    }
-  }
+  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PostToJson(this);
 }

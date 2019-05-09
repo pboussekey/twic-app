@@ -14,6 +14,7 @@ class Session{
   }
 
   static Future<bool> isFirstTime() async{
+    SharedPreferences.setMockInitialValues({});
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool firstLaunch = prefs.getBool('firstTime');
     prefs.setBool('firstTime', true);
@@ -23,10 +24,8 @@ class Session{
   static void update(Map<String, dynamic> data){
     Map<String, dynamic> session = Session.instance.toJson();
     print(["SESSION USER BEFORE", session['user']]);
-    session['user'].addAll(data);
     print(["SESSION USER AFTER", session['user']]);
     Session.instance = Session.fromJson(session);
-    print(['SESSION', Session.instance.user.toJson()]);
     Session.set(session);
   }
 

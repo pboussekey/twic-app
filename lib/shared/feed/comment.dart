@@ -6,31 +6,19 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/utils/round_picture.dart';
 import 'package:twic_app/api/models/post.dart';
 import 'package:twic_app/api/models/twic_file.dart';
-import 'package:twic_app/shared/components/slider.dart';
-import 'package:twic_app/pages/posts/post_view.dart';
 
-class PostWidget extends StatefulWidget {
+class CommentWidget extends StatefulWidget {
   final Post post;
 
-  PostWidget({Key key, this.post}) : super(key: key);
+  CommentWidget({Key key, this.post}) : super(key: key);
 
   @override
-  PostWidgetState createState() => PostWidgetState();
+  CommentWidgetState createState() => CommentWidgetState();
 }
 
-class PostWidgetState extends State<PostWidget>
-    with SingleTickerProviderStateMixin {
-  TabController _controller;
-  int index = 0;
-  bool dragging = false;
+class CommentWidgetState extends State<CommentWidget>
+{
 
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = new TabController(
-        length: widget.post.files.length, vsync: this, initialIndex: 0);
-  }
 
   RichText postText(String content) {
     RegExp exp = new RegExp(r"#[A-Za-z0-9]+");
@@ -70,28 +58,27 @@ class PostWidgetState extends State<PostWidget>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    Size mediaSize = MediaQuery.of(context).size;
     return Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(bottom: 20.0),
+        color: Style.lightGrey.withAlpha(25),
+        margin: EdgeInsets.only(bottom: 10.0),
         child: Column(
           children: <Widget>[
             Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Flex(
                 direction: Axis.horizontal,
                 children: <Widget>[
                   null != widget.post.user.avatar
                       ? RoundPicture(
                           picture: widget.post.user.avatar.href(),
-                          height: 40,
-                          width: 40,
+                          height: 25,
+                          width: 25,
                         )
                       : Icon(
                           Icons.account_circle,
                           color: Style.grey,
-                          size: 40.0,
+                          size: 25.0,
                         ),
                   Expanded(
                     child: Column(
@@ -123,70 +110,56 @@ class PostWidgetState extends State<PostWidget>
                       ],
                     ),
                   ),
-                  Text(
-                    _renderDate(widget.post.createdAt),
-                    style: Style.lightText,
+                  IconButton(
+                    icon: Icon(
+                      widget.post.isLiked
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: Style.red,
+                      size: 12.5,
+                    ),
                   )
                 ],
               ),
             ),
-            null != widget.post.files  && widget.post.files.length > 0
-                ? FileSlider(
-                    files: widget.post.files,
-                    builder: (TwicFile f) => Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: RoundPicture(
-                          picture: f.href(),
-                          fit: BoxFit.cover,
-                          width: width - 40,
-                          height: width * 0.8,
-                          radius: 8.0,
-                        )),
-                  )
-                : Container(),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: postText(widget.post.content),
             ),
             Row(
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.only(right: 5.0, left: 20),
+                  padding: const EdgeInsets.only(right: 5.0, left: 50),
                   child: Icon(
-                    widget.post.isLiked
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: Style.red,
+                    Icons.flag,
+                    color: Style.lightGrey,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: Text(
                     widget.post.nbLikes.toString(),
-                    style: Style.text,
+                    style: Style.lightText,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: Icon(
-                    Icons.mode_comment,
-                    color: Style.blue,
+                  child: Text(
+                    _renderDate(widget.post.createdAt),
+                    style: Style.lightText,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: Text(widget.post.nbComments.toString(),
-                      style: Style.text),
+                  child: Text(
+                      '${widget.post.nbLikes.toString()} like${widget.post.nbLikes > 1 ? "s" : ""}',
+                      style: Style.lightText),
                 ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.more_horiz,
-                      color: Style.lightGrey,
-                    ),
-                  ),
+                Container(
+                  padding: const EdgeInsets.only(right: 5.0),
+                  child: Text('reply', style: Style.lightText),
                 ),
                 SizedBox(
                   width: 20,

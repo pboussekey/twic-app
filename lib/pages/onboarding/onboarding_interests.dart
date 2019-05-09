@@ -49,6 +49,7 @@ class _OnboardingInterestsContentState
 
   @override
   Widget build(BuildContext context) {
+    final Size mediaSize = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
         Hashtags.getList(
@@ -64,6 +65,7 @@ class _OnboardingInterestsContentState
                               name: hashtag.name, data: hashtag))
                           .toList(),
                       minLength: 0,
+                      size: mediaSize.width - 100,
                       icon: Icons.search,
                       itemBuilder: (BuildContext context,
                               AutoCompleteElement item) =>

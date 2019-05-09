@@ -1,22 +1,23 @@
 import 'abstract_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class TwicFile extends AbstractModel{
-  int id;
+
+part 'twic_file.g.dart';
+
+@JsonSerializable()
+class TwicFile extends AbstractModel {
   String name;
   String bucketname;
+  String type;
   String token;
 
-  TwicFile.fromJson(Map<String, dynamic> data) {
-    id = data['id'];
-    name = data['name'];
-    bucketname = data['bucketname'];
-    token = data['token'];
-  }
+  TwicFile({id, this.name, this.bucketname, this.token, this.type}) : super(id : id);
 
+  factory TwicFile.fromJson(Map<String, dynamic> json) => _$TwicFileFromJson(json);
+  Map<String, dynamic> toJson() => _$TwicFileToJson(this);
 
-  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'bucketname': bucketname, 'token' : token};
-
-  String href(){
-    return 'https://firebasestorage.googleapis.com/v0/b/twicfiles-ccf31.appspot.com/o/${bucketname}?alt=media&token=' +token;
+  String href() {
+    return 'https://firebasestorage.googleapis.com/v0/b/twicfiles-ccf31.appspot.com/o/${bucketname}?alt=media&token=' +
+        token;
   }
 }
