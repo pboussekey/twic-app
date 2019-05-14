@@ -4,7 +4,7 @@ import 'package:twic_app/style/style.dart';
 
 import 'root_page.dart';
 import 'package:twic_app/shared/feed/feed.dart';
-import 'package:twic_app/shared/components/bottom_menu.dart';
+import 'package:twic_app/shared/components/bottom_nav.dart';
 
 
 class Home extends StatefulWidget {
@@ -34,7 +34,7 @@ class HomeState extends State<Home>{
             preferredSize: Size.fromHeight(1.0)),
       ),
       body: RootPage(child: Feed()),
-      bottomNavigationBar: BottomMenu(current: ButtonEnum.Home, refresh: setState,),
+      bottomNavigationBar: BottomNav(current: ButtonEnum.Home, refresh: setState,),
     );
   }
 }

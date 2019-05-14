@@ -7,7 +7,7 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/form/input.dart';
 import 'package:twic_app/shared/components/tabs.dart';
-import 'package:twic_app/shared/components/bottom_menu.dart';
+import 'package:twic_app/shared/components/bottom_nav.dart';
 
 class ProfileFollowings extends StatefulWidget {
   final int user_id;
@@ -58,7 +58,7 @@ class ProfileFollowingsState extends State<ProfileFollowings> {
                       user_id: widget.user_id,
                       builder: (List<User> users) => UserList(list: users))
                 ])),
-        bottomNavigationBar: BottomMenu(
+        bottomNavigationBar: BottomNav(
           current: ButtonEnum.Profile,
           refresh: setState,
         ));

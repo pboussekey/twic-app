@@ -9,7 +9,6 @@ part 'hashtag.g.dart';
 class Hashtag extends AbstractModel {
   String name;
   int nbfollowers;
-  @JsonKey(fromJson: AbstractModel.parseBool)
   bool followed;
   TwicFile picture;
 

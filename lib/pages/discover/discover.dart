@@ -13,7 +13,7 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/form/input.dart';
 import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/shared/components/tabs.dart';
-import 'package:twic_app/shared/components/bottom_menu.dart';
+import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/discover/discover_filters.dart';
 import 'package:twic_app/api/session.dart';
 
@@ -134,7 +134,7 @@ class DiscoverState extends State<Discover> {
                                               bottom: 10.0),
                                           child: Button(
                                             height: 30,
-                                            radius: 8.0,
+                                            radius: BorderRadius.all(Radius.circular(8.0)),
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             text: widget.filters['classYear']
@@ -150,7 +150,7 @@ class DiscoverState extends State<Discover> {
                                               bottom: 10.0),
                                           child: Button(
                                             height: 30,
-                                            radius: 8.0,
+                                            radius: BorderRadius.all(Radius.circular(8.0)),
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             text: 'mine' ==
@@ -168,7 +168,7 @@ class DiscoverState extends State<Discover> {
                                               bottom: 10.0),
                                           child: Button(
                                             height: 30,
-                                            radius: 8.0,
+                                            radius: BorderRadius.all(Radius.circular(8)),
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             text: widget.filters['major'].name,
@@ -183,7 +183,7 @@ class DiscoverState extends State<Discover> {
                                               bottom: 10.0),
                                           child: Button(
                                             height: 30,
-                                            radius: 8.0,
+                                            radius: BorderRadius.all(Radius.circular(8)),
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             text: widget.filters['minor'].name,
@@ -198,7 +198,7 @@ class DiscoverState extends State<Discover> {
                                               bottom: 10.0),
                                           child: Button(
                                             height: 30,
-                                            radius: 8.0,
+                                            radius: BorderRadius.all(Radius.circular(8.0)),
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             text: widget.filters['school'].name,
@@ -243,7 +243,7 @@ class DiscoverState extends State<Discover> {
                                 SchoolList(list: schools))
                       ])
                 ])),
-        bottomNavigationBar: BottomMenu(
+        bottomNavigationBar: BottomNav(
           current: ButtonEnum.Discover,
           refresh: setState,
         ));

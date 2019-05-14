@@ -59,7 +59,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                             Button(
                               text: "Mine",
                               height: 60,
-                              radius: 8.0,
+                              radius: BorderRadius.all(Radius.circular(8.0)),
                               width: (mediaSize.width - 42) / 3,
                               color: null != filters['university'] &&
                                       'mine' == filters['university']
@@ -80,7 +80,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                             Button(
                               text: "All",
                               height: 60,
-                              radius: 8.0,
+                              radius: BorderRadius.all(Radius.circular(8.0)),
                               width: (mediaSize.width - 42) / 3,
                               color: null == filters['university']
                                   ? Style.darkGrey
@@ -98,7 +98,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                             Button(
                               text: "Other",
                               height: 60,
-                              radius: 8.0,
+                              radius: BorderRadius.all(Radius.circular(8.0)),
                               width: (mediaSize.width - 42) / 3,
                               color: null != filters['university'] &&
                                       'other' == filters['university']
@@ -160,7 +160,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                                   child: Button(
                                     width: 80,
                                     padding: EdgeInsets.only(right: 10.0),
-                                    radius: 8.0,
+                                    radius: BorderRadius.all(Radius.circular(8.0)),
                                     border: null != filters['classYear'] &&
                                             currentYear - 50 + index ==
                                                 filters['classYear']
@@ -230,7 +230,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                           color: Style.grey,
                           border: Border.all(color: Style.border),
                           height: 60,
-                          radius: 8.0,
+                          radius: BorderRadius.all(Radius.circular(8.0)),
                           width: (mediaSize.width - 50) / 2,
                           text: "Major"),
                       SizedBox(
@@ -241,7 +241,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                           color: Style.grey,
                           border: Border.all(color: Style.border),
                           height: 60,
-                          radius: 8.0,
+                          radius: BorderRadius.all(Radius.circular(8.0)),
                           width: (mediaSize.width - 50) / 2,
                           text: "Minor")
                     ]),
@@ -273,7 +273,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                         color: Style.grey,
                         border: Border.all(color: Style.border),
                         height: 60,
-                        radius: 8.0,
+                        radius: BorderRadius.all(Radius.circular(8.0)),
                         width: (mediaSize.width - 40),
                         text: "Select school"),
 

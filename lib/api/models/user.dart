@@ -11,8 +11,9 @@ part 'user.g.dart';
 class User extends AbstractModel {
   String firstname;
   String lastname;
+  String description;
   TwicFile avatar;
-  School s;
+  School school;
   Field major;
   Field minor;
   bool isActive;
@@ -21,24 +22,22 @@ class User extends AbstractModel {
   int nbFollowers;
   int nbFollowings;
   int nbPosts;
-  @JsonKey(fromJson: AbstractModel.parseBool)
   bool followed;
 
-  School get university => s.university ?? s;
 
-  set school(School school) => s = school;
+  School get university => school.university;
 
-  School get school => null != s.university ? s : null;
 
   User({id,
     this.followed,
     this.isActive,
     this.avatar,
-    this.s,
+    this.school,
     this.classYear,
     this.degree,
     this.firstname,
     this.lastname,
+    this.description,
     this.major,
     this.minor,
     this.nbFollowers,

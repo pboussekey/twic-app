@@ -92,11 +92,14 @@ class OnboardingDetails extends OnboardingContentState {
                     ? SizedBox(height: 10)
                     : Container(),
                 Schools.getList(
-                    university_id: Session.instance.user.university.id,
+                    university_id: null != Session.instance.user.university
+                        ? Session.instance.user.university.id : Session.instance.user.school.id,
                     degree: Session.instance.user.degree,
                     builder: (List<School> schools) => schools.length > 0
                         ? Dropdown<School>(
-                            value: Session.instance.user.school,
+                            value: null != Session.instance.user.university
+                                ? Session.instance.user.school
+                                : null,
                             size: double.maxFinite,
                             hint: Text(
                                 'UNDERGRADUATE' == Session.instance.user.degree
@@ -110,7 +113,10 @@ class OnboardingDetails extends OnboardingContentState {
                                         ))
                                 .toList(),
                             onChanged: (School s) => setState(() {
-                                  Session.update({'school': s.toJson(), 'isActive' : this.isCompleted()});
+                                  Session.update({
+                                    'school': s.toJson(),
+                                    'isActive': this.isCompleted()
+                                  });
                                   runMutation({
                                     'school_id': s.id,
                                     'isActive': this.isCompleted()

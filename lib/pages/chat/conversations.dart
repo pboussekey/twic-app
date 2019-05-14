@@ -9,7 +9,7 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/form/input.dart';
 import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/shared/components/tabs.dart';
-import 'package:twic_app/shared/components/bottom_menu.dart';
+import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/api/session.dart';
 
 class ConversationsList extends StatefulWidget {
@@ -93,7 +93,7 @@ class ConversationsState extends State<ConversationsList> {
                     Container()
                   ])
                 ])),
-        bottomNavigationBar: BottomMenu(
+        bottomNavigationBar: BottomNav(
           current: ButtonEnum.Chat,
           refresh: setState,
         ));

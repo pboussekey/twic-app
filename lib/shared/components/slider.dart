@@ -54,22 +54,22 @@ class FileSliderState extends State<FileSlider>
     return files.length == 1
         ? ConstrainedBox(
             constraints: new BoxConstraints(
-              minHeight: width * 0.8,
+              minHeight: width * 0.6,
               minWidth: width,
-              maxHeight: width * 0.8,
+              maxHeight: width * 0.6,
               maxWidth: width,
             ),
             child: pictures[0])
         : Container(
-            height: width,
+            height: width * 0.6 + 25,
             width: width,
             child: Stack(children: [
               Column(children: <Widget>[
                 ConstrainedBox(
                   constraints: new BoxConstraints(
-                    minHeight: width * 0.8,
+                    minHeight: width * 0.6,
                     minWidth: width,
-                    maxHeight: width * 0.8,
+                    maxHeight: width * 0.6,
                     maxWidth: width,
                   ),
                   child:

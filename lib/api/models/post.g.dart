@@ -22,9 +22,7 @@ Post _$PostFromJson(Map<String, dynamic> json) {
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
-      isLiked: json['isLiked'] == null
-          ? null
-          : AbstractModel.parseBool(json['isLiked']),
+      isLiked: json['isLiked'] as bool,
       nbComments: json['nbComments'] as int);
 }
 

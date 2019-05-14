@@ -36,7 +36,7 @@ class ConversationList extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemBuilder: (BuildContext context, int index) => Button(
         background: Colors.white,
-          radius: 0.0,
+          radius: BorderRadius.all(Radius.circular(0)),
           onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(

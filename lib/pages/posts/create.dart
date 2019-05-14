@@ -6,7 +6,6 @@ import 'package:twic_app/api/session.dart';
 import '../root_page.dart';
 import 'package:twic_app/shared/form/dropdown.dart';
 import 'package:twic_app/shared/form/textarea.dart';
-import 'package:twic_app/api/models/post.dart';
 import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/api/services/upload_service.dart' as upload_service;
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +15,6 @@ import 'package:twic_app/shared/file/create_file_preview.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:twic_app/pages/home.dart';
 import 'dart:io';
-import 'package:share/share.dart';
 
 class CreatePost extends StatefulWidget {
   final String share;
@@ -103,9 +101,7 @@ class CreatePostState extends State<CreatePost> {
                                         top: 5, bottom: 5, right: 10),
                                     child: Posts.create(
                                         builder: (RunMutation runMutation,
-                                                QueryResult result){
-                                          print(files.map((TwicFile f) => f.toJson()).toList());
-                                            return Button(
+                                                QueryResult result)=> Button(
                                               text: "Post",
                                               onPressed: () {
                                                 runMutation({
@@ -114,7 +110,7 @@ class CreatePostState extends State<CreatePost> {
                                                   'files': files.map((TwicFile f) => f.toJson()).toList()
                                                 });
                                               },
-                                            );},
+                                            ),
                                         onCompleted: (dynamic result) => Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -341,7 +337,7 @@ class CreatePostState extends State<CreatePost> {
                   children: <Widget>[
                     Button(
                       background: Style.genZPurple.withAlpha(40),
-                      radius: 25.0,
+                      radius: BorderRadius.all(Radius.circular(25.0)),
                       padding: EdgeInsets.all(0),
                       width: 50.0,
                       child: Icon(
@@ -368,7 +364,7 @@ class CreatePostState extends State<CreatePost> {
                     ),
                     Button(
                       background: Style.genZYellow.withAlpha(40),
-                      radius: 25.0,
+                      radius: BorderRadius.all(Radius.circular(25.0)),
                       padding: EdgeInsets.all(0),
                       width: 50.0,
                       child: Icon(
@@ -395,7 +391,7 @@ class CreatePostState extends State<CreatePost> {
                     ),
                     Button(
                       background: Style.genZGreen.withAlpha(40),
-                      radius: 25.0,
+                      radius: BorderRadius.all(Radius.circular(25.0)),
                       padding: EdgeInsets.all(0),
                       width: 50.0,
                       child: Icon(

@@ -3,11 +3,13 @@ import 'package:intl/intl.dart';
 
 import 'package:twic_app/style/style.dart';
 
-import 'package:twic_app/shared/utils/round_picture.dart';
+import 'package:twic_app/shared/components/round_picture.dart';
 import 'package:twic_app/api/models/post.dart';
 import 'package:twic_app/api/models/twic_file.dart';
 import 'package:twic_app/shared/components/slider.dart';
+import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/pages/posts/post_view.dart';
+import 'package:twic_app/api/services/posts.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -75,6 +77,7 @@ class PostWidgetState extends State<PostWidget>
         color: Colors.white,
         margin: EdgeInsets.only(bottom: 20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               padding:
@@ -130,7 +133,7 @@ class PostWidgetState extends State<PostWidget>
                 ],
               ),
             ),
-            null != widget.post.files  && widget.post.files.length > 0
+            null != widget.post.files && widget.post.files.length > 0
                 ? FileSlider(
                     files: widget.post.files,
                     builder: (TwicFile f) => Container(
@@ -139,27 +142,61 @@ class PostWidgetState extends State<PostWidget>
                           picture: f.href(),
                           fit: BoxFit.cover,
                           width: width - 40,
-                          height: width * 0.8,
+                          height: width * 0.4,
                           radius: 8.0,
                         )),
                   )
                 : Container(),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
-              child: postText(widget.post.content),
-            ),
+            null != widget.post.content && widget.post.content.isNotEmpty
+                ? Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 20),
+                    child: postText(widget.post.content),
+                  )
+                : Container(),
             Row(
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.only(right: 5.0, left: 20),
-                  child: Icon(
-                    widget.post.isLiked
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: Style.red,
-                  ),
-                ),
+                    padding: const EdgeInsets.only(right: 5.0, left: 20),
+                    child: widget.post.isLiked
+                        ? Posts.unlike(
+                            builder: (RunMutation runMutation,
+                                    QueryResult result) =>
+                                Button(
+                                  background: Colors.transparent,
+                                  padding: const EdgeInsets.all(0),
+                                  width: 25,
+                                  height: 25,
+                                  child: Icon(
+                                    Icons.favorite,
+                                    color: Style.red,
+                                  ),
+                                  onPressed: () {
+                                    runMutation({'post_id': widget.post.id});
+                                    widget.post.isLiked = false;
+                                    widget.post.nbLikes--;
+                                    setState(() {});
+                                  },
+                                ))
+                        : Posts.like(
+                            builder: (RunMutation runMutation,
+                                    QueryResult result) =>
+                                Button(
+                                  background: Colors.transparent,
+                                  padding: const EdgeInsets.all(0),
+                                  width: 25,
+                                  height: 25,
+                                  child: Icon(
+                                    Icons.favorite_border,
+                                    color: Style.red,
+                                  ),
+                                  onPressed: () {
+                                    runMutation({'post_id': widget.post.id});
+                                    widget.post.isLiked = true;
+                                    widget.post.nbLikes++;
+                                    setState(() {});
+                                  },
+                                ))),
                 Container(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: Text(
@@ -167,17 +204,29 @@ class PostWidgetState extends State<PostWidget>
                     style: Style.text,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(right: 5.0),
-                  child: Icon(
-                    Icons.mode_comment,
-                    color: Style.blue,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(right: 5.0),
-                  child: Text(widget.post.nbComments.toString(),
-                      style: Style.text),
+                Button(
+                  padding: EdgeInsets.all(0),
+                  background: Colors.transparent,
+                  height: 30,
+                  child: Row(children: [
+                    Icon(
+                      Icons.mode_comment,
+                      color: Style.blue,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(widget.post.nbComments.toString(), style: Style.text),
+                    SizedBox(
+                      width: 5,
+                    )
+                  ]),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => PostView(
+                                post: widget.post,
+                              ))),
                 ),
                 Expanded(
                   child: Align(

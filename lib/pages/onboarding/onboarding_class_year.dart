@@ -11,7 +11,7 @@ class OnboardingClassYear extends OnboardingContentState {
       String text, double size, bool active, Function onPressed) {
     return Button(
       text: text,
-      radius: 6.0,
+      radius: BorderRadius.all(Radius.circular(6.0)),
       border: Border.all(color: Style.border),
       width: size,
       background: active ? Style.darkPurple : Colors.white,
@@ -72,7 +72,7 @@ class OnboardingClassYear extends OnboardingContentState {
                     children: [
                       Button(
                         text: 'Undergraduate',
-                        radius: 6.0,
+                        radius: BorderRadius.all(Radius.circular(6.0)),
                         border: Border.all(color: Style.border),
                         width: mediaSize.width / 2 - 25.0,
                         background:
@@ -96,7 +96,7 @@ class OnboardingClassYear extends OnboardingContentState {
                       ),
                       Button(
                         text: 'Graduate',
-                        radius: 6.0,
+                        radius: BorderRadius.all(Radius.circular(6.0)),
                         border: Border.all(color: Style.border),
                         width: mediaSize.width / 2 - 25.0,
                         background: 'GRADUATE' == Session.instance.user.degree

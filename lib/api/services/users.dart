@@ -102,8 +102,22 @@ class Users {
 
   static api.Mutation update({Function builder}) {
     return api.mutation(query: """      
-         mutation updateUser(\$minor_id: ID, \$major_id: ID, \$school_id: ID, \$classYear: Int, \$isActive: Boolean, \$degree: String) {
-          updateUser(minor_id: \$minor_id, major_id: \$major_id, school_id: \$school_id, classYear: \$classYear, isActive: \$isActive, degree : \$degree){
+         mutation updateUser(
+         \$minor_id: ID, 
+         \$major_id: ID, 
+         \$school_id: ID, 
+         \$classYear: Int, 
+         \$isActive: Boolean,
+         \$avatar: FileInputDef,
+         \$degree: String) {
+          updateUser(
+            minor_id: \$minor_id, 
+            major_id: \$major_id, 
+            school_id: \$school_id, 
+            classYear: \$classYear, 
+            isActive: \$isActive, 
+            avatar : \$avatar
+            degree : \$degree){
                 success
               }
           }

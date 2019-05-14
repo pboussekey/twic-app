@@ -13,6 +13,7 @@ ConnectionState state;
 
 void main() async {
   await DotEnv().load('local.env');
+  print("MAIN INIT SESSION");
   Session session = await Session.init();
   await translations.init();
   if (null != session) {

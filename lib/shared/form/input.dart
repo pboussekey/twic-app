@@ -4,6 +4,7 @@ import 'package:twic_app/style/style.dart';
 
 class Input extends StatelessWidget {
   final String placeholder;
+  final String label;
   final IconData icon;
   final bool obscureText;
   final bool shadow;
@@ -23,10 +24,11 @@ class Input extends StatelessWidget {
       this.obscureText,
       this.onSaved,
       this.controller,
-      this.height: 60,
+      this.height = 60,
       this.color = Colors.white,
       this.inputType = TextInputType.text,
       this.shadow = true,
+      this.label,
       this.after,
       this.validator});
 
@@ -42,19 +44,19 @@ class Input extends StatelessWidget {
             color: Style.lightGrey,
           ),
           border: InputBorder.none,
-          fillColor: Style.grey,
+          fillColor: Style.genZPurple,
           hintText: this.placeholder),
       onSaved: this.onSaved,
       validator: this.validator,
     );
 
     return Container(
-        height: height,
+        height: height + (null != label ? 16 : 0),
         padding: EdgeInsets.only(
-            top: (height - 40.0) / 2.0,
-            bottom: (height - 40.0) / 2.0,
-            left: 10.0,
-            right: 10.0),
+          top: (height - 40.0) / 2.0,
+          bottom: (height - 40.0) / 2.0,
+          left: 10.0,
+        ),
         decoration: BoxDecoration(
           color: color,
           boxShadow: shadow
@@ -68,12 +70,18 @@ class Input extends StatelessWidget {
               : null,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        child: Row(children: [
-          Expanded(child: this.field),
-          after ??
-              Container(
-                width: 10,
-              )
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+          null != label ? Text(label, style : Style.smallLightText) : Container(),
+          Row(mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+            Expanded(child: this.field),
+            after ??
+                Container(
+                  width: 10,
+                )
+          ])
         ]));
   }
 }

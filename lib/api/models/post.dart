@@ -12,7 +12,6 @@ class Post extends AbstractModel {
   DateTime createdAt;
   int nbComments;
   int nbLikes;
-  @JsonKey(fromJson: AbstractModel.parseBool)
   bool isLiked;
   User user;
   List<TwicFile> files = [];
@@ -20,13 +19,13 @@ class Post extends AbstractModel {
   Post(
       {id,
       this.content,
-      this.privacy,
+      this.privacy = "PUBLIC",
       this.files,
       this.createdAt,
-      this.nbLikes,
+      this.nbLikes = 0,
       this.user,
-      this.isLiked,
-      this.nbComments}) : super(id : id);
+      this.isLiked = false,
+      this.nbComments = 0}) : super(id : id);
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 

@@ -8,19 +8,21 @@ import 'package:twic_app/pages/posts/create.dart';
 class RootPage extends StatefulWidget {
   final Widget child;
   final Function builder;
+  final bool scrollable;
+  final Color backgroundColor;
   static final ScrollController scroll = ScrollController();
 
-  RootPage({this.child, this.builder});
+  RootPage(
+      {this.child, this.builder, this.backgroundColor, this.scrollable = true});
 
   @override
-  State createState() => _RootPageState(child: this.child);
+  State createState() => _RootPageState();
 }
 
 class _RootPageState extends ReceiveShareState<RootPage> {
   ValueNotifier<GraphQLClient> _client;
-  Widget child;
 
-  _RootPageState({this.child});
+  _RootPageState();
 
   @override
   void initState() {
@@ -40,18 +42,28 @@ class _RootPageState extends ReceiveShareState<RootPage> {
         ? Container(
             height: mediaSize.height,
             width: mediaSize.width,
-            color: Colors.white,
-            child: SingleChildScrollView(
-              controller: RootPage.scroll,
-              child: GraphQLProvider(
-                  client: _client,
-                  child: CacheProvider(child: SafeArea(child: child ?? widget.builder()))),
-            ))
+            color: widget.backgroundColor ?? Colors.white,
+            child: GraphQLProvider(
+                client: _client,
+                child: CacheProvider(
+                    child: widget.scrollable
+                        ? SingleChildScrollView(
+                            controller: RootPage.scroll,
+                            child: SafeArea(
+                                child: widget.child ?? widget.builder()))
+                        : Container(
+                            child: SafeArea(
+                                child: widget.child ?? widget.builder())))))
         : SafeArea(child: CircularProgressIndicator());
   }
 
   @override
   void receiveShare(Share shared) {
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => CreatePost(share: shared.text,)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => CreatePost(
+                  share: shared.text,
+                )));
   }
 }

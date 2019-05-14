@@ -12,7 +12,7 @@ class Button extends StatelessWidget {
   final double width;
   final double height;
   final double fontSize;
-  final double radius;
+  final BorderRadiusGeometry radius;
   final BoxBorder border;
   final bool disabled;
 
@@ -25,7 +25,7 @@ class Button extends StatelessWidget {
       this.width,
       this.height,
       this.fontSize,
-      this.radius = 20.0,
+      this.radius = const BorderRadius.all(Radius.circular(20)),
       this.border,
       this.child,
       this.disabled = false});
@@ -37,7 +37,7 @@ class Button extends StatelessWidget {
           decoration: BoxDecoration(
               color: background,
               border: border,
-              borderRadius: null != radius ? BorderRadius.all(Radius.circular(radius)) : null),
+              borderRadius: radius),
           height: height,
           width: width,
           child:

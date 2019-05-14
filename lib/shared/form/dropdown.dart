@@ -24,6 +24,7 @@ class Dropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(["DROPDOWN", this.items]);
     return Container(
         padding: EdgeInsets.all(10.0),
         height: 60.0,
