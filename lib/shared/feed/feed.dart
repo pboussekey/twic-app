@@ -30,7 +30,6 @@ class FeedState extends State<Feed> {
             count: 3)
         .then((List<Post> _posts) {
       posts.addAll(_posts);
-      print(posts);
       loading = false;
       setState(() {});
     });

@@ -27,10 +27,12 @@ class Textarea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(bottom: 5.0, right: 10.0, left: 10.0),
+        padding: EdgeInsets.only(bottom: 5.0, right: 10.0, left: 10.0, top : 5.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(6.0)), color: color),
-        child: Column(children: [
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
           null != label
               ? Text(label, style: Style.smallLightText)
               : Container(),
@@ -39,6 +41,7 @@ class Textarea extends StatelessWidget {
             decoration: InputDecoration(
               border: InputBorder.none,
             ),
+            maxLines: null,
             controller: controller,
             onSaved: onSaved,
             maxLength: maxLength,

@@ -22,7 +22,7 @@ class Users {
                 avatar{ id name bucketname token }
                 major{ id name }
                 minor{ id name }
-                school { id, name, university{ id name logo { name bucketname token } } }
+                school { id name  logo { name bucketname token } university{ id name logo { name bucketname token } } }
               }
           }
           """,
@@ -78,7 +78,7 @@ class Users {
                 followed
                 nbFollowers,
                 avatar{ name bucketname token }
-                school { id, name, university{ id name logo { name bucketname token } } }
+                school { id name  logo { name bucketname token } university{ id name logo { name bucketname token } } }
               }
           }
           """,
@@ -100,7 +100,7 @@ class Users {
         builder: builder);
   }
 
-  static api.Mutation update({Function builder}) {
+  static api.Mutation update({Function builder, Function update, Function onCompleted}) {
     return api.mutation(query: """      
          mutation updateUser(
          \$minor_id: ID, 
@@ -109,18 +109,35 @@ class Users {
          \$classYear: Int, 
          \$isActive: Boolean,
          \$avatar: FileInputDef,
-         \$degree: String) {
+         \$degree: String,
+         \$firstname: String,
+         \$lastname: String,
+         \$description: String) {
           updateUser(
             minor_id: \$minor_id, 
             major_id: \$major_id, 
             school_id: \$school_id, 
             classYear: \$classYear, 
             isActive: \$isActive, 
-            avatar : \$avatar
-            degree : \$degree){
-                success
+            avatar : \$avatar,
+            degree : \$degree,
+            firstname : \$firstname,
+            lastname : \$lastname,
+            description : \$description){
+                 id
+                firstname
+                lastname
+                followed
+                nbFollowers,
+                avatar{ name bucketname token }
+                school { id name logo { name bucketname token } university{ id name logo { name bucketname token } } }
+                minor{ id name }
+                major{ id name }
+                classYear
+                isActive
+                degree
               }
           }
-          """, builder: builder);
+          """, builder: builder, update: update, onCompleted: onCompleted);
   }
 }

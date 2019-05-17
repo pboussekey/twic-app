@@ -69,7 +69,7 @@ class Posts {
       'parent_id': parent_id,
       'count': count,
       'page': page
-    }).then((dynamic data){ return (data['posts'] as List<dynamic>)
+    }, cache: false).then((dynamic data){ return (data['posts'] as List<dynamic>)
         .map((dynamic post) => Post.fromJson(post))
         .toList(); });
 

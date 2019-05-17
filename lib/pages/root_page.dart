@@ -10,7 +10,7 @@ class RootPage extends StatefulWidget {
   final Function builder;
   final bool scrollable;
   final Color backgroundColor;
-  static final ScrollController scroll = ScrollController();
+  static ScrollController scroll = ScrollController();
 
   RootPage(
       {this.child, this.builder, this.backgroundColor, this.scrollable = true});
@@ -38,6 +38,7 @@ class _RootPageState extends ReceiveShareState<RootPage> {
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
+    RootPage.scroll = ScrollController();
     return null != _client
         ? Container(
             height: mediaSize.height,

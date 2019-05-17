@@ -12,7 +12,6 @@ class CreateFilePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
     Widget content;
-    print("File type ${file.type}");
     if (null == file.type || file.type.startsWith('image/')) {
       content = RoundPicture(
         picture : file.href(),

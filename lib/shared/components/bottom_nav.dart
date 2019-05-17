@@ -73,7 +73,7 @@ class BottomNav extends StatelessWidget {
             IconButton(
               icon: Avatar(
                 size: 24.0,
-                file: Session.instance.user.avatar,
+                href: Session.instance.user.avatar?.href(),
               ),
               onPressed: () {
                 current == ButtonEnum.Profile

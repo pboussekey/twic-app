@@ -31,7 +31,7 @@ class HashtagList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Avatar(
-                            file: list[index].picture,
+                            href: list[index].picture?.href(),
                             size: 30.0,
                           ),
                           SizedBox(

@@ -6,9 +6,7 @@ class CommentsList extends StatelessWidget {
   final List<Post> comments;
   final int commentCount;
 
-  CommentsList({this.comments, this.commentCount}){
-    print("BUILD COMMENTS ${comments.length}");
-  }
+  CommentsList({this.comments, this.commentCount});
 
   @override
   Widget build(BuildContext context) => ListView.builder(

@@ -70,11 +70,9 @@ class Hashtags {
           followed: true,
           builder: (List<Hashtag> hashtags) {
             _followed = hashtags;
-            print(_followed);
             return builder(_followed);
           });
     }
-    print(_followed);
     return builder(_followed);
   }
 

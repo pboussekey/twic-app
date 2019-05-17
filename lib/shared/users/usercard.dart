@@ -35,7 +35,7 @@ class UserCardState extends State<UserCard> {
           borderRadius: new BorderRadius.circular(20.0),
           child: Column(
             children: <Widget>[
-              Avatar(file: widget.user.avatar),
+              Avatar(href: widget.user.avatar?.href()),
               SizedBox(height: 10.0),
               Text("${widget.user.firstname} ${widget.user.lastname}",
                   style: Style.smallTitle),

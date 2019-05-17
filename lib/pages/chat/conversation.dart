@@ -44,7 +44,7 @@ class ConversationPageState extends State<ConversationPage> {
                             onPressed: () => Navigator.pop(context),
                           ),
                           Avatar(
-                            file: user.avatar,
+                            href: user.avatar?.href(),
                           ),
                           SizedBox(
                             width: 50.0,

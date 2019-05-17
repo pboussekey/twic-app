@@ -39,10 +39,10 @@ class Input extends StatelessWidget {
       key: key,
       controller: controller,
       decoration: InputDecoration(
-          icon: Icon(
+          icon: null != this.icon ? Icon(
             this.icon,
             color: Style.lightGrey,
-          ),
+          ) : null,
           border: InputBorder.none,
           fillColor: Style.genZPurple,
           hintText: this.placeholder),
@@ -53,8 +53,8 @@ class Input extends StatelessWidget {
     return Container(
         height: height + (null != label ? 16 : 0),
         padding: EdgeInsets.only(
-          top: (height - 40.0) / 2.0,
-          bottom: (height - 40.0) / 2.0,
+          top: (height - 48.0) / 2.0,
+          bottom: (height - 48.0) / 2.0,
           left: 10.0,
         ),
         decoration: BoxDecoration(

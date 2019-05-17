@@ -61,7 +61,7 @@ class DiscoverState extends State<Discover> {
                             child: Container(
                                 width: mediaSize.width - 100,
                                 child: Input(
-                                  height: 40.0,
+                                  height: 43.0,
                                   color: Style.veryLightGrey,
                                   shadow: false,
                                   icon: Icons.search,

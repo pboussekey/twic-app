@@ -12,7 +12,6 @@ class MessageList extends StatelessWidget {
 
   String _renderDate(DateTime date) {
     Duration since = DateTime.now().difference(date);
-    print([date, DateTime.now(), since]);
     if (since.inSeconds < 60) {
       return '${since.inSeconds}s';
     } else if (since.inMinutes < 60) {
@@ -30,57 +29,61 @@ class MessageList extends StatelessWidget {
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
     return Container(
-      width: mediaSize.width - 40.0,
+        width: mediaSize.width - 40.0,
         child: ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (BuildContext context, int index) => Column(
-            crossAxisAlignment: list[index].user.id == Session.instance.user.id
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(children: [
-                list[index].user.id == Session.instance.user.id
-                    ? Expanded( child : Container())
-                    : Avatar(
-                        size: 20.0,
-                        file: list[index].user.avatar,
-                      ),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Text(_renderDate(list[index].createdAt), style: Style.lightText)
-              ]),
-              Row(children: [
-                list[index].user.id == Session.instance.user.id
-                    ? Expanded( child : Container()) : SizedBox(width: 25.0),
-                list[index].user.id == Session.instance.user.id
-                    ? Container(
-                        padding: EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-                        constraints:
-                            BoxConstraints(maxWidth: mediaSize.width * 0.7),
-                        decoration: BoxDecoration(
-                            color: Style.genZPurple,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        child: Text(list[index].text, style: Style.whiteText),
-                      )
-                    : Container(
-                        padding: EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-                        constraints:
-                            BoxConstraints(maxWidth: mediaSize.width * 0.7),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        child: Text(list[index].text, style: Style.text),
-                      )
-              ]),
-            ],
-          ),
-      itemCount: list.length,
-    ));
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) => Column(
+                crossAxisAlignment:
+                    list[index].user.id == Session.instance.user.id
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(children: [
+                    list[index].user.id == Session.instance.user.id
+                        ? Expanded(child: Container())
+                        : Avatar(
+                            size: 20.0,
+                            href: list[index].user.avatar?.href(),
+                          ),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Text(_renderDate(list[index].createdAt),
+                        style: Style.lightText)
+                  ]),
+                  Row(children: [
+                    list[index].user.id == Session.instance.user.id
+                        ? Expanded(child: Container())
+                        : SizedBox(width: 25.0),
+                    list[index].user.id == Session.instance.user.id
+                        ? Container(
+                            padding: EdgeInsets.only(
+                                left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                            constraints:
+                                BoxConstraints(maxWidth: mediaSize.width * 0.7),
+                            decoration: BoxDecoration(
+                                color: Style.genZPurple,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8.0))),
+                            child:
+                                Text(list[index].text, style: Style.whiteText),
+                          )
+                        : Container(
+                            padding: EdgeInsets.only(
+                                left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                            constraints:
+                                BoxConstraints(maxWidth: mediaSize.width * 0.7),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8.0))),
+                            child: Text(list[index].text, style: Style.text),
+                          )
+                  ]),
+                ],
+              ),
+          itemCount: list.length,
+        ));
   }
 }

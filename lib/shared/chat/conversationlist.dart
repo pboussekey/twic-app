@@ -52,7 +52,7 @@ class ConversationList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Avatar(
-                  file: list[index].users[0].avatar,
+                  href: list[index].users[0].avatar?.href(),
                   size: 30.0,
                 ),
                 SizedBox(

@@ -152,6 +152,9 @@ class _PostViewState extends State<_PostView> {
                           ),
                     )
                   : Container(),
+                  SizedBox(
+                    height: 10,
+                  ),
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Flex(

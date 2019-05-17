@@ -11,12 +11,14 @@ class Dropdown<T> extends StatelessWidget {
   final Widget icon;
   final List<BoxShadow> shadow;
   final BoxBorder border;
+  final String label;
 
   Dropdown(
       {this.value,
       this.items,
       this.icon,
       this.onChanged,
+      this.label,
       this.size,
       this.hint,
       this.shadow,
@@ -24,10 +26,9 @@ class Dropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(["DROPDOWN", this.items]);
     return Container(
         padding: EdgeInsets.all(10.0),
-        height: 60.0,
+        height: null != label ? 82 : 68.0,
         width: size,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -42,17 +43,23 @@ class Dropdown<T> extends StatelessWidget {
               ],
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        child: Row(children: [
-          icon ?? Container(),
-          Expanded(child :DropdownButtonHideUnderline(
-              child: DropdownButton<T>(
-            elevation: 0,
-            isExpanded: true,
-            hint: hint,
-            value: value,
-            items: items,
-            onChanged: onChanged,
-          )))
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          null != label
+              ? Text(label, style: Style.smallLightText)
+              : Container(),
+          Row(children: [
+            icon ?? Container(),
+            Expanded(
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton<T>(
+              elevation: 0,
+              isExpanded: true,
+              hint: hint,
+              value: value,
+              items: items,
+              onChanged: onChanged,
+            )))
+          ])
         ]));
   }
 }

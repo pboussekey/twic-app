@@ -27,12 +27,11 @@ Future<ValueNotifier<GraphQLClient>> getClient() async {
   return _client;
 }
 
-Future<dynamic> execute(String query, Map<String, dynamic> params) async {
+Future<dynamic> execute(String query, Map<String, dynamic> params, { bool cache : false }) async {
   return getClient().then(
     (ValueNotifier<GraphQLClient> client) {
-      print(client);
       return client.value
-          .query(QueryOptions(document: query, variables: params));
+          .query(QueryOptions(document: query, variables: params, fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache));
     },
   ).then((QueryResult result) => result.data);
 }
@@ -50,7 +49,6 @@ Widget query<T extends AbstractModel>(
           variables: params,
           fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        print(params);
         if (result.loading) {
           return whileLoading ?? Container();
         }

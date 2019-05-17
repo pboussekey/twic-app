@@ -31,7 +31,7 @@ class UserList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Avatar(
-                            file: list[index].avatar,
+                            href: list[index].avatar.href(),
                             size: 30.0,
                           ),
                           SizedBox(
