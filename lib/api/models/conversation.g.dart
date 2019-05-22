@@ -17,7 +17,10 @@ Conversation _$ConversationFromJson(Map<String, dynamic> json) {
       users: (json['users'] as List)
           ?.map((e) =>
               e == null ? null : User.fromJson(e as Map<String, dynamic>))
-          ?.toList());
+          ?.toList())
+    ..picture = json['picture'] == null
+        ? null
+        : TwicFile.fromJson(json['picture'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ConversationToJson(Conversation instance) =>
@@ -26,5 +29,6 @@ Map<String, dynamic> _$ConversationToJson(Conversation instance) =>
       'name': instance.name,
       'last': instance.last,
       'users': instance.users?.map((e) => e?.toJson())?.toList(),
-      'lastDate': instance.lastDate?.toIso8601String()
+      'lastDate': instance.lastDate?.toIso8601String(),
+      'picture': instance.picture?.toJson()
     };

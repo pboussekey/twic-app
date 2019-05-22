@@ -27,9 +27,6 @@ class RoundPicture extends StatelessWidget {
               height: height,
               width: width,
               fit: fit,
-              placeholder: (context, url) => Center(
-                  child: Container(
-                      child: CircularProgressIndicator())),
               fadeOutDuration: new Duration(seconds: 1),
               fadeInDuration: new Duration(seconds: 1),
             )

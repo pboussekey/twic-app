@@ -51,9 +51,14 @@ class ConversationList extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Avatar(
+                list[index].users.length == 1 ? Avatar(
                   href: list[index].users[0].avatar?.href(),
-                  size: 30.0,
+                ) : (
+                    null != list[index].picture ? Avatar(href : list[index].picture.href()) :
+                    Container(
+                      color : Style.darkGrey,
+                      child: Text((list[index].users.length + 1).toString(), style : Style.whiteTitle),
+                    )
                 ),
                 SizedBox(
                   width: 10,
@@ -65,7 +70,7 @@ class ConversationList extends StatelessWidget {
                     Text(
                         "${list[index].users[0].firstname} ${list[index].users[0].lastname}",
                         style: Style.text),
-                    Text("${list[index].last}", style: Style.lightText),
+                    null != list[index].last ? Text("${list[index].last}", style: Style.lightText) : Container(),
                   ],
                 )),
                 Container(
@@ -73,10 +78,10 @@ class ConversationList extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(
+                        null != list[index].lastDate ? Text(
                           "${_renderDate(list[index].lastDate)}",
                           style: Style.lightText,
-                        )
+                        ): Container()
                       ],
                     )),
               ])),

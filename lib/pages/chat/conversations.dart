@@ -69,7 +69,7 @@ class ConversationsState extends State<ConversationsList> {
                     child: Container(
                         width: mediaSize.width - 40,
                         child: Input(
-                          height: 40.0,
+                          height: 50.0,
                           color: Style.veryLightGrey,
                           shadow: false,
                           icon: Icons.search,

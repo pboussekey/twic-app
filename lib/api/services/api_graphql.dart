@@ -17,7 +17,13 @@ Future<ValueNotifier<GraphQLClient>> getClient() async {
 
   final AuthLink authLink = AuthLink(getToken: () => 'Bearer ${session.token}');
 
-  final Link link = authLink.concat(httpLink as Link);
+  final WebSocketLink websocketLink = WebSocketLink(
+    url: 'ws://10.0.2.2:3000/subscriptions',
+    config: SocketClientConfig(autoReconnect: true, inactivityTimeout: null),
+  );
+
+  final Link link = authLink.concat(httpLink as Link).concat(websocketLink);
+
   _client = ValueNotifier<GraphQLClient>(
     GraphQLClient(
       link: link,
@@ -27,11 +33,14 @@ Future<ValueNotifier<GraphQLClient>> getClient() async {
   return _client;
 }
 
-Future<dynamic> execute(String query, Map<String, dynamic> params, { bool cache : false }) async {
+Future<dynamic> execute(String query, Map<String, dynamic> params,
+    {bool cache: false}) async {
   return getClient().then(
     (ValueNotifier<GraphQLClient> client) {
-      return client.value
-          .query(QueryOptions(document: query, variables: params, fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache));
+      return client.value.query(QueryOptions(
+          document: query,
+          variables: params,
+          fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache));
     },
   ).then((QueryResult result) => result.data);
 }
@@ -47,7 +56,7 @@ Widget query<T extends AbstractModel>(
       options: QueryOptions(
           document: query.replaceAll('\n', ' '),
           variables: params,
-          fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache),
+          fetchPolicy: FetchPolicy.noCache),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) {
           return whileLoading ?? Container();
@@ -76,3 +85,10 @@ Mutation mutation(
         return builder(runMutation, result);
       });
 }
+
+Subscription subscription(
+        {String operation,
+        String query,
+        Map<String, dynamic> params,
+        Function builder}) =>
+    Subscription(operation, query, variables: params, builder: builder);

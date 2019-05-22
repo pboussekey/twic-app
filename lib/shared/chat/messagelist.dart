@@ -4,70 +4,124 @@ import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:twic_app/shared/components/round_picture.dart';
 
-class MessageList extends StatelessWidget {
+class MessageList extends StatefulWidget {
   final List<Message> list;
 
   MessageList({this.list});
 
-  String _renderDate(DateTime date) {
-    Duration since = DateTime.now().difference(date);
-    if (since.inSeconds < 60) {
-      return '${since.inSeconds}s';
-    } else if (since.inMinutes < 60) {
-      return '${since.inMinutes}m';
-    } else if (since.inHours < 24) {
-      return '${since.inHours}h';
-    } else if (since.inDays < 30) {
-      return '${since.inDays}d';
-    }
+  @override
+  MessageListState createState() => MessageListState();
+}
 
-    return DateFormat.yMMMd().format(new DateTime.now());
+class MessageListState extends State<MessageList> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isBottom = true;
+
+  void _scrollBottom() {
+    if (_isBottom) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  String _renderDate(DateTime date) {
+    DateTime now = DateTime.now();
+    if (now.year == date.year &&
+        now.month == date.month &&
+        now.day == date.day) {
+      return "Today ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}";
+    }
+    return DateFormat.yMMMd().format(date);
+  }
+
+  MessageListState() {
+    _scrollController.addListener(() {
+      _isBottom = _scrollController.position.pixels >
+          _scrollController.position.maxScrollExtent - 100;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollBottom();
+    });
     return Container(
         width: mediaSize.width - 40.0,
         child: ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) => Column(
+          controller: _scrollController,
+          itemBuilder: (BuildContext context, int index) => Padding(
+              padding: EdgeInsets.only(
+                  bottom: index < widget.list.length - 1 ? 10 : 80,
+                  top: index == 0 ? 10 : 0),
+              child: Column(
                 crossAxisAlignment:
-                    list[index].user.id == Session.instance.user.id
+                    widget.list[index].user.id == Session.instance.user.id
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(children: [
-                    list[index].user.id == Session.instance.user.id
+                    widget.list[index].user.id == Session.instance.user.id
                         ? Expanded(child: Container())
-                        : Avatar(
-                            size: 20.0,
-                            href: list[index].user.avatar?.href(),
+                        : Container(
+                            width: 15,
                           ),
                     SizedBox(
                       width: 10.0,
                     ),
-                    Text(_renderDate(list[index].createdAt),
-                        style: Style.lightText)
+                    index == 0 ||
+                            (widget.list[index].createdAt
+                                        .difference(
+                                            widget.list[index - 1].createdAt)
+                                        .inMinutes >
+                                    5 &&
+                                _renderDate(widget.list[index].createdAt) !=
+                                    _renderDate(
+                                        widget.list[index - 1].createdAt))
+                        ? Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                                _renderDate(widget.list[index].createdAt),
+                                style: Style.lightText))
+                        : Container(),
+
                   ]),
                   Row(children: [
-                    list[index].user.id == Session.instance.user.id
+                    widget.list[index].user.id == Session.instance.user.id
                         ? Expanded(child: Container())
                         : SizedBox(width: 25.0),
-                    list[index].user.id == Session.instance.user.id
+                    widget.list[index].user.id == Session.instance.user.id
                         ? Container(
-                            padding: EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
+                            padding: null != widget.list[index].text
+                                ? EdgeInsets.only(
+                                    left: 20.0,
+                                    right: 20.0,
+                                    top: 5.0,
+                                    bottom: 5.0)
+                                : EdgeInsets.all(0),
                             constraints:
                                 BoxConstraints(maxWidth: mediaSize.width * 0.7),
                             decoration: BoxDecoration(
-                                color: Style.genZPurple,
+                                color: null != widget.list[index].text
+                                    ? Style.genZPurple
+                                    : Colors.transparent,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0))),
-                            child:
-                                Text(list[index].text, style: Style.whiteText),
+                            child: null != widget.list[index].text
+                                ? Text(widget.list[index].text,
+                                    style: Style.whiteText)
+                                : RoundPicture(
+                                    picture:
+                                        widget.list[index].attachment.href(),
+                                  ),
                           )
                         : Container(
                             padding: EdgeInsets.only(
@@ -78,12 +132,18 @@ class MessageList extends StatelessWidget {
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0))),
-                            child: Text(list[index].text, style: Style.text),
+                            child: null != widget.list[index].text
+                                ? Text(widget.list[index].text,
+                                    style: Style.text)
+                                : RoundPicture(
+                                    picture:
+                                        widget.list[index].attachment.href(),
+                                  ),
                           )
                   ]),
                 ],
-              ),
-          itemCount: list.length,
+              )),
+          itemCount: widget.list.length,
         ));
   }
 }

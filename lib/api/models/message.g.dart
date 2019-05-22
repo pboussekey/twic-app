@@ -15,12 +15,16 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
           : User.fromJson(json['user'] as Map<String, dynamic>),
       createdAt: json['createdAt'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String));
+          : DateTime.parse(json['createdAt'] as String))
+    ..attachment = json['attachment'] == null
+        ? null
+        : TwicFile.fromJson(json['attachment'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'id': instance.id,
       'text': instance.text,
       'user': instance.user?.toJson(),
-      'createdAt': instance.createdAt?.toIso8601String()
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'attachment': instance.attachment?.toJson()
     };
