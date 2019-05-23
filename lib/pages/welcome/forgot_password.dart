@@ -21,7 +21,7 @@ class ForgotPassword extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: Style.genZPurple,
+          backgroundColor: Style.mainColor,
           elevation: 0.0,
           iconTheme: IconThemeData(color: Colors.white),
         ),
@@ -55,7 +55,7 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
           ClipRect(
             child: CustomPaint(
                 painter: CustomBackgroundPainter(
-                    color: Style.genZPurple, padding: 0.4),
+                    color: Style.mainColor, padding: 0.4),
                 size: Size(double.infinity, mediaSize.height * 0.55)),
           ),
           Container(

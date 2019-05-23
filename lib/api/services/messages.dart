@@ -1,5 +1,5 @@
 import 'package:twic_app/api/services/api_graphql.dart' as api;
-import 'package:twic_app/api/models/message.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:flutter/material.dart';
 
 export 'package:twic_app/api/services/api_graphql.dart';
@@ -34,7 +34,7 @@ class Messages {
         builder: builder);
 
 
-  static Widget onMessage({int conversation_id, Function builder }) =>
+  static Widget onMessage({int conversation_id, Function builder, Function onCompleted }) =>
       api.subscription(
           operation : "onMessage",
           query: """
@@ -43,6 +43,7 @@ class Messages {
                 id
                 text
                 createdAt
+                conversation_id
                  user{ 
                   id
                   firstname 
@@ -55,16 +56,16 @@ class Messages {
           params: {
             'conversation_id' : conversation_id
           },
-          builder : builder);
+          builder : builder,);
 
 
-  static api.Mutation send({Function builder}) => api.mutation(query: """      
-         mutation sendMessage(\$conversation_id: ID!, \$text : String,  \$attachment : FileInputDef) {
-          sendMessage(conversation_id: \$conversation_id, text : \$text, attachment : \$attachment){
-                success
+  static api.Mutation send({Function builder, Function onCompleted}) => api.mutation(query: """      
+         mutation sendMessage(\$conversation_id: ID, \$users: [ID], \$text : String, \$name : String, \$attachment : FileInputDef) {
+          sendMessage(conversation_id: \$conversation_id, users : \$users, text : \$text, name : \$name, attachment : \$attachment){
+                conversation_id
               }
           }
-          """, builder: builder);
+          """, builder: builder, onCompleted: onCompleted);
 }
 
 

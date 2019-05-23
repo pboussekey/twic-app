@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/hashtag.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 class HashtagList extends StatelessWidget {
   final List<Hashtag> list;

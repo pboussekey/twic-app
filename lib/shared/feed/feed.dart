@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'post.dart';
-import 'package:twic_app/api/models/post.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:twic_app/shared/components/infinite_scroll.dart';
 

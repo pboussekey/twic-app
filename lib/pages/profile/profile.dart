@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:twic_app/api/models/user.dart';
-import 'package:twic_app/api/models/twic_file.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/users.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
 
 import '../root_page.dart';
 import 'package:twic_app/shared/feed/feed.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/profile/profile_followers.dart';

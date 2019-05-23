@@ -19,7 +19,7 @@ class Button extends StatelessWidget {
   Button(
       {this.text,
       this.onPressed,
-      this.background = Style.genZPurple,
+      this.background = Style.mainColor,
       this.color = Colors.white,
       this.padding,
       this.width,

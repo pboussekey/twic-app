@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:twic_app/api/services/users.dart';
 import 'package:twic_app/api/services/hashtags.dart';
 import 'package:twic_app/api/services/schools.dart';
-import 'package:twic_app/api/models/user.dart';
-import 'package:twic_app/api/models/hashtag.dart';
-import 'package:twic_app/api/models/school.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/userlist.dart';
 import 'package:twic_app/shared/hashtags/hashtaglist.dart';
 import 'package:twic_app/shared/schools/schoollist.dart';
 import '../root_page.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/input.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/tabs.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/discover/discover_filters.dart';
@@ -85,7 +82,7 @@ class DiscoverState extends State<Discover> {
                                           height: 20,
                                           width: 20,
                                           padding: EdgeInsets.all(2.0),
-                                          color: Style.genZPurple,
+                                          color: Style.mainColor,
                                           child: Text(
                                             widget.filters.length.toString(),
                                             style: Style.whiteText,

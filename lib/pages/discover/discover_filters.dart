@@ -169,7 +169,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                                     background: null != filters['classYear'] &&
                                             currentYear - 50 + index ==
                                                 filters['classYear']
-                                        ? Style.genZPurple
+                                        ? Style.mainColor
                                         : Colors.white,
                                     child: Row(
                                         mainAxisAlignment:

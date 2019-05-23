@@ -14,7 +14,7 @@ abstract class Style {
   static const Color purple = Color.fromARGB(255, 234, 242, 249);
   static const Color darkPurple = Color.fromARGB(255, 24,24,76);
 
-  static const Color genZPurple = Color.fromARGB(255, 124,137,253);
+  static const Color mainColor = Color.fromARGB(255, 124,137,253);
   static const Color genZGreen = Color.fromARGB(255, 154,239,202);
   static const Color genZOrange = Color.fromARGB(255, 242,145,114);
   static const Color genZYellow = Color.fromARGB(255, 252,222,120);
@@ -57,10 +57,10 @@ abstract class Style {
   TextStyle(fontSize: 11.0, color: Colors.white, fontFamily: 'Rubik');
 
   static TextStyle hashtagStyle = TextStyle(
-      fontSize: 15.0, color: Style.genZPurple, fontFamily: 'Rubik');
+      fontSize: 15.0, color: Style.mainColor, fontFamily: 'Rubik');
 
 
-  static TextStyle get({double fontSize, Color color}){
-    return TextStyle(fontSize: fontSize, color : color, fontFamily: 'Rubik');
+  static TextStyle get({double fontSize, Color color, FontWeight fontWeight}){
+    return TextStyle(fontSize: fontSize, color : color, fontFamily: 'Rubik', fontWeight: fontWeight);
   }
 }

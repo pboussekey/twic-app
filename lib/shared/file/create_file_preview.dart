@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/twic_file.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/components/round_picture.dart';
 

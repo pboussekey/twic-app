@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/post.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/feed/comment.dart';
 
 class CommentsList extends StatelessWidget {

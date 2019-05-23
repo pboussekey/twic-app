@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/conversation.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/pages/chat/conversation.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:intl/intl.dart';
@@ -29,11 +29,11 @@ class ConversationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
+    print(list.length);
     return Container(
         child: ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.horizontal,
       itemBuilder: (BuildContext context, int index) => Button(
         background: Colors.white,
           radius: BorderRadius.all(Radius.circular(0)),
@@ -43,7 +43,7 @@ class ConversationList extends StatelessWidget {
                   builder: (BuildContext context) =>
                       ConversationPage(conversation: list[index]))),
           padding:
-              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+              EdgeInsets.only(top: 5.0, bottom: 5.0, left: 20.0, right: 20.0),
           height: 50,
           width: mediaSize.width,
           child: Flex(
@@ -56,7 +56,14 @@ class ConversationList extends StatelessWidget {
                 ) : (
                     null != list[index].picture ? Avatar(href : list[index].picture.href()) :
                     Container(
-                      color : Style.darkGrey,
+                      alignment: Alignment(0, 0),
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color : Style.darkGrey,
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                        
+                      ),
                       child: Text((list[index].users.length + 1).toString(), style : Style.whiteTitle),
                     )
                 ),
@@ -64,7 +71,9 @@ class ConversationList extends StatelessWidget {
                   width: 10,
                 ),
                 Expanded(
-                    child: Column(
+                    child: Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                        child : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
@@ -72,7 +81,7 @@ class ConversationList extends StatelessWidget {
                         style: Style.text),
                     null != list[index].last ? Text("${list[index].last}", style: Style.lightText) : Container(),
                   ],
-                )),
+                ))),
                 Container(
                     height: 50.0,
                     child: Row(

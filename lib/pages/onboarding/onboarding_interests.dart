@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:twic_app/shared/form/autocomplete.dart';
 import 'package:twic_app/pages/onboarding/onboarding_states.dart';
 import 'package:twic_app/pages/onboarding/onboarding_content_state.dart';
-import 'package:twic_app/api/models/hashtag.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/hashtags/hashtags.dart';
 import 'package:twic_app/api/services/hashtags.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/button.dart';
 
 class OnboardingInterests extends OnboardingContentState {
   Widget _render() {

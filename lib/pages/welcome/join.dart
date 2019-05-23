@@ -5,9 +5,7 @@ import 'package:twic_app/api/session.dart';
 
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/components/notifier.dart' as notifier;
-import 'package:twic_app/shared/form/button.dart';
-import 'package:twic_app/shared/form/input.dart';
-import 'package:twic_app/shared/form/autocomplete.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 import 'package:twic_app/pages/home.dart';
 import 'package:twic_app/pages/onboarding/onboarding.dart';

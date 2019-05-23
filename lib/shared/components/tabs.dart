@@ -23,7 +23,7 @@ class Tabs extends StatelessWidget{
               Container(
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
                   child: TabBar(
-                    indicatorColor: Style.genZPurple,
+                    indicatorColor: Style.mainColor,
                     labelStyle: Style.smallText,
                     unselectedLabelColor: Style.lightGrey,
                     indicatorWeight: 2.0,

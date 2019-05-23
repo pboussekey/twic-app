@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/user.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 class UserList extends StatelessWidget {
   final List<User> list;
+  final Function renderAction;
+  final Function onClick;
 
-  UserList({this.list});
+  UserList({this.list, this.renderAction, this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +18,13 @@ class UserList extends StatelessWidget {
         child: ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) => Container(
+          itemBuilder: (BuildContext context, int index) => Button(
+            background: Colors.transparent,
+              radius: BorderRadius.all(Radius.circular(0)),
               padding: EdgeInsets.only(
-                  top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
-              height: 50,
-              width: mediaSize.width,
+                  top: 10.0, bottom: 10.0),
+              height: 51,
+              onPressed: () => null != onClick ? onClick(list[index]) : null,
               child: Flex(
                   direction: Axis.horizontal,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +34,7 @@ class UserList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Avatar(
-                            href: list[index].avatar.href(),
+                            href: list[index]?.avatar?.href(),
                             size: 30.0,
                           ),
                           SizedBox(
@@ -44,12 +47,12 @@ class UserList extends StatelessWidget {
                               Text(
                                   "${list[index].firstname} ${list[index].lastname}",
                                   style: Style.text),
-                              Text("${list[index].university.name}",
+                              Text("${list[index].institution.name}",
                                   style: Style.lightText),
                             ],
                           ))
                         ]),
-                    Button(
+                    null == renderAction ? Button(
                       height: 30.0,
                       padding: EdgeInsets.only(left : 10.0, right : 10.0),
                       text: list[index].followed ? 'Unfollow' : 'Follow',
@@ -59,7 +62,7 @@ class UserList extends StatelessWidget {
                       color: list[index].followed
                           ? Style.lightGrey
                           : Style.lightGrey,
-                    )
+                    ) : renderAction(list[index])
                   ])),
           itemCount: list.length,
         ));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/message.dart';
-import 'package:twic_app/shared/users/avatar.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:intl/intl.dart';
@@ -100,34 +99,32 @@ class MessageListState extends State<MessageList> {
                         : SizedBox(width: 25.0),
                     widget.list[index].user.id == Session.instance.user.id
                         ? Container(
+                      width: mediaSize.width * 0.55,
                             padding: null != widget.list[index].text
                                 ? EdgeInsets.only(
-                                    left: 20.0,
-                                    right: 20.0,
+                                    left: 10.0,
+                                    right: 10.0,
                                     top: 5.0,
                                     bottom: 5.0)
                                 : EdgeInsets.all(0),
-                            constraints:
-                                BoxConstraints(maxWidth: mediaSize.width * 0.7),
                             decoration: BoxDecoration(
                                 color: null != widget.list[index].text
-                                    ? Style.genZPurple
+                                    ? Style.mainColor
                                     : Colors.transparent,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0))),
                             child: null != widget.list[index].text
                                 ? Text(widget.list[index].text,
-                                    style: Style.whiteText)
+                                    style: Style.whiteText, textAlign: TextAlign.start,)
                                 : RoundPicture(
                                     picture:
                                         widget.list[index].attachment.href(),
                                   ),
                           )
                         : Container(
+                      width: mediaSize.width * 0.55,
                             padding: EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-                            constraints:
-                                BoxConstraints(maxWidth: mediaSize.width * 0.7),
+                                left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:

@@ -4,13 +4,11 @@ import 'package:twic_app/style/style.dart';
 
 import 'package:twic_app/api/session.dart';
 import '../root_page.dart';
-import 'package:twic_app/shared/form/dropdown.dart';
-import 'package:twic_app/shared/form/textarea.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/api/services/upload_service.dart' as upload_service;
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:twic_app/api/models/twic_file.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/file/create_file_preview.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:twic_app/pages/home.dart';
@@ -336,14 +334,14 @@ class CreatePostState extends State<CreatePost> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Button(
-                      background: Style.genZPurple.withAlpha(40),
+                      background: Style.mainColor.withAlpha(40),
                       radius: BorderRadius.all(Radius.circular(25.0)),
                       padding: EdgeInsets.all(0),
                       width: 50.0,
                       child: Icon(
                         Icons.camera_alt,
                         size: 24.0,
-                        color: Style.genZPurple,
+                        color: Style.mainColor,
                       ),
                       onPressed: () =>
                           ImagePicker.pickImage(source: ImageSource.camera)

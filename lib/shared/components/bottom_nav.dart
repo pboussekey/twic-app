@@ -7,8 +7,7 @@ import 'package:twic_app/pages/chat/conversations.dart';
 import 'package:twic_app/pages/posts/create.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/users/avatar.dart';
-import 'package:twic_app/shared/form/button.dart';
-import 'package:twic_app/api/models/post.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 enum ButtonEnum { Home, Discover, Create, Profile, Chat }
 
@@ -58,7 +57,7 @@ class BottomNav extends StatelessWidget {
                                   )));
                 }),
             Button(
-              background: Style.genZPurple,
+              background: Style.mainColor,
               height: 24.0,
               width: 40.0,
               radius: BorderRadius.all(Radius.circular(4.0)),

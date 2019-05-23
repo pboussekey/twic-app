@@ -40,7 +40,7 @@ Future<dynamic> execute(String query, Map<String, dynamic> params,
       return client.value.query(QueryOptions(
           document: query,
           variables: params,
-          fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.noCache));
+          fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.cacheAndNetwork));
     },
   ).then((QueryResult result) => result.data);
 }

@@ -1,5 +1,5 @@
 import 'package:twic_app/api/services/api_graphql.dart' as api;
-import 'package:twic_app/api/models/hashtag.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:flutter/material.dart';
 
 export 'package:twic_app/api/services/api_graphql.dart';

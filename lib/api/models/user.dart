@@ -26,6 +26,7 @@ class User extends AbstractModel {
 
 
   School get university => school.university;
+  School get institution => school.university ?? school;
 
 
   User({id,

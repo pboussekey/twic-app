@@ -8,6 +8,7 @@ class Input extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
   final bool shadow;
+  final Widget before;
   final Widget after;
   final Function onSaved;
   final TextEditingController controller;
@@ -29,6 +30,7 @@ class Input extends StatelessWidget {
       this.inputType = TextInputType.text,
       this.shadow = true,
       this.label,
+      this.before,
       this.after,
       this.validator});
 
@@ -39,12 +41,14 @@ class Input extends StatelessWidget {
       key: key,
       controller: controller,
       decoration: InputDecoration(
-          icon: null != this.icon ? Icon(
-            this.icon,
-            color: Style.lightGrey,
-          ) : null,
+          icon: null != this.icon
+              ? Icon(
+                  this.icon,
+                  color: Style.lightGrey,
+                )
+              : null,
           border: InputBorder.none,
-          fillColor: Style.genZPurple,
+          fillColor: Style.mainColor,
           hintText: this.placeholder),
       onSaved: this.onSaved,
       validator: this.validator,
@@ -70,15 +74,16 @@ class Input extends StatelessWidget {
               : null,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-          null != label ? Text(label, style : Style.smallLightText) : Container(),
-          Row(mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          null != label
+              ? Text(label, style: Style.smallLightText)
+              : Container(),
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            before ?? Container(),
+            SizedBox(width: null != before ? 10 : 0,),
             Expanded(child: this.field),
             after ??
-                Container(
+                SizedBox(
                   width: 10,
                 )
           ])

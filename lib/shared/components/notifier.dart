@@ -21,7 +21,7 @@ void alert(
     //Immutable
     forwardAnimationCurve: Curves.elasticOut,
     //Immutable
-    backgroundColor: type == AlertType.error ? Style.red : Style.genZPurple,
+    backgroundColor: type == AlertType.error ? Style.red : Style.mainColor,
     isDismissible: isDismissible,
     duration: Duration(seconds: duration),
     icon: icon,

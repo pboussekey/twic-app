@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/school.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/users/avatar.dart';
-import 'package:twic_app/shared/form/button.dart';
 
 class SchoolCard extends StatefulWidget {
   final School school;

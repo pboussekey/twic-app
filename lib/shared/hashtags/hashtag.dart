@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/hashtag.dart';
-import 'package:twic_app/shared/components/round_picture.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/api/services/hashtags.dart';
 
 class HashtagWidget extends StatefulWidget {
@@ -57,7 +56,7 @@ class _HashtagState extends State<HashtagWidget> {
                                   color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold)),
-                          color: Style.genZPurple,
+                          color: Style.mainColor,
                           height: 20,
                           width: 20,
                           alignment: Alignment.center,

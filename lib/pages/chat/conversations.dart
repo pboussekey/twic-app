@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/api/services/conversations.dart';
-import 'package:twic_app/api/models/conversation.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/chat/conversationlist.dart';
-import 'package:twic_app/shared/hashtags/hashtaglist.dart';
-import 'package:twic_app/shared/schools/schoollist.dart';
 import '../root_page.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/input.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/tabs.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
-import 'package:twic_app/api/session.dart';
+import 'package:twic_app/pages/chat/create_conversation.dart';
 
 class ConversationsList extends StatefulWidget {
   String search;
@@ -54,13 +51,17 @@ class ConversationsState extends State<ConversationsList> {
                         Text('Conversations', style: Style.titleStyle),
                         Button(
                             background: Colors.transparent,
-                            width: 50.0,
+                            width: 25.0,
                             padding: EdgeInsets.all(0.0),
                             child: Icon(
                               Icons.add,
-                              color: Style.genZPurple,
+                              color: Style.mainColor,
                             ),
-                            onPressed: () {})
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        CreateConversation())))
                       ],
                     ),
                   ),
@@ -77,7 +78,9 @@ class ConversationsState extends State<ConversationsList> {
                           placeholder: "Search",
                         )),
                   ),
-                  SizedBox(height: 10.0,),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                   Tabs(tabs: [
                     Text(
                       'My Messages',

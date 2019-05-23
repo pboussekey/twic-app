@@ -4,10 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:twic_app/style/style.dart';
 
 import 'package:twic_app/shared/components/round_picture.dart';
-import 'package:twic_app/api/models/post.dart';
-import 'package:twic_app/api/models/twic_file.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/components/slider.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/pages/posts/post_view.dart';
 import 'package:twic_app/api/services/posts.dart';
 
@@ -73,6 +72,7 @@ class PostWidgetState extends State<PostWidget>
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    print(widget.post.user.toJson());
     return Container(
         color: Colors.white,
         margin: EdgeInsets.only(bottom: 20.0),

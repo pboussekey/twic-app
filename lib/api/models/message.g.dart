@@ -18,7 +18,10 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
           : DateTime.parse(json['createdAt'] as String))
     ..attachment = json['attachment'] == null
         ? null
-        : TwicFile.fromJson(json['attachment'] as Map<String, dynamic>);
+        : TwicFile.fromJson(json['attachment'] as Map<String, dynamic>)
+    ..conversation_id = json['conversation_id'] == null
+        ? null
+        : AbstractModel.parseId(json['conversation_id']);
 }
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
@@ -26,5 +29,6 @@ Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'text': instance.text,
       'user': instance.user?.toJson(),
       'createdAt': instance.createdAt?.toIso8601String(),
-      'attachment': instance.attachment?.toJson()
+      'attachment': instance.attachment?.toJson(),
+      'conversation_id': instance.conversation_id
     };

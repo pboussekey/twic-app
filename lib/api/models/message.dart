@@ -12,6 +12,8 @@ class Message extends AbstractModel {
   User user;
   DateTime createdAt;
   TwicFile attachment;
+  @JsonKey(fromJson: AbstractModel.parseId)
+  int conversation_id;
 
   Message({id, this.text, this.user, this.createdAt}) : super(id : id);
 

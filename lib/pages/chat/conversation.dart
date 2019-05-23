@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/api/services/messages.dart';
 import 'package:twic_app/shared/chat/messagelist.dart';
-import 'package:twic_app/api/models/conversation.dart';
-import 'package:twic_app/api/models/message.dart';
-import 'package:twic_app/api/models/user.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import '../root_page.dart';
 import 'package:twic_app/style/style.dart';
-import 'package:twic_app/shared/form/input.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/api/services/upload_service.dart' as upload_service;
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:twic_app/api/models/twic_file.dart';
 import 'dart:io';
 import 'package:twic_app/api/session.dart';
 
 class ConversationPage extends StatefulWidget {
-  final Conversation conversation;
+  Conversation conversation;
+  final User user;
 
-  ConversationPage({this.conversation});
+  ConversationPage({this.conversation, this.user});
 
   @override
   State<ConversationPage> createState() => ConversationPageState();
@@ -32,7 +29,7 @@ class ConversationPageState extends State<ConversationPage> {
   TwicFile attachment;
 
   void onNewMessage(Message message) {
-    if(message.user.id == Session.instance.user.id) return;
+    if (message.user.id == Session.instance.user.id) return;
     _messages.add(message);
   }
 
@@ -40,7 +37,19 @@ class ConversationPageState extends State<ConversationPage> {
     send(params);
     params["user"] = Session.instance.user.toJson();
     params["createdAt"] = DateTime.now().toIso8601String();
-    onNewMessage(Message.fromJson(params));
+    if (null != widget.conversation) {
+      onNewMessage(Message.fromJson(params));
+    }
+  }
+
+  String printUsers() {
+    if (widget.conversation.users.length == 1) {
+      return "${widget.conversation.users[0].firstname} ${widget.conversation.users[0].lastname}";
+    }
+    String users = "You";
+    widget.conversation.users.forEach(
+        (User user) => users += ", ${user.firstname} ${user.lastname}");
+    return users;
   }
 
   void onFileUpload(File file, Function send) {
@@ -55,7 +64,8 @@ class ConversationPageState extends State<ConversationPage> {
           TwicFile attachment = TwicFile.fromJson(fileData);
 
           sendMessage({
-            "conversation_id": widget.conversation.id,
+            "users": null != widget.user ? [widget.user.id] : null,
+            "conversation_id": widget?.conversation?.id,
             "attachment": attachment.toJson()
           }, send);
         });
@@ -66,7 +76,8 @@ class ConversationPageState extends State<ConversationPage> {
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
-    User user = widget.conversation.users[0];
+    User user =
+        null != widget.conversation ? widget.conversation.users[0] : null;
     TextEditingController _controller = TextEditingController();
     return Scaffold(
         body: RootPage(
@@ -76,30 +87,101 @@ class ConversationPageState extends State<ConversationPage> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Button(
-                background: Colors.transparent,
-                width: 50.0,
-                child: Icon(Icons.arrow_back, color: Style.lightGrey),
-                onPressed: () => Navigator.pop(context),
-              ),
-              widget.conversation.users.length == 1 ? Avatar(
-                href: user.avatar?.href(),
-              ) : (
-                null != widget.conversation.picture ? Avatar(href : widget.conversation.picture.href()) :
-                    Container(
-                      color : Style.darkGrey,
-                      child: Text((widget.conversation.users.length + 1).toString(), style : Style.whiteTitle),
+          null != widget.conversation
+              ? Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: widget.conversation.users.length == 1
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Button(
+                              background: Colors.transparent,
+                              width: 50.0,
+                              child: Icon(Icons.arrow_back,
+                                  color: Style.lightGrey),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            Container(
+                                width: mediaSize.width - 120,
+                                height: 70,
+                                child: Column(children: [
+                                  Avatar(
+                                    href: user.avatar?.href(),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Flexible(
+                                      child: Text(printUsers(),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Style.text)),
+                                ])),
+                            SizedBox(
+                              width: 50.0,
+                            )
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              Button(
+                                background: Colors.transparent,
+                                width: 50.0,
+                                child: Icon(Icons.arrow_back,
+                                    color: Style.lightGrey),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              Container(
+                                  width: mediaSize.width - 120,
+                                  height: 50,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Flexible(
+                                          child: Text(widget.conversation.name,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Style.largeText)),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Flexible(
+                                          child: Text(printUsers(),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Style.text)),
+                                    ],
+                                  )),
+                              (null != widget.conversation.picture
+                                  ? Avatar(
+                                      href: widget.conversation.picture.href())
+                                  : Container(
+                                      width: 50,
+                                      height: 50,
+                                      alignment: Alignment(0, 0),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(25)),
+                                          color: Style.darkGrey),
+                                      child: Text(
+                                          (widget.conversation.users.length + 1)
+                                              .toString(),
+                                          style: Style.whiteTitle),
+                                    )),
+                            ]))
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Button(
+                      background: Colors.transparent,
+                      width: 50.0,
+                      child: Icon(Icons.close, color: Style.lightGrey),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    Text('New Message', style: Style.largeText),
+                    SizedBox(
+                      width: 50.0,
                     )
-              ),
-              SizedBox(
-                width: 50.0,
-              )
-            ],
-          ),
-          Text("${user.firstname} ${user.lastname}", style: Style.text),
+                  ],
+                ),
           SizedBox(
             height: 10.0,
           ),
@@ -109,16 +191,56 @@ class ConversationPageState extends State<ConversationPage> {
                 height: mediaSize.height - 120,
                 color: Style.greyBackground,
                 padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 0),
-                child: Messages.getList(
-                    conversation_id: widget.conversation.id,
-                    builder: (List<Message> messages) {
-                      _messages = messages;
-                      return ConversationContent(
-                          conversation_id: widget.conversation.id,
-                          messages: _messages,
-                          onNewMessage: onNewMessage);
-                    })),
+                child: null != widget.conversation
+                    ? Messages.getList(
+                        conversation_id: widget.conversation.id,
+                        builder: (List<Message> messages) {
+                          _messages = messages;
+                          return ConversationContent(
+                              conversation_id: widget.conversation.id,
+                              messages: _messages,
+                              onNewMessage: onNewMessage);
+                        })
+                    : Container()),
+            null != widget.conversation
+                ? Container()
+                : Positioned(
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                    child: Container(
+                      height: 50,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      child: Row(
+                        children: <Widget>[
+                          Text('To: ',
+                              style: Style.get(
+                                  fontSize: 17, color: Style.lightGrey)),
+                          Text(
+                              ' ${widget.user.firstname} ${widget.user.lastname}',
+                              style: Style.largeText)
+                        ],
+                      ),
+                    ),
+                  ),
             Messages.send(
+                onCompleted: (dynamic data) {
+                  if (null != data && null == widget.conversation) {
+                    Message message = Message.fromJson(data['sendMessage']);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => ConversationPage(
+                                  conversation: Conversation.fromJson({
+                                    "users": [widget.user.toJson()],
+                                    "id": message.conversation_id
+                                  }),
+                                )));
+                  }
+                },
                 builder: (RunMutation send, QueryResult result) => Positioned(
                     bottom: 0,
                     left: 0,
@@ -129,10 +251,11 @@ class ConversationPageState extends State<ConversationPage> {
                       color: Colors.white,
                       child: Padding(
                         padding: EdgeInsets.only(
-                            left: 20.0, right: 20.0, bottom: 10.0, top: 10.0),
+                            left: 20.0, right: 20.0),
                         child: !addingFiles
                             ? Row(children: [
-                                !uploading ? Button(
+                                !uploading
+                                    ? Button(
                                         padding: EdgeInsets.all(0),
                                         height: 20,
                                         width: 20,
@@ -143,8 +266,9 @@ class ConversationPageState extends State<ConversationPage> {
                                         ),
                                         onPressed: () =>
                                             setState(() => addingFiles = true),
-                                        color: Style.genZPurple,
-                                      ) : CircularProgressIndicator(),
+                                        color: Style.mainColor,
+                                      )
+                                    : CircularProgressIndicator(),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -164,8 +288,11 @@ class ConversationPageState extends State<ConversationPage> {
                                     onPressed: () {
                                       if (_controller.text.isEmpty) return;
                                       sendMessage({
+                                        "users": null != widget.user
+                                            ? [widget.user.id]
+                                            : null,
                                         "conversation_id":
-                                            widget.conversation.id,
+                                            widget?.conversation?.id,
                                         "text": _controller.text
                                       }, send);
                                       _controller.text = "";
@@ -192,7 +319,7 @@ class ConversationPageState extends State<ConversationPage> {
                                     width: 10,
                                   ),
                                   Button(
-                                    background: Style.genZPurple.withAlpha(40),
+                                    background: Style.mainColor.withAlpha(40),
                                     radius:
                                         BorderRadius.all(Radius.circular(25.0)),
                                     padding: EdgeInsets.all(0),
@@ -200,7 +327,7 @@ class ConversationPageState extends State<ConversationPage> {
                                     child: Icon(
                                       Icons.camera_alt,
                                       size: 24.0,
-                                      color: Style.genZPurple,
+                                      color: Style.mainColor,
                                     ),
                                     onPressed: () => ImagePicker.pickImage(
                                             source: ImageSource.camera)
@@ -222,9 +349,9 @@ class ConversationPageState extends State<ConversationPage> {
                                       color: Style.genZYellow,
                                     ),
                                     onPressed: () => ImagePicker.pickVideo(
-                                                source: ImageSource.camera)
+                                            source: ImageSource.camera)
                                         .then((File file) =>
-                                        onFileUpload(file, send)),
+                                            onFileUpload(file, send)),
                                   ),
                                   SizedBox(
                                     width: 10,

@@ -5,10 +5,7 @@ import 'package:twic_app/api/session.dart';
 
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/components/notifier.dart' as notifier;
-import 'package:twic_app/shared/form/button.dart';
-import 'package:twic_app/shared/form/link.dart';
-import 'package:twic_app/shared/form/input.dart';
-import 'package:twic_app/shared/form/autocomplete.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 import 'package:twic_app/pages/home.dart';
 import 'package:twic_app/pages/onboarding/onboarding.dart';
@@ -25,7 +22,7 @@ class Login extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          backgroundColor: Style.genZPurple,
+          backgroundColor: Style.mainColor,
           elevation: 0.0,
           iconTheme: IconThemeData(color: Colors.white),
         ),
@@ -59,7 +56,7 @@ class LoginFormState extends State<LoginForm> {
           ClipRect(
             child: CustomPaint(
                 painter: CustomBackgroundPainter(
-                    color: Style.genZPurple, padding: 0.4),
+                    color: Style.mainColor, padding: 0.4),
                 size: Size(double.infinity, mediaSize.height * 0.55)),
           ),
           Container(

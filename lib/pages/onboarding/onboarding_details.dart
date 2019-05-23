@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/shared/form/autocomplete.dart';
-import 'package:twic_app/shared/form/dropdown.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/pages/onboarding/onboarding_content_state.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/pages/onboarding/onboarding_states.dart';
-import 'package:twic_app/api/models/school.dart';
-import 'package:twic_app/api/models/field.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/fields.dart';
 import 'package:twic_app/api/services/schools.dart';
 import 'package:twic_app/api/services/users.dart';

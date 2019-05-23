@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/api/services/users.dart';
 import 'package:twic_app/api/services/hashtags.dart';
-import 'package:twic_app/api/models/user.dart';
-import 'package:twic_app/api/models/hashtag.dart';
-import 'package:twic_app/shared/form/dropdown.dart';
+import 'package:twic_app/api/models/models.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/pages/onboarding/onboarding_content_state.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
@@ -122,7 +121,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                           icon: Container(
                             padding: EdgeInsets.only(top: 4),
                             decoration: BoxDecoration(
-                                color: Style.genZPurple,
+                                color: Style.mainColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(25))),
                             width: 30,

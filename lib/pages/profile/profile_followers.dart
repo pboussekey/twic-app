@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/api/services/users.dart';
-import 'package:twic_app/api/models/user.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/userlist.dart';
 import '../root_page.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
-import 'package:twic_app/shared/form/input.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/tabs.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
 

@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:twic_app/style/style.dart';
 
 import 'package:twic_app/shared/components/round_picture.dart';
-import 'package:twic_app/api/models/post.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/posts.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 class CommentWidget extends StatefulWidget {
   final Post post;

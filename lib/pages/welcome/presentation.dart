@@ -26,7 +26,7 @@ class PresentationState extends State<Presentation> {
         pathImage: 'assets/image-splash-1.png',
         widthImage: double.infinity,
         description: translations.text("welcome.step1.description"),
-        backgroundColor: Style.genZPurple,
+        backgroundColor: Style.mainColor,
         marginImage: 0.03,
       ),
     );

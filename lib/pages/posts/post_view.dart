@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/shared/feed/comment.dart';
-import 'package:twic_app/api/models/post.dart';
-import 'package:twic_app/api/models/twic_file.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/pages/root_page.dart';
-import 'package:twic_app/shared/form/input.dart';
-import 'package:twic_app/shared/form/button.dart';
+import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:twic_app/shared/components/round_picture.dart';
@@ -289,7 +287,7 @@ class _PostViewState extends State<_PostView> {
             after: Button(
               background: Colors.transparent,
               padding: EdgeInsets.all(0),
-              child: Icon(Icons.arrow_forward, color: Style.genZPurple),
+              child: Icon(Icons.arrow_forward, color: Style.mainColor),
               onPressed: () {
                 if (sending || content.isEmpty) return;
                 sending = true;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/models/user.dart';
+import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/usercard.dart';
 
 class UserCardList extends StatelessWidget{
