@@ -8,7 +8,8 @@ class Messages {
 
   api.SocketClient socketClient = api.SocketClient('ws://10.0.2.2:3000/subscriptions');
 
-  static Widget getList({int conversation_id, Function builder}) => api.query<Message>(
+  static Widget getList({int conversation_id, Function builder}) {
+    return api.query<Message>(
         query: """      
          query messages(\$conversation_id: ID!) {
           messages(conversation_id: \$conversation_id){
@@ -32,6 +33,7 @@ class Messages {
                 .map((dynamic message) => Message.fromJson(message))
                 .toList(),
         builder: builder);
+  }
 
 
   static Widget onMessage({int conversation_id, Function builder, Function onCompleted }) =>
@@ -66,6 +68,34 @@ class Messages {
               }
           }
           """, builder: builder, onCompleted: onCompleted);
+
+
+  static Future<List<Message>> load(
+      {int conversation_id, int offset, int count}){
+    return api.execute("""      
+          query messages(\$conversation_id: ID!, \$count : Int,  \$offset : Int) {
+          messages(conversation_id: \$conversation_id, count : \$count, offset : \$offset){
+                id
+                text
+                createdAt
+                user{ 
+                  id
+                  firstname 
+                  lastname 
+                  avatar{ name bucketname token } 
+                }
+                attachment{ name bucketname token } 
+              }
+          }
+          """, {
+      'conversation_id': conversation_id,
+      'count': count,
+      'offset': offset
+    }, cache: false).then((dynamic data){ return (data['messages'] as List<dynamic>)
+        .map((dynamic message) => Message.fromJson(message))
+        .toList(); });
+
+  }
 }
 
 

@@ -6,9 +6,21 @@ class InfiniteScroll extends StatefulWidget {
   final Function builder;
   final int count;
   ScrollController scroll;
+  final bool reverse;
+  final bool shrink;
+  final int delta;
+  final Function onScroll;
 
-  InfiniteScroll({this.fetch, this.builder, this.count, this.scroll}){
-    if(null == scroll) scroll = RootPage.scroll;
+  InfiniteScroll(
+      {this.fetch,
+      this.shrink = true,
+      this.builder,
+      this.onScroll,
+      this.count,
+      this.scroll,
+      this.delta = 200,
+      this.reverse = false}) {
+    if (null == scroll) scroll = RootPage.scroll;
   }
 
   @override
@@ -18,27 +30,39 @@ class InfiniteScroll extends StatefulWidget {
 class InfiniteScrollState extends State<InfiniteScroll> {
   int page = 0;
   bool loading = false;
-
+  double previousScroll = 0;
 
   @override
   void initState() {
     super.initState();
     widget.scroll.addListener(() {
       double maxScroll = widget.scroll.position.maxScrollExtent;
-      double currentScroll = widget.scroll.position.pixels;
-      double delta = 200.0;
-      if (maxScroll - currentScroll <= delta) {
+      double currentScroll = widget.scroll.offset;
+      bool scrolled = widget.reverse
+          ? widget.scroll.offset < previousScroll
+          : widget.scroll.offset > previousScroll;
+      print(["ON SCROLLED", scrolled, widget.scroll.initialScrollOffset, widget.scroll.offset]);
+      double scroll =
+          widget.reverse ? currentScroll : maxScroll - currentScroll;
+      if (scrolled && scroll <= widget.delta) {
         widget.fetch();
       }
+      if (null != widget.onScroll) {
+        widget.onScroll();
+      }
+      previousScroll = widget.scroll.offset;
     });
     widget.fetch();
   }
 
   @override
   Widget build(BuildContext context) => ListView.builder(
-    shrinkWrap: true,
-    physics: NeverScrollableScrollPhysics(),
-    itemBuilder: widget.builder,
-    itemCount: widget.count,
-  );
+        controller: widget.scroll,
+        shrinkWrap: widget.shrink,
+        physics: widget.shrink
+            ? NeverScrollableScrollPhysics()
+            : PageScrollPhysics(),
+        itemBuilder: widget.builder,
+        itemCount: widget.count,
+      );
 }

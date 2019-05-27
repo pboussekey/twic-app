@@ -118,7 +118,7 @@ class PostWidgetState extends State<PostWidget>
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10.0),
                               child: Text(
-                                widget.post.user.university.name,
+                                widget.post.user.institution.name,
                                 style: Style.lightText,
                                 textAlign: TextAlign.start,
                               ),

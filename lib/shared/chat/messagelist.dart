@@ -5,11 +5,12 @@ import 'package:twic_app/api/session.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:twic_app/shared/components/round_picture.dart';
+import 'package:twic_app/shared/components/infinite_scroll.dart';
 
 class MessageList extends StatefulWidget {
-  final List<Message> list;
-
-  MessageList({this.list});
+  List<Message> list;
+  final Function fetch;
+  MessageList({this.fetch, this.list});
 
   @override
   MessageListState createState() => MessageListState();
@@ -39,13 +40,6 @@ class MessageListState extends State<MessageList> {
     return DateFormat.yMMMd().format(date);
   }
 
-  MessageListState() {
-    _scrollController.addListener(() {
-      _isBottom = _scrollController.position.pixels >
-          _scrollController.position.maxScrollExtent - 100;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
@@ -54,12 +48,13 @@ class MessageListState extends State<MessageList> {
     });
     return Container(
         width: mediaSize.width - 40.0,
-        child: ListView.builder(
-          shrinkWrap: true,
-          controller: _scrollController,
-          itemBuilder: (BuildContext context, int index) => Padding(
+        child: InfiniteScroll(
+          fetch: widget.fetch,
+          reverse: true,
+          shrink: false,
+          builder: (BuildContext context, int index) => Padding(
               padding: EdgeInsets.only(
-                  bottom: index < widget.list.length - 1 ? 10 : 80,
+                  bottom: 10,
                   top: index == 0 ? 10 : 0),
               child: Column(
                 crossAxisAlignment:
@@ -140,7 +135,12 @@ class MessageListState extends State<MessageList> {
                   ]),
                 ],
               )),
-          itemCount: widget.list.length,
+          count: widget.list.length,
+          scroll: _scrollController,
+          onScroll: (){
+            _isBottom = _scrollController.position.pixels >
+                _scrollController.position.maxScrollExtent - 100;
+          },
         ));
   }
 }
