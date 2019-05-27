@@ -90,10 +90,20 @@ class ConversationsState extends State<ConversationsList> {
                     Text('Channels', textAlign: TextAlign.center),
                   ], tabsContent: [
                     Conversations.getList(
+                        search: controller.text,
+                        type: 'MESSAGE',
                         builder: (List<Conversation> conversations) =>
                             ConversationList(list: conversations)),
-                    Container(),
-                    Container()
+                    Conversations.getList(
+                        search: controller.text,
+                        type: 'GROUP',
+                        builder: (List<Conversation> conversations) =>
+                            ConversationList(list: conversations)),
+                    Conversations.getList(
+                        search: controller.text,
+                        type: 'CHANNEL',
+                        builder: (List<Conversation> conversations) =>
+                            ConversationList(list: conversations)),
                   ])
                 ])),
         bottomNavigationBar: BottomNav(

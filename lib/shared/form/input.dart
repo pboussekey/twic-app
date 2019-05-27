@@ -13,6 +13,7 @@ class Input extends StatelessWidget {
   final Function onSaved;
   final TextEditingController controller;
   final Function validator;
+  final Function onSubmitted;
   final TextInputType inputType;
   final double height;
   final Color color;
@@ -31,6 +32,7 @@ class Input extends StatelessWidget {
       this.shadow = true,
       this.label,
       this.before,
+      this.onSubmitted,
       this.after,
       this.validator});
 
@@ -40,6 +42,7 @@ class Input extends StatelessWidget {
       obscureText: obscureText ?? false,
       key: key,
       controller: controller,
+      onFieldSubmitted: onSubmitted,
       decoration: InputDecoration(
           icon: null != this.icon
               ? Icon(
@@ -80,7 +83,9 @@ class Input extends StatelessWidget {
               : Container(),
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             before ?? Container(),
-            SizedBox(width: null != before ? 10 : 0,),
+            SizedBox(
+              width: null != before ? 10 : 0,
+            ),
             Expanded(child: this.field),
             after ??
                 SizedBox(

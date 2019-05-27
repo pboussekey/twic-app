@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/shared/components/custom_painter.dart';
+import 'dart:math';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/shared/form/link.dart';
@@ -33,7 +33,7 @@ class Welcome extends StatelessWidget {
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
     return Scaffold(
-        body: Container(
+        body: SingleChildScrollView( child : Container(
             color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +53,7 @@ class Welcome extends StatelessWidget {
                     fit: BoxFit.fitWidth,
                   ),
                 ]),
-                SizedBox(height: 50,),
+                SizedBox(height: max(0, mediaSize.height * 0.6 - 325,)),
                 Container(
                     padding: EdgeInsets.only(left: 30.0, right: 30.0),
                     child: Column(
@@ -109,6 +109,6 @@ class Welcome extends StatelessWidget {
                       ],
                     ))
               ],
-            )));
+            ))));
   }
 }

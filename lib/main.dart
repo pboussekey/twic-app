@@ -12,7 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 ConnectionState state;
 
 void main() async {
-  await DotEnv().load('local.env');
+  await DotEnv().load('conf.env');
   print("MAIN INIT SESSION");
   Session session = await Session.init();
   await translations.init();

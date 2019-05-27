@@ -70,7 +70,8 @@ class CreateGroupState extends State<CreateGroup> {
                                           builder: (BuildContext context) =>
                                               ConversationPage(
                                                 conversation:
-                                                    Conversation.fromJson(data['addConversation']),
+                                                    Conversation.fromJson(data[
+                                                        'addConversation']),
                                               )));
                                 }
                               },
@@ -82,7 +83,7 @@ class CreateGroupState extends State<CreateGroup> {
                                             text: 'Create',
                                             height: 40,
                                             width: 90,
-                                            disabled: name.isEmpty,
+                                            disabled: name.isEmpty || uploading,
                                             onPressed: () {
                                               if (creating) return;
                                               setState(() {
@@ -91,7 +92,8 @@ class CreateGroupState extends State<CreateGroup> {
                                               create({
                                                 'name': name,
                                                 'users': widget.users
-                                                    .map((User u) => u.id).toList(),
+                                                    .map((User u) => u.id)
+                                                    .toList(),
                                                 'picture': picture?.toJson()
                                               });
                                             })
@@ -121,13 +123,16 @@ class CreateGroupState extends State<CreateGroup> {
                                         height: 35,
                                         width: 35,
                                         radius: 17.5,
+                                        fit: BoxFit.cover,
                                         picture: picture.href(),
                                       ),
                                 onPressed: () => ImagePicker.pickImage(
-                                            source: ImageSource.gallery)
+                                            source: ImageSource.camera)
                                         .then((File file) {
                                       if (null != file) {
-                                        uploading = true;
+                                        setState(() {
+                                          uploading = true;
+                                        });
                                         upload_service.upload(file: file).then(
                                             (Map<String, dynamic> fileData) {
                                           setState(() {
