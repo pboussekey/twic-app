@@ -21,8 +21,8 @@ class UserList extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) => Button(
             background: Colors.transparent,
               radius: BorderRadius.all(Radius.circular(0)),
-              padding: EdgeInsets.only(
-                  top: 10.0, bottom: 10.0),
+              padding:
+              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
               height: 51,
               onPressed: () => null != onClick ? onClick(list[index]) : null,
               child: Flex(

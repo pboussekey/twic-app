@@ -43,6 +43,31 @@ class Conversations {
           }
           """, builder: builder, onCompleted: onCompleted, update: update);
 
+  static api.Mutation createChannel({Function builder, Function onCompleted, Function update}) => api.mutation(query: """      
+         mutation createChannel(\$name: String) {
+          createChannel(name: \$name){
+                id 
+                name 
+                last 
+                lastDate  
+                picture{ name bucketname token }
+            }
+          }
+          """, builder: builder, onCompleted: onCompleted, update: update);
+
+  static api.Mutation join({Function builder, Function onCompleted, Function update}) => api.mutation(query: """      
+         mutation joinChannel( \$hashtag_id : ID) {
+          joinChannel( hashtag_id: \$hashtag_id){
+                id 
+                name 
+                last 
+                lastDate  
+                users{id firstname lastname avatar{ name bucketname token }}
+                picture{ name bucketname token }
+            }
+          }
+          """, builder: builder, onCompleted: onCompleted, update: update);
+
 
 
 }

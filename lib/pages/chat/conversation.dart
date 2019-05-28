@@ -293,7 +293,7 @@ class _ConversationPageState extends State<_ConversationPage> {
       ),
       Padding(
           padding: EdgeInsets.only(right: 20),
-          child: widget.conversation.users.length == 1
+          child: widget.conversation?.users?.length == 1
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
