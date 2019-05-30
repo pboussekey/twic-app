@@ -90,11 +90,11 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
         //SAME UNIVERSITY
         Users.getList(
             follower: false,
-            university_id: Session.instance.user.university.id,
+            university_id: Session.instance.user.institution.id,
             builder: (List<User> users) => users.length > 0
                 ? Column(children: [
                     Text(
-                      'Most popular at ${Session.instance.user.university.name}',
+                      'Most popular at ${Session.instance.user.institution.name}',
                       style: Style.titleStyle,
                     ),
                     SizedBox(

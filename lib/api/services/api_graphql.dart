@@ -11,6 +11,7 @@ export 'package:graphql_flutter/graphql_flutter.dart';
 ValueNotifier<GraphQLClient> _client;
 
 Future<ValueNotifier<GraphQLClient>> getClient() async {
+  print(["ALLO?",DotEnv().env]);
   if (null != _client) return _client;
   Session session = Session.instance;
   HttpLink httpLink = HttpLink(uri: '${DotEnv().env['API_URL']}/api');
@@ -18,7 +19,7 @@ Future<ValueNotifier<GraphQLClient>> getClient() async {
   final AuthLink authLink = AuthLink(getToken: () => 'Bearer ${session.token}');
 
   final WebSocketLink websocketLink = WebSocketLink(
-    url: 'ws://10.0.2.2:3000/subscriptions',
+    url: '${DotEnv().env['SUBSCRIPTION_URL']}/api',
     config: SocketClientConfig(autoReconnect: true, inactivityTimeout: null),
   );
 

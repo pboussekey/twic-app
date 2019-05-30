@@ -8,14 +8,30 @@ import 'package:twic_app/api/session.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:twic_app/shared/locale/translations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 ConnectionState state;
 
+
+final DynamicLinkParameters parameters = DynamicLinkParameters(
+  uriPrefix: 'https://twicapp.page.link/authentication',
+  link: Uri.parse('https://twicapp.page.link/authentication'),
+  androidParameters: AndroidParameters(
+    packageName: 'io.twic.app',
+    minimumVersion: 125,
+  ),
+  iosParameters: IosParameters(
+    bundleId: 'com.example.ios',
+    minimumVersion: '1.0.1',
+    appStoreId: '123456789',
+  ),
+);
+
 void main() async {
-  await DotEnv().load('conf.env');
-  print("MAIN INIT SESSION");
+  await DotEnv().load('dev.env');
   Session session = await Session.init();
   await translations.init();
+
   if (null != session) {
     state = session.user.isActive == true
         ? ConnectionState.Logged
@@ -27,7 +43,6 @@ void main() async {
   }
   return runApp(TwicApp());
 }
-
 enum ConnectionState { FirstTime, NotLogged, Logged, Inactive }
 
 Map<ConnectionState, Widget> states = {
@@ -37,7 +52,29 @@ Map<ConnectionState, Widget> states = {
   ConnectionState.Logged: Home(),
 };
 
-class TwicApp extends StatelessWidget{
+class TwicApp extends StatefulWidget {
+
+
+  @override
+  State<StatefulWidget> createState() => _TwicApp();
+}
+
+class _TwicApp extends State<TwicApp>{
+
+  Future<void> _retrieveDynamicLink() async {
+    final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink();
+    final Uri deepLink = data?.link;
+
+    if (deepLink != null) {
+      print(deepLink.pathSegments);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //_retrieveDynamicLink();
+  }
 
   @override
   Widget build(BuildContext context) {
