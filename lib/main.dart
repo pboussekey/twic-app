@@ -9,26 +9,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:twic_app/shared/locale/translations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:twic_app/api/services/api_rest.dart' as api;
 
 ConnectionState state;
 
-
-final DynamicLinkParameters parameters = DynamicLinkParameters(
-  uriPrefix: 'https://twicapp.page.link/authentication',
-  link: Uri.parse('https://twicapp.page.link/authentication'),
-  androidParameters: AndroidParameters(
-    packageName: 'io.twic.app',
-    minimumVersion: 125,
-  ),
-  iosParameters: IosParameters(
-    bundleId: 'com.example.ios',
-    minimumVersion: '1.0.1',
-    appStoreId: '123456789',
-  ),
-);
-
 void main() async {
-  await DotEnv().load('dev.env');
+  await DotEnv().load('conf.env');
   Session session = await Session.init();
   await translations.init();
 
@@ -36,13 +22,13 @@ void main() async {
     state = session.user.isActive == true
         ? ConnectionState.Logged
         : ConnectionState.Inactive;
-  }
-  else{
+  } else {
     bool firstTime = await Session.isFirstTime();
     state = firstTime ? ConnectionState.FirstTime : ConnectionState.NotLogged;
   }
   return runApp(TwicApp());
 }
+
 enum ConnectionState { FirstTime, NotLogged, Logged, Inactive }
 
 Map<ConnectionState, Widget> states = {
@@ -53,27 +39,32 @@ Map<ConnectionState, Widget> states = {
 };
 
 class TwicApp extends StatefulWidget {
-
-
   @override
   State<StatefulWidget> createState() => _TwicApp();
 }
 
-class _TwicApp extends State<TwicApp>{
-
+class _TwicApp extends State<TwicApp> {
   Future<void> _retrieveDynamicLink() async {
-    final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink();
+    final PendingDynamicLinkData data =
+        await FirebaseDynamicLinks.instance.retrieveDynamicLink();
     final Uri deepLink = data?.link;
+    if (null != deepLink && null != deepLink.queryParameters['token']) {
+      print(deepLink.queryParameters['token']);
+      final Map<String, dynamic> data = await api.request(
+          cmd: 'login',
+          params: {'magic_token': deepLink.queryParameters['token']});
 
-    if (deepLink != null) {
-      print(deepLink.pathSegments);
+      if (null != data['token']) {
+        await Session.set(data);
+        setState(() {});
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-    //_retrieveDynamicLink();
+    _retrieveDynamicLink();
   }
 
   @override
@@ -106,5 +97,4 @@ class _TwicApp extends State<TwicApp>{
       home: states[state],
     );
   }
-
 }
