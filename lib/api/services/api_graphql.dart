@@ -11,7 +11,6 @@ export 'package:graphql_flutter/graphql_flutter.dart';
 ValueNotifier<GraphQLClient> _client;
 
 Future<ValueNotifier<GraphQLClient>> getClient() async {
-  print(["ALLO?",DotEnv().env]);
   if (null != _client) return _client;
   Session session = Session.instance;
   HttpLink httpLink = HttpLink(uri: '${DotEnv().env['API_URL']}/api');

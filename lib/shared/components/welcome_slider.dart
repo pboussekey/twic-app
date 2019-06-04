@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/locale/translations.dart';
+import 'package:twic_app/shared/form/button.dart';
 
 import 'package:twic_app/shared/components/custom_painter.dart';
 
@@ -132,7 +133,7 @@ class WelcomeSliderState extends State<WelcomeSlider>
                       this.setState(() {});
                       tabController.animateTo(tabController.index - 1);
                     },
-                    textColor: Style.darkGrey,
+                    textColor: Style.lightGrey,
                   ))
               : Container(
                   width: 100.0,
@@ -149,10 +150,10 @@ class WelcomeSliderState extends State<WelcomeSlider>
           Container(
             width: 100.0,
             child: tabController.index + 1 == slides.length
-                ? FlatButton(
-                    child: Text(translations.text('slider.actions.done')),
+                ? Button(
+                    height: 41,
+                    text: translations.text('slider.actions.done'),
                     onPressed: onDonePress,
-                    textColor: Style.darkGrey,
                   )
                 : FlatButton(
                     onPressed: () {

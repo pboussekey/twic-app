@@ -20,11 +20,21 @@ class Session{
     return firstLaunch != true;
   }
 
+  static Future<void> setRequest(String requestToken) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('requestToken', requestToken);
+  }
+
+
+  static Future<String> getRequest() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('requestToken');
+  }
+
+
   static void update(Map<String, dynamic> data){
     Map<String, dynamic> session = Session.instance.toJson();
-    print(["SESSION BEFORE", session['user']]);
     session['user'].addAll(data);
-    print(["SESSION AFTER", session['user']]);
     Session.instance = Session.fromJson(session);
     Session.set(session);
   }

@@ -7,6 +7,10 @@ import 'package:twic_app/pages/welcome/welcome.dart';
 import 'package:twic_app/shared/locale/translations.dart';
 
 class Presentation extends StatefulWidget {
+  final Widget onDone;
+
+  Presentation({this.onDone});
+
   @override
   State<StatefulWidget> createState() {
     return PresentationState();
@@ -36,11 +40,11 @@ class PresentationState extends State<Presentation> {
         title: translations.text("welcome.step2.title"),
         pathImage: 'assets/image-splash-2.png',
         widthImage: double.infinity,
-        heightImage: 0.5,
+        heightImage: 0.4,
         imageFit: BoxFit.fitHeight,
         description: translations.text("welcome.step2.description"),
         backgroundColor: Style.genZGreen,
-        marginImage: 0.12,
+        marginImage: 0.1,
       ),
     );
 
@@ -75,7 +79,7 @@ class PresentationState extends State<Presentation> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => Welcome(),
+          builder: (BuildContext context) => widget.onDone,
         ));
   }
 

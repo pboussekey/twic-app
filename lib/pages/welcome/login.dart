@@ -7,14 +7,12 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/components/notifier.dart' as notifier;
 import 'package:twic_app/shared/form/form.dart';
 
-import 'package:twic_app/pages/home.dart';
-import 'package:twic_app/pages/onboarding/onboarding.dart';
 import 'package:twic_app/pages/welcome/join.dart';
-import 'package:twic_app/pages/welcome/forgot_password.dart';
-import 'package:twic_app/pages/loading_page.dart';
 
 import 'package:twic_app/shared/components/custom_painter.dart';
 import 'package:twic_app/shared/locale/translations.dart';
+
+import 'package:twic_app/style/twic_font_icons.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -37,12 +35,18 @@ class LoginForm extends StatefulWidget {
 
 class LoginFormState extends State<LoginForm> {
   String email;
-  String password;
+  TextEditingController _controller = TextEditingController();
 
   bool _isLoading = false;
+  bool _requested = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey fieldKey = Autocomplete.getKey();
+
+  @override
+  void initState() {
+    _controller.addListener(() => email = _controller.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +84,8 @@ class LoginFormState extends State<LoginForm> {
                   SizedBox(height: 60),
                   Input(
                     placeholder: translations.text('login.email_placeholder'),
-                    icon: Icons.email,
+                    icon: TwicFont.envelope,
+                    iconSize: 15,
                     validator: (String email) {
                       if (email.trim().isEmpty) {
                         return translations.text('errors.empty_email');
@@ -91,35 +96,17 @@ class LoginFormState extends State<LoginForm> {
                         return translations.text('errors.invalid_email');
                       }
                     },
+                    controller: _controller,
                     inputType: TextInputType.emailAddress,
-                    onSaved: (String value) => this.email = value.trim(),
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Input(
-                      placeholder: translations.text('login.pwd_placeholder'),
-                      icon: Icons.lock,
-                      obscureText: true,
-                      validator: (String password) {
-                        if (password.isEmpty) {
-                          return translations.text('errors.empty_pwd');
-                        }
-                      },
-                      onSaved: (String value) => this.password = value),
-                  SizedBox(height: 10),
-                  Link(
-                    text: translations.text('login.forgot_pwd'),
-                    style: Style.lightText,
-                    href: (BuildContext context) => ForgotPassword(),
-                  ),
-                  Align(
-                      alignment: Alignment.topRight,
+                                 SizedBox(height: 50,),
+                                 Align(
+                      alignment: Alignment.center,
                       child: Button(
-                          width: 150,
                           background: Style.darkGrey,
-                          text: translations.text('login.proceed'),
-                          disabled: null != email && null != password,
+                          width: 250,
+                          text: translations.text(!_requested ? 'login.proceed' :'login.proceeded'),
+                          disabled: _controller.text.isEmpty,
                           child: _isLoading
                               ? Padding(
                                   padding: EdgeInsets.all(10.0),
@@ -135,30 +122,29 @@ class LoginFormState extends State<LoginForm> {
                           onPressed: () async {
                             if (!_isLoading &&
                                 _formKey.currentState.validate()) {
-                              this.setState(() => _isLoading = true);
+                              setState(() => _isLoading = true);
                               _formKey.currentState.save();
                               Map<String, dynamic> params = {
-                                'email': this.email,
-                                'password': this.password
+                                'email': this.email.trim()
                               };
+
                               final Map<String, dynamic> data = await api
-                                  .request(cmd: 'login', params: params);
-                              this.setState(() => _isLoading = false);
-                              if (null != data['token']) {
-                                await Session.set(data);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Session.instance.user.isActive
-                                              ? Home()
-                                              : Onboarding(),
-                                    ));
+                                  .request(cmd: 'requestLink', params: params);
+                              setState(() => _isLoading = false);
+                              notifier.alert(
+                                  content: Text('Email sent! Please check your inbox.', style : Style.whiteText, textAlign: TextAlign.center,),
+                                  background: Style.darkPurple,
+                                  context: context);
+                              if (null != data) {
+                                await Session.setRequest(data['request_token']);
+                                setState(() {
+                                    _requested = true;
+                                });
                               } else {
                                 String error = data["error"];
                                 notifier.alert(
                                     message: translations.text('errors.$error'),
-                                    type: notifier.AlertType.error,
+                                    background: Style.red,
                                     icon:
                                         Icon(Icons.error, color: Colors.white),
                                     context: context);

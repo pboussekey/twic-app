@@ -7,10 +7,7 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/components/notifier.dart' as notifier;
 import 'package:twic_app/shared/form/form.dart';
 
-import 'package:twic_app/pages/home.dart';
-import 'package:twic_app/pages/onboarding/onboarding.dart';
-import 'package:twic_app/pages/loading_page.dart';
-
+import 'package:twic_app/style/twic_font_icons.dart';
 import 'package:twic_app/shared/components/custom_painter.dart';
 import 'package:twic_app/shared/locale/translations.dart';
 
@@ -38,12 +35,20 @@ class JoinFormState extends State<JoinForm> {
   AutoCompleteElement school;
 
   String email;
+  TextEditingController _controller = TextEditingController();
   String password;
 
   bool _isLoading = false;
+  bool _requested = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey fieldKey = Autocomplete.getKey();
+
+
+  @override
+  void initState() {
+    _controller.addListener(() => email = _controller.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +65,7 @@ class JoinFormState extends State<JoinForm> {
                     color: Style.genZBlue, padding: 0.4),
                 size: Size(double.infinity, mediaSize.height * 0.55)),
           ),
+
           Container(
             margin: EdgeInsets.only(top: 60.0, left: 50.0, right: 50.0),
             child: Form(
@@ -71,143 +77,83 @@ class JoinFormState extends State<JoinForm> {
                     translations.text('join.title'),
                     style: Style.whiteTitle,
                   ),
-                  SizedBox(height: 10,),
-                  Text(
-                    translations.text('join.description'),
+                  Link(
+                    text: translations.text('join.description'),
                     style: TextStyle(
                         color: Colors.white, fontSize: 15, fontFamily: 'Rubik'),
+                    context: context,
+                    href: (BuildContext context) => Join(),
                   ),
-                  SizedBox(height: 40),
-                  FutureBuilder(
-                    future: api.request(cmd: 'schools'),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                      if (snapshot.hasData) {
-                        List<dynamic> data = snapshot.data['schools'];
-                        return Autocomplete(
-                          fieldKey: fieldKey,
-                          suggestions: data
-                              .map((dynamic _data) => AutoCompleteElement(
-                                  name: _data['name'], logo: _data['logo']))
-                              .toList(),
-                          size: mediaSize.width - 100,
-                          placeholder:
-                              translations.text('join.schools_placeholder'),
-                          initialValue: school != null ? school.name : null,
-                          icon: Icons.search,
-                          minLength: 0,
-                          itemSubmitted: (AutoCompleteElement item) {
-                            this.setState(() {
-                              school = item;
-                            });
-                          },
-                          textChanged: (String text) {
-                            if (null != school) {
-                              this.setState(() {
-                                school = null;
-                              });
-                            }
-                          },
-                        );
+                  SizedBox(height: 60),
+                  Input(
+                    placeholder: translations.text('join.email_placeholder'),
+                    icon: TwicFont.envelope,
+                    iconSize: 15,
+                    validator: (String email) {
+                      if (email.trim().isEmpty) {
+                        return translations.text('errors.empty_email');
                       }
-                      return Center(
-                          child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.white),
-                      ));
+                      if (!RegExp(
+                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                          .hasMatch(email.trim())) {
+                        return translations.text('errors.invalid_email');
+                      }
                     },
+                    controller: _controller,
+                    inputType: TextInputType.emailAddress,
                   ),
-                  SizedBox(height: 10.0,),
-                  null != school
-                      ?  Input(
-                            placeholder:
-                                translations.text('join.email_placeholder'),
-                            icon: Icons.email,
-                            validator: (String email) {
-                              if (email.isEmpty) {
-                                return translations.text('errors.empty_email');
+                  SizedBox(height: 50,),
+                  Align(
+                      alignment: Alignment.center,
+                      child: Button(
+                          background: Style.mainColor,
+                          width: 250,
+                          text: translations.text(!_requested ? 'join.proceed' :'join.proceeded'),
+                          disabled: _controller.text.isEmpty,
+                          child: _isLoading
+                              ? Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: SizedBox(
+                                  height: 30.0,
+                                  width: 30.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: new AlwaysStoppedAnimation(
+                                        Colors.white),
+                                    strokeWidth: 5.0,
+                                  )))
+                              : null,
+                          onPressed: () async {
+                            if (!_isLoading &&
+                                _formKey.currentState.validate()) {
+                              setState(() => _isLoading = true);
+                              _formKey.currentState.save();
+                              Map<String, dynamic> params = {
+                                'email': this.email.trim()
+                              };
+
+                              final Map<String, dynamic> data = await api
+                                  .request(cmd: 'requestLink', params: params);
+                              setState(() => _isLoading = false);
+                              notifier.alert(
+                                  content: Text('Email sent! Please check your inbox.', style : Style.whiteText, textAlign: TextAlign.center,),
+                                  background: Style.mainColor,
+                                  context: context);
+                              if (null != data) {
+                                await Session.setRequest(data['request_token']);
+                                setState(() {
+                                  _requested = true;
+                                });
+                              } else {
+                                String error = data["error"];
+                                notifier.alert(
+                                    message: translations.text('errors.$error'),
+                                    background: Style.red,
+                                    icon:
+                                    Icon(Icons.error, color: Colors.white),
+                                    context: context);
                               }
-                              if (!RegExp(
-                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                  .hasMatch(email)) {
-                                return translations
-                                    .text('errors.invalid_email');
-                              }
-                            },
-                            inputType: TextInputType.emailAddress,
-                            onSaved: (String value) => this.email = value,
-                          )
-                      : Container(),
-                  SizedBox(height: 10.0,),
-                  null != school
-                      ? Input(
-                              placeholder:
-                                  translations.text('join.pwd_placeholder'),
-                              icon: Icons.lock,
-                              obscureText: true,
-                              validator: (String password) {
-                                if (password.isEmpty) {
-                                  return translations.text('errors.empty_pwd');
-                                }
-                              },
-                              onSaved: (String value) => this.password = value)
-                      : Container(),
-                  SizedBox(height:50),
-                  null != school
-                      ? Center(
-                              child: Button(
-                                  text: translations.text('join.proceed'),
-                                  child: _isLoading
-                                      ? Padding(
-                                          padding: EdgeInsets.all(10.0),
-                                          child: SizedBox(
-                                              height: 30.0,
-                                              width: 30.0,
-                                              child: CircularProgressIndicator(
-                                                valueColor:
-                                                    new AlwaysStoppedAnimation(
-                                                        Colors.white),
-                                                strokeWidth: 5.0,
-                                              )))
-                                      : null,
-                                  padding:
-                                      EdgeInsets.only(left: 80.0, right: 80.0),
-                                  onPressed: () async {
-                                    if (!_isLoading &&
-                                        _formKey.currentState.validate()) {
-                                      this.setState(() => _isLoading = true);
-                                      _formKey.currentState.save();
-                                      Map<String, dynamic> params = {
-                                        'email': this.email,
-                                        'password': this.password
-                                      };
-                                      final Map<String, dynamic> data =
-                                          await api.request(
-                                              cmd: 'login', params: params);
-                                      this.setState(() => _isLoading = false);
-                                      if (null != data['token']) {
-                                        await Session.set(data);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  Session.instance.user
-                                                              .isActive
-                                                      ? Home()
-                                                      : Onboarding(),
-                                            ));
-                                      } else {
-                                        String error = data["error"];
-                                        notifier.alert(
-                                            message: translations
-                                                .text('errors.$error'),
-                                            type: notifier.AlertType.error,
-                                            icon: Icon(Icons.error,
-                                                color: Colors.white),
-                                            context: context);
-                                      }
-                                    }
-                                  }))
-                      : Container(),
+                            }
+                          })),
                 ],
               ),
             ),

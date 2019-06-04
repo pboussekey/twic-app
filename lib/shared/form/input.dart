@@ -16,6 +16,7 @@ class Input extends StatelessWidget {
   final Function onSubmitted;
   final TextInputType inputType;
   final double height;
+  final double iconSize;
   final Color color;
 
   TextFormField field;
@@ -27,6 +28,7 @@ class Input extends StatelessWidget {
       this.onSaved,
       this.controller,
       this.height = 60,
+      this.iconSize,
       this.color = Colors.white,
       this.inputType = TextInputType.text,
       this.shadow = true,
@@ -46,8 +48,9 @@ class Input extends StatelessWidget {
       decoration: InputDecoration(
           icon: null != this.icon
               ? Icon(
-                  this.icon,
+                  icon,
                   color: Style.lightGrey,
+                  size: iconSize,
                 )
               : null,
           border: InputBorder.none,

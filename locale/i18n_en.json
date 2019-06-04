@@ -23,14 +23,16 @@
     "schools_placeholder": "Select your school",
     "email_placeholder": "School email",
     "pwd_placeholder": "Password",
-    "proceed":"Proceed"
+    "proceed":"Send email to log in",
+    "proceeded":"Resend email link"
   },
   "login": {
     "title": "Log into your community",
     "description": "First time using TWIC? Join us here.",
     "email_placeholder": "School email",
     "pwd_placeholder": "Password",
-    "proceed":"Login",
+    "proceed":"Send email to log in",
+    "proceeded":"Resend email link",
     "forgot_pwd": "I forgot my password."
   },
   "forgot_pwd": {
@@ -42,8 +44,8 @@
   "slider": {
     "actions": {
       "next": "Next",
-      "previous": "Previous",
-      "done": "Done"
+      "previous": "Prev",
+      "done": "Join now"
     }
   },
   "errors":{

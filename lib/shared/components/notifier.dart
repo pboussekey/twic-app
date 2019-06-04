@@ -9,9 +9,10 @@ void alert(
     {
     String message,
     Widget icon,
+    Widget content,
     bool isDismissible = true,
     int duration = 4,
-    AlertType type = AlertType.message,
+    Color background = Style.mainColor,
     @required BuildContext context}) {
   Flushbar(
     message:  message,
@@ -21,14 +22,14 @@ void alert(
     //Immutable
     forwardAnimationCurve: Curves.elasticOut,
     //Immutable
-    backgroundColor: type == AlertType.error ? Style.red : Style.mainColor,
+    backgroundColor: background,
     isDismissible: isDismissible,
     duration: Duration(seconds: duration),
     icon: icon,
 
     showProgressIndicator: false,
     progressIndicatorBackgroundColor: Colors.blueGrey,
-    messageText: new Text(
+    messageText: content ?? new Text(
       message ?? "",
       style: Style.whiteText,
     ),

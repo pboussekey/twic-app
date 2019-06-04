@@ -104,7 +104,7 @@ class Welcome extends StatelessWidget {
                           style: Style.lightText,
                           text: "Learn more",
                           context: context,
-                          href: (BuildContext context) => Presentation(),
+                          href: (BuildContext context) => Presentation(onDone: this,),
                         )
                       ],
                     ))
