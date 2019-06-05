@@ -84,7 +84,7 @@ class LoginFormState extends State<LoginForm> {
                   SizedBox(height: 60),
                   Input(
                     placeholder: translations.text('login.email_placeholder'),
-                    icon: TwicFont.envelope,
+                    icon: TwicFont.email,
                     iconSize: 15,
                     validator: (String email) {
                       if (email.trim().isEmpty) {

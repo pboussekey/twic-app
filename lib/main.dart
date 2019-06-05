@@ -82,6 +82,7 @@ class _TwicApp extends State<TwicApp> {
     Session session = Session.instance;
     if (null != session) {
       if (firstTime) {
+        firstTime = false;
         return Presentation(
           onDone: session.user.isActive == true ? Home() : Onboarding(),
         );
@@ -98,7 +99,6 @@ class _TwicApp extends State<TwicApp> {
   }
 
   Future<void> _retrieveDynamicLink(BuildContext context) async {
-    print('RETRIEVE DYNAMIC LINK');
     final PendingDynamicLinkData data =
         await FirebaseDynamicLinks.instance.retrieveDynamicLink();
     final Uri deepLink = data?.link;

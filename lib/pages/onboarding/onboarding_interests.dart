@@ -6,6 +6,7 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/hashtags/hashtags.dart';
 import 'package:twic_app/api/services/hashtags.dart';
 import 'package:twic_app/style/style.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 class OnboardingInterests extends OnboardingContentState {
   Widget _render() {
@@ -23,7 +24,7 @@ class OnboardingInterests extends OnboardingContentState {
       : super(
             title: 'What are your interests?',
             text:
-                'Select a topic to see content about it in your feed. Your interests won’t appear in your profile.',
+                'Select a Channel to follow content in your feed and discuss.',
             next: OnboardingState.Connect,
             previous: OnboardingState.Details,
             isCompleted: () => true) {
@@ -58,14 +59,15 @@ class _OnboardingInterestsContentState
                 builder: (RunMutation runMutation, QueryResult result) =>
                     Autocomplete(
                       fieldKey: hashtagKey,
-                      placeholder: 'Search a #Hashtag',
+                      placeholder: 'Search a #Channel',
                       suggestions: autocompleteSuggestions
                           .map((Hashtag hashtag) => AutoCompleteElement(
                               name: hashtag.name, data: hashtag))
                           .toList(),
                       minLength: 0,
                       size: mediaSize.width - 100,
-                      icon: Icons.search,
+                      icon: TwicFont.search,
+                      iconSize: 15,
                       itemBuilder: (BuildContext context,
                               AutoCompleteElement item) =>
                           Container(

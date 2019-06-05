@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/form/form.dart';
+import 'package:twic_app/shared/components/round_picture.dart';
 import 'package:twic_app/api/services/hashtags.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 class HashtagWidget extends StatefulWidget {
   final Hashtag hashtag;
@@ -26,8 +28,7 @@ class _HashtagState extends State<HashtagWidget> {
           BoxShadow(
               color: Style.shadow,
               offset: Offset(10.0, 10.0),
-              spreadRadius: 3.0,
-              blurRadius: 9.0)
+              blurRadius: 30.0)
         ],
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
@@ -39,10 +40,12 @@ class _HashtagState extends State<HashtagWidget> {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  Icon(
-                    Icons.blur_circular,
-                    color: Style.grey,
-                    size: 40,
+                  RoundPicture(
+                    width: 30,
+                    padding: EdgeInsets.all(5),
+                    height: 30,
+                    background: Style.darkPurple,
+                    picture: 'assets/logo-white.png',
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
@@ -51,11 +54,7 @@ class _HashtagState extends State<HashtagWidget> {
                     child: ClipRRect(
                         borderRadius: new BorderRadius.circular(20.0),
                         child: Container(
-                          child: Text("#",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold)),
+                          child: Icon(TwicFont.hashtag, color: Colors.white, size: 10,),
                           color: Style.mainColor,
                           height: 20,
                           width: 20,
@@ -85,6 +84,8 @@ class _HashtagState extends State<HashtagWidget> {
                             return Button(
                                 text: 'Following',
                                 height: 20.0,
+                                color: Style.lightGrey,
+                                background: Style.veryLightGrey,
                                 padding: EdgeInsets.all(0),
                                 fontSize: 12.0,
                                 onPressed: () => setState(() {
@@ -101,10 +102,8 @@ class _HashtagState extends State<HashtagWidget> {
                               (RunMutation runMutation, QueryResult result) {
                             return Button(
                                 text: 'Follow',
-                                background: Colors.white,
-                                color: Style.lightGrey,
-                                border: Border.all(color: Style.lightGrey),
-                                height: 20.0,
+                                height: 24.0,
+                                width: 60,
                                 padding: EdgeInsets.all(0),
                                 fontSize: 12.0,
                                 onPressed: () => setState(() {

@@ -24,7 +24,7 @@ class TwicFont {
   static const IconData conversation = const IconData(0xe801, fontFamily: _kFontFam);
   static const IconData empty_heart = const IconData(0xe802, fontFamily: _kFontFam);
   static const IconData plain_heart = const IconData(0xe803, fontFamily: _kFontFam);
-  static const IconData envelope = const IconData(0xe804, fontFamily: _kFontFam);
+  static const IconData email = const IconData(0xe804, fontFamily: _kFontFam);
   static const IconData eye = const IconData(0xe805, fontFamily: _kFontFam);
   static const IconData library_icon = const IconData(0xe806, fontFamily: _kFontFam);
   static const IconData notification = const IconData(0xe807, fontFamily: _kFontFam);
@@ -34,4 +34,5 @@ class TwicFont {
   static const IconData star = const IconData(0xe80b, fontFamily: _kFontFam);
   static const IconData video = const IconData(0xe80c, fontFamily: _kFontFam);
   static const IconData dessin = const IconData(0xe80d, fontFamily: _kFontFam);
+  static const IconData hashtag = const IconData(0xe81c, fontFamily: _kFontFam);
 }

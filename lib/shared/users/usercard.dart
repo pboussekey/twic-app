@@ -26,8 +26,7 @@ class UserCardState extends State<UserCard> {
             BoxShadow(
                 color: Style.shadow,
                 offset: Offset(10.0, 10.0),
-                spreadRadius: 3.0,
-                blurRadius: 9.0),
+                blurRadius: 30.0),
           ],
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
@@ -63,7 +62,7 @@ class UserCardState extends State<UserCard> {
                 height: 40.0,
                 text: widget.user.followed ? 'Followed' : 'Follow',
                 background: Colors.white,
-                color: widget.user.followed ? Style.grey : Style.lightGrey,
+                color: widget.user.followed ? Style.grey : Style.mainColor,
               )
             ],
           ),

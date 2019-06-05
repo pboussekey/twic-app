@@ -3,17 +3,20 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:flutter/material.dart';
 
 class Fields {
-  static Widget getList({Function builder}) {
+  static Widget getList({int school_id, String search, Function builder}) {
     return api.query<Field>(
-        query: """query fields{
-                      fields{
-                        id 
-                        name
-                      }
-                  }""",
+        query: """      
+         query fields(\$school_id: ID, \$search : String) {
+          fields(school_id: \$school_id, search: \$search){
+                id 
+                name
+              }
+          }
+          """,
         onComplete: (dynamic data) => (data['fields'] as List<dynamic>)
             .map((dynamic field) => Field.fromJson(field))
             .toList(),
-        builder: builder);
+        builder: builder,
+        params: {'school_id': school_id, 'search': search});
   }
 }

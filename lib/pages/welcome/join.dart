@@ -87,7 +87,7 @@ class JoinFormState extends State<JoinForm> {
                   SizedBox(height: 60),
                   Input(
                     placeholder: translations.text('join.email_placeholder'),
-                    icon: TwicFont.envelope,
+                    icon: TwicFont.email,
                     iconSize: 15,
                     validator: (String email) {
                       if (email.trim().isEmpty) {

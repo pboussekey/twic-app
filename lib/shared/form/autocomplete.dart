@@ -15,6 +15,7 @@ class AutoCompleteElement {
 class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
   final String placeholder;
   final IconData icon;
+  final double iconSize;
   final bool obscureText;
   final Function onSaved;
   final Function validator;
@@ -51,7 +52,8 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
       this.fieldKey,
       this.suggestionsAmount,
       this.minLength,
-      this.size});
+      this.size,
+      this.iconSize});
 
   @override
   Widget build(BuildContext context) {
@@ -80,20 +82,20 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
                           style: Style.largeText,
                         ),
                       )))),
-      itemSorter: this.itemSorter ??
+      itemSorter: itemSorter ??
           (T a, T b) {
             return a.name.compareTo(b.name);
           },
-      itemFilter: this.itemFilter ??
+      itemFilter: itemFilter ??
           (T item, String query) {
             return query.length == 0 ||
                 item.name.toLowerCase().startsWith(query.toLowerCase());
           },
-      itemSubmitted: this.itemSubmitted,
-      textChanged: this.textChanged,
+      itemSubmitted: itemSubmitted,
+      textChanged: textChanged,
       keyboardType: TextInputType.text,
       key: fieldKey,
-      suggestions: this.suggestions,
+      suggestions: suggestions,
       controller: null != initialValue
           ? TextEditingController(text: initialValue)
           : null,
@@ -101,9 +103,10 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
       onFocusChanged: (bool focused) {},
       minLength: this.minLength,
       decoration: InputDecoration(
-          icon: this.icon != null
+          icon: icon != null
               ? Icon(
-                  this.icon,
+                  icon,
+                  size: iconSize,
                   color: Style.lightGrey,
                 )
               : null,
@@ -123,8 +126,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
           BoxShadow(
               color: Style.shadow,
               offset: Offset(10.0, 10.0),
-              spreadRadius: 3.0,
-              blurRadius: 9.0)
+              blurRadius: 30.0)
         ],
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),

@@ -15,9 +15,9 @@ class Session{
 
   static Future<bool> isFirstTime() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool firstLaunch = prefs.getBool('firstTime');
+    bool firstTime = prefs.getBool('firstTime');
     prefs.setBool('firstTime', true);
-    return firstLaunch != true;
+    return firstTime != true;
   }
 
   static Future<void> setRequest(String requestToken) async{

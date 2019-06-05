@@ -39,16 +39,19 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
             follower: false,
             class_year: Session.instance.user.classYear,
             builder: (List<User> users) => users.length > 0
-                ? Column(children: <Widget>[
-                    Text(
-                      'Class of ${Session.instance.user.classYear}',
-                      style: Style.titleStyle,
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    UserCardList(list: users),
-                  ])
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                        Text(
+                          'Class of ${Session.instance.user.classYear}',
+                          style: Style.titleStyle,
+                          textAlign: TextAlign.start,
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        UserCardList(list: users),
+                      ])
                 : Container()),
         //SAME MAJOR/MINOR
         null != Session.instance.user.major
@@ -57,16 +60,18 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                 major_id: Session.instance.user.major.id,
                 minor_id: Session.instance.user.minor.id,
                 builder: (List<User> users) => users.length > 0
-                    ? Column(children: [
-                        Text(
-                          '${Session.instance.user.major.name} or ${Session.instance.user.minor.name}',
-                          style: Style.titleStyle,
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        UserCardList(list: users)
-                      ])
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            Text(
+                              '${Session.instance.user.major.name} or ${Session.instance.user.minor.name}',
+                              style: Style.titleStyle,
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            UserCardList(list: users)
+                          ])
                     : Container())
             : Container(),
         //SAME SCHOOL
@@ -75,16 +80,19 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                 follower: false,
                 school_id: Session.instance.user.school.id,
                 builder: (List<User> users) => users.length > 0
-                    ? Column(children: [
-                        Text(
-                          'Most popular at ${Session.instance.user.school.name}',
-                          style: Style.titleStyle,
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        UserCardList(list: users)
-                      ])
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            Text(
+                              'Most popular at ${Session.instance.user.school.name}',
+                              style: Style.titleStyle,
+                              textAlign: TextAlign.start,
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            UserCardList(list: users)
+                          ])
                     : Container())
             : Container(),
         //SAME UNIVERSITY
@@ -92,16 +100,19 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
             follower: false,
             university_id: Session.instance.user.institution.id,
             builder: (List<User> users) => users.length > 0
-                ? Column(children: [
-                    Text(
-                      'Most popular at ${Session.instance.user.institution.name}',
-                      style: Style.titleStyle,
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    UserCardList(list: users)
-                  ])
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Text(
+                          'Most popular at ${Session.instance.user.institution.name}',
+                          style: Style.titleStyle,
+                          textAlign: TextAlign.start,
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        UserCardList(list: users)
+                      ])
                 : Container()),
         Hashtags.followed(
             builder: (List<Hashtag> followed) => followed.length == 0
@@ -109,9 +120,11 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                 : Column(
                     children: <Widget>[
                       Row(children: [
+                        SizedBox(width : 10),
                         Text(
                           'Top from',
                           style: Style.titleStyle,
+                          textAlign: TextAlign.start,
                         ),
                         SizedBox(
                           width: 10,
@@ -154,24 +167,49 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                       Users.getList(
                           follower: false,
                           hashtag_id: (hashtag ?? followed[0]).id,
-                          builder: (List<User> users) =>
-                              UserCardList(list: users))
+                          builder: (List<User> users) => users.length > 0
+                              ? UserCardList(list: users)
+                              : Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Image.asset(
+                                      'assets/empty.png',
+                                      width: 35,
+                                      height: 35,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                        "There doesn’t seem to be anything here.",
+                                        style: Style.greyText),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                  ],
+                                ))
                     ],
                   )),
         //ALL PLATFORM
         Users.getList(
             follower: false,
             builder: (List<User> users) => users.length > 0
-                ? Column(children: [
-                    Text(
-                      'Most popular on TWIC',
-                      style: Style.titleStyle,
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    UserCardList(list: users)
-                  ])
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Text(
+                          'Most popular on TWIC',
+                          style: Style.titleStyle,
+                          textAlign: TextAlign.start,
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        UserCardList(list: users)
+                      ])
                 : Container()),
       ],
     );

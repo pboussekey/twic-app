@@ -16,6 +16,8 @@ class Input extends StatelessWidget {
   final Function onSubmitted;
   final TextInputType inputType;
   final double height;
+  final double width;
+  final FocusNode focusNode;
   final double iconSize;
   final Color color;
 
@@ -28,6 +30,7 @@ class Input extends StatelessWidget {
       this.onSaved,
       this.controller,
       this.height = 60,
+      this.width,
       this.iconSize,
       this.color = Colors.white,
       this.inputType = TextInputType.text,
@@ -35,6 +38,7 @@ class Input extends StatelessWidget {
       this.label,
       this.before,
       this.onSubmitted,
+      this.focusNode,
       this.after,
       this.validator});
 
@@ -44,6 +48,7 @@ class Input extends StatelessWidget {
       obscureText: obscureText ?? false,
       key: key,
       controller: controller,
+      focusNode: focusNode,
       onFieldSubmitted: onSubmitted,
       decoration: InputDecoration(
           icon: null != this.icon
@@ -62,6 +67,7 @@ class Input extends StatelessWidget {
 
     return Container(
         height: height + (null != label ? 16 : 0),
+        width: width,
         padding: EdgeInsets.only(
           top: (height - 48.0) / 2.0,
           bottom: (height - 48.0) / 2.0,
@@ -74,8 +80,7 @@ class Input extends StatelessWidget {
                   BoxShadow(
                       color: Style.shadow,
                       offset: Offset(10.0, 10.0),
-                      spreadRadius: 3.0,
-                      blurRadius: 9.0)
+                      blurRadius: 30.0)
                 ]
               : null,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),

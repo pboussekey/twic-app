@@ -1,12 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/pages/onboarding/onboarding_content_state.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/pages/onboarding/onboarding_states.dart';
 import 'package:twic_app/api/services/users.dart';
+import 'package:twic_app/shared/form/form.dart';
 
 class OnboardingClassYear extends OnboardingContentState {
+  bool otherClassYear = false;
+  FocusNode _focusNode;
+  TextEditingController _classYearCtrl = TextEditingController();
+
+  @override
+  initState() {
+    super.initState();
+    int currentYear = new DateTime.now().year;
+    int classYear = Session.instance.user.classYear;
+    _focusNode = FocusNode();
+
+    if (null != classYear &&
+        (classYear < currentYear || classYear >= currentYear + 6)) {
+      _classYearCtrl.text = classYear.toString();
+      otherClassYear = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed
+    _focusNode.dispose();
+
+    super.dispose();
+  }
+
   Widget _renderButton(
       String text, double size, bool active, Function onPressed) {
     return Button(
@@ -31,8 +57,10 @@ class OnboardingClassYear extends OnboardingContentState {
       buttons.add(_renderButton(
           classYear.toString(),
           size / 2 - 25.0,
-          Session.instance.user.classYear == classYear,
+          !otherClassYear && Session.instance.user.classYear == classYear,
           () => setState(() {
+                otherClassYear = false;
+                _classYearCtrl.text = '';
                 runMutation({'classYear': classYear});
                 Session.update({'classYear': classYear});
               })));
@@ -48,6 +76,43 @@ class OnboardingClassYear extends OnboardingContentState {
       }
       index++;
     }
+    if (!_classYearCtrl.hasListeners) {
+      _classYearCtrl.addListener(() {
+        int classYear = int.tryParse(_classYearCtrl.text);
+        if (null != classYear) {
+          otherClassYear = true;
+          runMutation({'classYear': classYear});
+          Session.update({'classYear': classYear});
+        }
+      });
+    }
+    lines.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      _renderButton(
+          "Other",
+          size / 2 - 25.0,
+          otherClassYear,
+          () => setState(() {
+                otherClassYear = true;
+                FocusScope.of(context).requestFocus(_focusNode);
+                int classYear = int.tryParse(_classYearCtrl.text);
+                if (null != classYear) {
+                  runMutation({'classYear': classYear});
+                  Session.update({'classYear': classYear});
+                }
+              })),
+      SizedBox(
+        width: 10,
+      ),
+      Expanded(
+          child: Input(
+            height: 52,
+        controller: _classYearCtrl,
+        focusNode: _focusNode,
+        placeholder: "Class year",
+        inputType:
+            TextInputType.numberWithOptions(decimal: false, signed: false),
+      ))
+    ]));
 
     return Column(
       children: lines,
@@ -56,9 +121,9 @@ class OnboardingClassYear extends OnboardingContentState {
 
   OnboardingClassYear()
       : super(
-            title: 'What is your current year?',
+            title: 'What type of student are you?',
             text:
-                'Please select your current class standing from the list below.',
+                'Please select your education level and expected graduation year.',
             next: OnboardingState.Details,
             isCompleted: () =>
                 Session.instance.user.classYear != null &&
@@ -85,12 +150,16 @@ class OnboardingClassYear extends OnboardingContentState {
                         onPressed: () => setState(() {
                               runMutation({
                                 'degree': 'UNDERGRADUATE',
-                                'school_id': (Session.instance.user.university ?? Session.instance.user.school).id
+                                'school_id':
+                                    (Session.instance.user.university ??
+                                            Session.instance.user.school)
+                                        .id
                               });
                               Session.update({
                                 'degree': 'UNDERGRADUATE',
-                                'school':
-                                (Session.instance.user.university ?? Session.instance.user.school).toJson()
+                                'school': (Session.instance.user.university ??
+                                        Session.instance.user.school)
+                                    .toJson()
                               });
                             }),
                       ),
@@ -110,14 +179,18 @@ class OnboardingClassYear extends OnboardingContentState {
                                 'degree': 'GRADUATE',
                                 'major_id': 0,
                                 'minor_id': 0,
-                                'school_id': (Session.instance.user.university ?? Session.instance.user.school).id
+                                'school_id':
+                                    (Session.instance.user.university ??
+                                            Session.instance.user.school)
+                                        .id
                               });
                               Session.update({
                                 'degree': 'GRADUATE',
                                 'major': null,
                                 'minor': null,
-                                'school':
-                                (Session.instance.user.university ?? Session.instance.user.school).toJson()
+                                'school': (Session.instance.user.university ??
+                                        Session.instance.user.school)
+                                    .toJson()
                               });
                             }),
                       ),
@@ -125,7 +198,7 @@ class OnboardingClassYear extends OnboardingContentState {
                 SizedBox(
                   height: 50,
                 ),
-                _renderButtons(runMutation, mediaSize.width)
+                _renderButtons(runMutation, mediaSize.width),
               ],
             ));
   }
