@@ -13,7 +13,6 @@ class UserList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size mediaSize = MediaQuery.of(context).size;
     return Container(
         child: ListView.builder(
           shrinkWrap: true,
@@ -58,10 +57,10 @@ class UserList extends StatelessWidget {
                       text: list[index].followed ? 'Unfollow' : 'Follow',
                       background: list[index].followed
                           ? Style.veryLightGrey
-                          : Colors.white,
+                          : Style.mainColor,
                       color: list[index].followed
                           ? Style.lightGrey
-                          : Style.lightGrey,
+                          : Colors.white,
                     ) : renderAction(list[index])
                   ])),
           itemCount: list.length,

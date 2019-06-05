@@ -10,7 +10,7 @@ import 'dart:async';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/api/services/api_rest.dart' as api;
 
-String url = "https://us-central1-twicfiles-ccf31.cloudfunctions.net/upload";
+String url = "https://us-central1-twicapp-5d95f.cloudfunctions.net/upload";
 
 Future<Map<String, dynamic>> upload({ File file, bool stopOnFailure : false }) async{
 
@@ -39,6 +39,7 @@ Future<Map<String, dynamic>> upload({ File file, bool stopOnFailure : false }) a
         return null;
       }
     }
+    print(["UPLOAD", data]);
     return data;
 
 

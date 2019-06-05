@@ -27,7 +27,7 @@ class Dropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical : 10.0),
+        padding: EdgeInsets.symmetric(vertical: 10.0),
         height: null != label ? 82 : 68.0,
         width: size,
         decoration: BoxDecoration(
@@ -45,7 +45,9 @@ class Dropdown<T> extends StatelessWidget {
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           null != label
-              ? Text(label, style: Style.smallLightText)
+              ? Container(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(label, style: Style.smallLightText))
               : Container(),
           Row(children: [
             icon ?? Container(),
@@ -53,6 +55,8 @@ class Dropdown<T> extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                     child: ButtonTheme(
                         alignedDropdown: true,
+
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         child: DropdownButton<T>(
                           elevation: 0,
                           isExpanded: true,

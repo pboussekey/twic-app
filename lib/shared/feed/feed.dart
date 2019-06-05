@@ -8,8 +8,10 @@ import 'package:twic_app/shared/components/infinite_scroll.dart';
 class Feed extends StatefulWidget {
   final int hashtag_id;
   final int user_id;
+  final bool hideHeaders;
+  final Widget placeholder;
 
-  Feed({this.hashtag_id, this.user_id});
+  Feed({this.hashtag_id, this.user_id, this.hideHeaders = false, this.placeholder});
 
   @override
   State<Feed> createState() => FeedState();
@@ -38,9 +40,9 @@ class FeedState extends State<Feed> {
 
 
   @override
-  Widget build(BuildContext context) => InfiniteScroll(
+  Widget build(BuildContext context) => posts.length > 0 || null == widget.placeholder  ? InfiniteScroll(
     fetch: _fetch,
-    builder: (BuildContext context, int index) => PostWidget(post: posts[index]),
+    builder: (BuildContext context, int index) => PostWidget(post: posts[index], hideHeader: widget.hideHeaders,),
     count: posts.length,
-  );
+  ) : widget.placeholder;
 }

@@ -16,6 +16,7 @@ class Input extends StatelessWidget {
   final Function onSubmitted;
   final TextInputType inputType;
   final double height;
+  final double padding;
   final double width;
   final FocusNode focusNode;
   final double iconSize;
@@ -30,6 +31,7 @@ class Input extends StatelessWidget {
       this.onSaved,
       this.controller,
       this.height = 60,
+      this.padding = 10,
       this.width,
       this.iconSize,
       this.color = Colors.white,
@@ -71,7 +73,7 @@ class Input extends StatelessWidget {
         padding: EdgeInsets.only(
           top: (height - 48.0) / 2.0,
           bottom: (height - 48.0) / 2.0,
-          left: 10.0,
+          left: padding,
         ),
         decoration: BoxDecoration(
           color: color,

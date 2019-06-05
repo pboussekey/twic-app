@@ -17,7 +17,7 @@ class TwicFile extends AbstractModel {
   Map<String, dynamic> toJson() => _$TwicFileToJson(this);
 
   String href() {
-    return 'https://firebasestorage.googleapis.com/v0/b/twicfiles-ccf31.appspot.com/o/${bucketname}?alt=media&token=' +
+    return 'https://firebasestorage.googleapis.com/v0/b/twicapp-5d95f.appspot.com/o/${bucketname}?alt=media&token=' +
         token;
   }
 }

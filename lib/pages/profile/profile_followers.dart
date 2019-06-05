@@ -29,32 +29,20 @@ class ProfileFollowersState extends State<ProfileFollowers> {
           elevation: 0,
         ),
         body: RootPage(
-            child: Tabs(
-                tabs: [
-                  Text(
-                    'All',
-                    textAlign: TextAlign.center,
-                  ),
-                  Text('My university', textAlign: TextAlign.center),
-                ],
-                widget: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Input(
-                    height: 40.0,
+            child: Column(children:[
+
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child : Input(
+                    height: 50.0,
                     color: Style.veryLightGrey,
                     shadow: false,
                     icon: Icons.search,
                     placeholder: "Search",
-                  ),
-                ),
-                tabsContent: [
+                  )),
+                  SizedBox(height: 10,),
                   Users.getList(
                       follower: true,
-                      user_id: widget.user_id,
-                      builder: (List<User> users) => UserList(list: users)),
-                  Users.getList(
-                      follower: true,
-                      school_id: Session.instance.user.university.id,
                       user_id: widget.user_id,
                       builder: (List<User> users) => UserList(list: users))
                 ])),

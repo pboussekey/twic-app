@@ -69,35 +69,46 @@ class BottomNav extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (BuildContext context) => CreatePost())),
             ),
-            IconButton(
-              icon: Avatar(
-                size: 24.0,
-                href: Session.instance.user.avatar?.href(),
+            Stack(
+                alignment: Alignment(0, 0),
+                children : [Container(
+              height: 24,
+              width: 24,
+              decoration: BoxDecoration(
+                color: Style.mainColor,
+                borderRadius: BorderRadius.all(Radius.circular(12))
               ),
-              onPressed: () {
-                current == ButtonEnum.Profile
-                    ? refresh(() {})
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                Profile(user_id: Session.instance.user.id)));
-              },
             ),
+              IconButton(
+                icon: Avatar(
+                  size: 22.0,
+                  href: Session.instance.user.avatar?.href(),
+                ),
+                onPressed: () {
+                  current == ButtonEnum.Profile
+                      ? refresh(() {})
+                      : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              Profile(user_id: Session.instance.user.id)));
+                },
+              ),]),
+
             IconButton(
               icon: Icon(
                 Icons.chat,
                 size: 24.0,
                 color: Style.grey,
               ),
-              onPressed: (){
+              onPressed: () {
                 current == ButtonEnum.Chat
                     ? refresh(() {})
                     : Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ConversationsList()));
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ConversationsList()));
               },
             ),
           ],

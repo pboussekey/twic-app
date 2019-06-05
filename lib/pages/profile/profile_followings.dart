@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/api/services/users.dart';
+import 'package:twic_app/api/services/hashtags.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/userlist.dart';
+import 'package:twic_app/shared/hashtags/hashtaglist.dart';
 import '../root_page.dart';
-import 'package:twic_app/style/style.dart';
-import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/tabs.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
+import 'package:twic_app/style/style.dart';
 
 class ProfileFollowings extends StatefulWidget {
   final int user_id;
@@ -32,15 +33,15 @@ class ProfileFollowingsState extends State<ProfileFollowings> {
             child: Tabs(
                 tabs: [
                   Text(
-                    'All',
+                    'People',
                     textAlign: TextAlign.center,
                   ),
-                  Text('My university', textAlign: TextAlign.center),
+                  Text('Channels', textAlign: TextAlign.center),
                 ],
                 widget: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Input(
-                    height: 40.0,
+                    height: 50.0,
                     color: Style.veryLightGrey,
                     shadow: false,
                     icon: Icons.search,
@@ -52,11 +53,9 @@ class ProfileFollowingsState extends State<ProfileFollowings> {
                       following: true,
                       user_id: widget.user_id,
                       builder: (List<User> users) => UserList(list: users)),
-                  Users.getList(
-                      following: true,
-                      school_id: Session.instance.user.university.id,
+                  Hashtags.getList(
                       user_id: widget.user_id,
-                      builder: (List<User> users) => UserList(list: users))
+                      builder: (List<Hashtag> hashtags) => HashtagList(list: hashtags))
                 ])),
         bottomNavigationBar: BottomNav(
           current: ButtonEnum.Profile,

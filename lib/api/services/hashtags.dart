@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 export 'package:twic_app/api/services/api_graphql.dart';
 
 class Hashtags {
-  static Widget getList({bool followed, String search, Function builder, bool cache = true}) {
+  static Widget getList({bool followed, String search, int user_id, Function builder, bool cache = true}) {
     return api.query<Hashtag>(
         query: """      
-         query hashtags(\$followed: Boolean, \$search : String) {
-          hashtags(followed: \$followed, search: \$search){
+         query hashtags(\$followed: Boolean, \$search : String, \$user_id : ID) {
+          hashtags(followed: \$followed, search: \$search, user_id : \$user_id){
                 id
                 name
                 followed
@@ -18,7 +18,7 @@ class Hashtags {
           }
           """,
         cache: search == null && cache,
-        params: {'followed': followed, 'search': search},
+        params: {'followed': followed, 'search': search, 'user_id' : user_id},
         onComplete: (dynamic data) =>
             ((data['hashtags'] ?? []) as List<dynamic>)
                 .map((dynamic hashtag) => Hashtag.fromJson(hashtag))

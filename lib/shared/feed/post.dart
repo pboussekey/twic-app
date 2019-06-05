@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:twic_app/style/style.dart';
 
 import 'package:twic_app/shared/components/round_picture.dart';
+import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/components/slider.dart';
 import 'package:twic_app/shared/form/form.dart';
@@ -12,8 +13,9 @@ import 'package:twic_app/api/services/posts.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
+  final bool hideHeader;
 
-  PostWidget({Key key, this.post}) : super(key: key);
+  PostWidget({Key key, this.post, this.hideHeader = false}) : super(key: key);
 
   @override
   PostWidgetState createState() => PostWidgetState();
@@ -85,18 +87,11 @@ class PostWidgetState extends State<PostWidget>
               child: Flex(
                 direction: Axis.horizontal,
                 children: <Widget>[
-                  null != widget.post.user.avatar
-                      ? RoundPicture(
-                          picture: widget.post.user.avatar.href(),
-                          height: 40,
-                          width: 40,
-                        )
-                      : Icon(
-                          Icons.account_circle,
-                          color: Style.grey,
-                          size: 40.0,
-                        ),
-                  Expanded(
+                  !widget.hideHeader ? Avatar(
+                          href:  widget.post.user?.avatar?.href(),
+                          size: 40,
+                        ) : Container(),
+                  !widget.hideHeader ?Expanded(
                     child: Column(
                       children: <Widget>[
                         Align(
@@ -125,7 +120,7 @@ class PostWidgetState extends State<PostWidget>
                             )),
                       ],
                     ),
-                  ),
+                  ) : Container(),
                   Text(
                     _renderDate(widget.post.createdAt),
                     style: Style.lightText,

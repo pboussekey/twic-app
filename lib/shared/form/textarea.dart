@@ -10,6 +10,7 @@ class Textarea extends StatelessWidget {
   final TextInputType inputType;
   final Color color;
   final int maxLength;
+  final double padding;
   final String label;
 
   TextFormField field;
@@ -20,6 +21,7 @@ class Textarea extends StatelessWidget {
       this.onSaved,
       this.controller,
       this.maxLength,
+      this.padding = 10,
       this.color = Style.grey,
       this.inputType = TextInputType.text,
       this.validator});
@@ -27,12 +29,11 @@ class Textarea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(bottom: 5.0, right: 10.0, left: 10.0, top : 5.0),
+        padding:
+            EdgeInsets.only(bottom: 5.0, right: padding, left: padding, top: 5.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(6.0)), color: color),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           null != label
               ? Text(label, style: Style.smallLightText)
               : Container(),

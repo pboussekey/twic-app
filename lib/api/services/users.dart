@@ -18,6 +18,7 @@ class Users {
                 nbFollowings
                 nbPosts
                 classYear
+                description
                 degree
                 avatar{ id name bucketname token }
                 major{ id name }

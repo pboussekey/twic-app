@@ -106,6 +106,7 @@ class ProfileEditionState extends State<ProfileEdition> {
                                       controller: firstnameController,
                                       shadow: false,
                                       height: 60,
+                                      padding: 15,
                                       color: Style.veryLightGrey,
                                       onSaved: (String value) =>
                                           firstname = value,
@@ -116,6 +117,8 @@ class ProfileEditionState extends State<ProfileEdition> {
                                     Input(
                                       label: "Lastname",
                                       shadow: false,
+                                      height: 60,
+                                      padding: 15,
                                       controller: lastnameController,
                                       color: Style.veryLightGrey,
                                       onSaved: (String value) =>
@@ -126,6 +129,7 @@ class ProfileEditionState extends State<ProfileEdition> {
                                     ),
                                     Textarea(
                                       label: "Bio",
+                                      padding: 15,
                                       controller: descriptionController,
                                       color: Style.veryLightGrey,
                                       onSaved: (String value) =>
@@ -185,6 +189,7 @@ class ProfileEditionState extends State<ProfileEdition> {
                                     'UNDERGRADUATE' ==
                                             Session.instance.user.degree
                                         ? Fields.getList(
+                                            school_id: Session.instance.user.institution.id,
                                             builder:
                                                 (List<Field> fields) => Column(
                                                       children: <Widget>[
@@ -369,6 +374,7 @@ class ProfileEditionState extends State<ProfileEdition> {
                                           uploading = false;
                                           editingPicture = false;
                                           avatar = TwicFile.fromJson(fileData);
+                                          print(['AVATAR', avatar.toJson()]);
                                         });
                                       });
                                     }

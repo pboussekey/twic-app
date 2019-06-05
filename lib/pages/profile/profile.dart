@@ -13,6 +13,7 @@ import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/profile/profile_followers.dart';
 import 'package:twic_app/pages/profile/profile_followings.dart';
 import 'package:twic_app/pages/profile/profile_edition.dart';
+import 'package:twic_app/pages/posts/create.dart';
 
 class Profile extends StatefulWidget {
   final int user_id;
@@ -26,7 +27,6 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    print("USER GET");
     return Scaffold(
         body: RootPage(
             child: Users.get(
@@ -38,14 +38,14 @@ class ProfileState extends State<Profile> {
                       lastname: user.lastname,
                       major: user.major.name,
                       minor: user.minor.name,
-                      nb_channels: 0,
                       nb_followers: user.nbFollowers,
                       nb_followings: user.nbFollowings,
                       nb_posts: user.nbPosts,
                       classYear: user.classYear,
                       school: user.school.name,
                       university: user.university?.name,
-                      university_logo: (user.university ?? user.school).logo.href(),
+                      university_logo:
+                          (user.university ?? user.school).logo.href(),
                       user_id: user.id,
                     ))),
         bottomNavigationBar: BottomNav(
@@ -96,7 +96,6 @@ class ProfileContent extends StatefulWidget {
 class ProfileContentState extends State<ProfileContent> {
   @override
   Widget build(BuildContext context) {
-    print([ widget.firstname, widget.avatar]);
     Size mediaSize = MediaQuery.of(context).size;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
@@ -126,19 +125,21 @@ class ProfileContentState extends State<ProfileContent> {
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               ProfileEdition())).then(
-                                    (dynamic value) => setState((){
-                                      widget.firstname = value['avatar'];
-                                      widget.lastname = value['lastname'];
-                                      widget.description = value['description'];
-                                      widget.classYear = value['classYear'];
-                                      widget.avatar = value['avatar'];
-                                      widget.school = value['school'];
-                                      widget.university = value['university'];
-                                      widget.university_logo =
-                                          value['university_logo'];
-                                      widget.minor = value['minor'];
-                                      widget.major = value['major'];
-                                    }),
+                                    (dynamic value) => setState(() {
+                                          widget.firstname = value['avatar'];
+                                          widget.lastname = value['lastname'];
+                                          widget.description =
+                                              value['description'];
+                                          widget.classYear = value['classYear'];
+                                          widget.avatar = value['avatar'];
+                                          widget.school = value['school'];
+                                          widget.university =
+                                              value['university'];
+                                          widget.university_logo =
+                                              value['university_logo'];
+                                          widget.minor = value['minor'];
+                                          widget.major = value['major'];
+                                        }),
                                   ))
                           : Container()
                     ]),
@@ -157,11 +158,20 @@ class ProfileContentState extends State<ProfileContent> {
                 ]),
                 Row(children: [
                   null != widget.university_logo
-                      ? Image.network(
-                          widget.university_logo,
-                          height: 12.0,
-                          width: 12.0,
-                        )
+                      ? Container(
+                          padding: EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Style.border,
+                                  style: BorderStyle.solid)),
+                          child: Image.network(
+                            widget.university_logo,
+                            height: 12.0,
+                            width: 12.0,
+                          ))
                       : Container(),
                   SizedBox(
                     width: 10.0,
@@ -204,7 +214,7 @@ class ProfileContentState extends State<ProfileContent> {
                           decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0)),
-                            color: Style.lightGrey,
+                            color: Style.veryLightGrey,
                           ),
                           child: Text(widget.minor, style: Style.smallGreyText),
                         )
@@ -216,21 +226,50 @@ class ProfileContentState extends State<ProfileContent> {
           SizedBox(
             height: 10.0,
           ),
-          SizedBox(
-            height: 10.0,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                          width: 1,
-                          color: Style.border,
-                          style: BorderStyle.solid))),
-            ),
-          ),
+          null != widget.description
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 10.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      width: 1,
+                                      color: Style.border,
+                                      style: BorderStyle.solid))),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        widget.description,
+                        style: Style.get(fontSize: 12, color: Style.grey),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ))
+              : Container(),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                height: 10.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 1,
+                              color: Style.border,
+                              style: BorderStyle.solid))),
+                ),
+              )),
           Padding(
             padding: EdgeInsets.only(left: 10.0, right: 10.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
@@ -283,25 +322,7 @@ class ProfileContentState extends State<ProfileContent> {
                           children: <Widget>[
                             Text(widget.nb_posts.toString(),
                                 style: Style.largeText),
-                            Text('HASHTAGS', style: Style.verySmallWhiteText),
-                          ],
-                        ))),
-                Container(
-                    width: (mediaSize.width - 20) / 4,
-                    child: FlatButton(
-                        padding: EdgeInsets.all(0.0),
-                        onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ProfileFollowings(
-                                        user_id: widget.user_id))),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(widget.nb_channels.toString(),
-                                style: Style.largeText),
-                            Text('CHANNELS', style: Style.verySmallWhiteText),
+                            Text('POSTS', style: Style.verySmallWhiteText),
                           ],
                         ))),
               ],
@@ -309,19 +330,21 @@ class ProfileContentState extends State<ProfileContent> {
           )
         ],
       )),
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: SizedBox(
+            height: 10.0,
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          width: 1,
+                          color: Style.border,
+                          style: BorderStyle.solid))),
+            ),
+          )),
       SizedBox(
-        height: 0.0,
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      width: 1,
-                      color: Style.border,
-                      style: BorderStyle.solid))),
-        ),
-      ),
-      SizedBox(
-        height: 10.0,
+        height: 20.0,
       ),
       Padding(
           padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -333,8 +356,42 @@ class ProfileContentState extends State<ProfileContent> {
         height: 10.0,
       ),
       Feed(
-        user_id: widget.user_id,
-      )
+          user_id: widget.user_id,
+          hideHeaders: true,
+          placeholder: Button(
+            background: Colors.transparent,
+            width: mediaSize.width,
+            onPressed: () => widget.user_id == Session.instance.user.id ? Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => CreatePost())) : null,
+            padding: EdgeInsets.all(0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 40,
+                ),
+                Image.asset(
+                  'assets/empty-feed.png',
+                  height: 60,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                    widget.user_id == Session.instance.user.id
+                        ? "You have no posts"
+                        : "No posts",
+                    style: Style.titleStyle),
+                Text(
+                    widget.user_id == Session.instance.user.id
+                        ? "Create your first post."
+                        : "${widget.firstname} hasn’t shared anything on TWIC yet.",
+                    style: Style.greyText),
+                SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
+          ))
     ]);
   }
 }
