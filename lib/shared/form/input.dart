@@ -30,7 +30,7 @@ class Input extends StatelessWidget {
       this.obscureText,
       this.onSaved,
       this.controller,
-      this.height = 60,
+      this.height,
       this.padding = 10,
       this.width,
       this.iconSize,
@@ -68,11 +68,11 @@ class Input extends StatelessWidget {
     );
 
     return Container(
-        height: height + (null != label ? 16 : 0),
+        height: null != height ? height + (null != label ? 16 : 0) : null,
         width: width,
         padding: EdgeInsets.only(
-          top: (height - 48.0) / 2.0,
-          bottom: (height - 48.0) / 2.0,
+          top: null != height && height > 48 ? (height - 48.0) / 2.0 : 0,
+          bottom: null != height && height > 48 ? (height - 48.0) / 2.0 : 0,
           left: padding,
         ),
         decoration: BoxDecoration(
@@ -87,10 +87,7 @@ class Input extends StatelessWidget {
               : null,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          null != label
-              ? Text(label, style: Style.smallLightText)
-              : Container(),
+        child: null != before && null != after ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             before ?? Container(),
             SizedBox(
@@ -102,6 +99,6 @@ class Input extends StatelessWidget {
                   width: 10,
                 )
           ])
-        ]));
+        ]) : this.field);
   }
 }

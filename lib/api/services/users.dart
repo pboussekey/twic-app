@@ -141,4 +141,76 @@ class Users {
           }
           """, builder: builder, update: update, onCompleted: onCompleted);
   }
+
+
+  static Future<List<User>> loadUsers(
+      {int school_id,
+        int university_id,
+        String search,
+        bool follower,
+        bool following,
+        int user_id,
+        int major_id,
+        int minor_id,
+        int hashtag_id,
+        int class_year,
+        int count,
+        int page,}){
+    return api.execute("""      
+         query users(
+            \$follower: Boolean, 
+            \$following: Boolean, 
+            \$search : String, 
+            \$school_id : ID, 
+            \$university_id : ID, 
+            \$user_id : ID, 
+            \$major_id : ID, 
+            \$minor_id : ID,
+            \$hashtag_id : ID, 
+            \$class_year : Int, 
+            \$exclude_school : [ID], 
+            \$count : Int,  
+            \$page : Int
+          ) {
+          users(
+            follower: \$follower, 
+            following: \$following, 
+            search: \$search, 
+            school_id : \$school_id,  
+            university_id : \$university_id, 
+            user_id : \$user_id, 
+            major_id : \$major_id, 
+            minor_id : \$minor_id, 
+            hashtag_id : \$hashtag_id, 
+            class_year : \$class_year, 
+            exclude_school : \$exclude_school,
+            count : \$count,
+            page : \$page
+          ){
+                id
+                firstname
+                lastname
+                followed
+                nbFollowers,
+                avatar{ name bucketname token }
+                school { id name  logo { name bucketname token } university{ id name logo { name bucketname token } } }
+              }
+          }
+          """, {
+      'hashtag_id': hashtag_id,
+      'user_id': user_id,
+      'school_id': school_id,
+      'university_id' : university_id,
+      'major_id' : major_id,
+      'minor_id' : minor_id,
+      'class_year' : class_year,
+      'follower' : follower,
+      'following' : following,
+      'count': count,
+      'page': page
+    }, cache: false).then((dynamic data){ return (data['users'] as List<dynamic>)
+        .map((dynamic user) => User.fromJson(user))
+        .toList(); });
+
+  }
 }

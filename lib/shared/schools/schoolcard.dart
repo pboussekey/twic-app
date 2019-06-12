@@ -34,11 +34,11 @@ class SchoolCardState extends State<SchoolCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.network(
-            widget.school.logo.href(),
-            height: 30,
+          null !=  widget.school.logo ? Image.network(
+            widget.school?.logo?.href(),
+            height: 35,
             fit: BoxFit.fitHeight,
-          ),
+          ) : Container(height: 30,),
           SizedBox(height: 10.0),
           Text(widget.school.name, style: Style.smallTitle),
         ],

@@ -42,9 +42,11 @@ class Button extends StatelessWidget {
           width: width,
           child:
               FlatButton(
+
                 padding: padding ?? EdgeInsets.only(left: 20.0, right: 20.0),
                 onPressed: disabled == true ? null : onPressed,
-                child:  child ?? Text(text, style: TextStyle(color: color, fontSize: fontSize), textAlign: TextAlign.center,),
+                child:  child ?? Text(text, style: TextStyle(color: color, fontSize: fontSize), textAlign: TextAlign.center,
+                    overflow: TextOverflow.fade),
               )),
       opacity: disabled ? 0.5 : 1.0,
     );

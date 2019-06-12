@@ -237,34 +237,11 @@ class CreateConversationState extends State<CreateConversation> {
                     list: list,
                     renderAction: (User user) => CreateState.OneToOne == state
                         ? Container()
-                        : Button(
-                            padding: EdgeInsets.all(0),
-                            background: Colors.transparent,
+                        : RadioButton(
                             onPressed: () => setState(() => users.contains(user)
                                 ? users.remove(user)
                                 : users.add(user)),
-                            child: Container(
-                              height: 24,
-                              width: 24,
-                              padding: EdgeInsets.all(0),
-                              child: users.contains(user)
-                                  ? Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                      size: 18,
-                                    )
-                                  : null,
-                              decoration: BoxDecoration(
-                                  color: users.contains(user)
-                                      ? Style.mainColor
-                                      : Colors.transparent,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  border: users.contains(user)
-                                      ? null
-                                      : Border.all(color: Style.border)),
-                            ),
-                          ),
+                            isChecked: users.contains(user)),
                     onClick: CreateState.OneToOne == state
                         ? (User user) => Navigator.push(
                                 context,

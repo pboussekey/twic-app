@@ -9,10 +9,12 @@ class InfiniteScroll extends StatefulWidget {
   final bool reverse;
   final bool shrink;
   final int delta;
+  final Axis direction;
   final Function onScroll;
 
   InfiniteScroll(
       {this.fetch,
+      this.direction = Axis.vertical,
       this.shrink = true,
       this.builder,
       this.onScroll,
@@ -41,7 +43,6 @@ class InfiniteScrollState extends State<InfiniteScroll> {
       bool scrolled = widget.reverse
           ? widget.scroll.offset < previousScroll
           : widget.scroll.offset > previousScroll;
-      print(["ON SCROLLED", scrolled, widget.scroll.initialScrollOffset, widget.scroll.offset]);
       double scroll =
           widget.reverse ? currentScroll : maxScroll - currentScroll;
       if (scrolled && scroll <= widget.delta) {
@@ -57,6 +58,7 @@ class InfiniteScrollState extends State<InfiniteScroll> {
 
   @override
   Widget build(BuildContext context) => ListView.builder(
+        scrollDirection: widget.direction,
         controller: widget.scroll,
         shrinkWrap: widget.shrink,
         physics: widget.shrink

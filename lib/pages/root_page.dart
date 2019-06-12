@@ -40,21 +40,26 @@ class _RootPageState extends ReceiveShareState<RootPage> {
     final Size mediaSize = MediaQuery.of(context).size;
     RootPage.scroll = ScrollController();
     return null != _client
-        ? Container(
-            height: mediaSize.height,
-            width: mediaSize.width,
-            color: widget.backgroundColor ?? Colors.white,
-            child: GraphQLProvider(
-                client: _client,
-                child: CacheProvider(
-                    child: widget.scrollable
-                        ? SingleChildScrollView(
-                            controller: RootPage.scroll,
-                            child: SafeArea(
-                                child: widget.child ?? widget.builder()))
-                        : Container(
-                            child: SafeArea(
-                                child: widget.child ?? widget.builder())))))
+        ? GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus((FocusNode()));
+            },
+            child: Container(
+                height: mediaSize.height,
+                width: mediaSize.width,
+                color: widget.backgroundColor ?? Colors.white,
+                child: GraphQLProvider(
+                    client: _client,
+                    child: CacheProvider(
+                        child: widget.scrollable
+                            ? SingleChildScrollView(
+                                controller: RootPage.scroll,
+                                child: SafeArea(
+                                    child: widget.child ?? widget.builder()))
+                            : Container(
+                                child: SafeArea(
+                                    child:
+                                        widget.child ?? widget.builder()))))))
         : SafeArea(child: CircularProgressIndicator());
   }
 

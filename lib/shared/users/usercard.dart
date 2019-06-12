@@ -6,8 +6,9 @@ import 'package:twic_app/shared/form/form.dart';
 
 class UserCard extends StatefulWidget {
   final User user;
+  final double width;
 
-  UserCard({this.user});
+  UserCard({this.user, this.width = 160});
 
   @override
   State<StatefulWidget> createState() => UserCardState();
@@ -17,9 +18,8 @@ class UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 160.0,
-        margin: EdgeInsets.only(bottom: 20.0),
-        padding: EdgeInsets.only(top: 10.0),
+        width: widget.width,
+        padding: EdgeInsets.only(top: 12.0),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -35,11 +35,15 @@ class UserCardState extends State<UserCard> {
           child: Column(
             children: <Widget>[
               Avatar(href: widget.user.avatar?.href()),
-              SizedBox(height: 10.0),
-              Text("${widget.user.firstname} ${widget.user.lastname}",
+              SizedBox(height: 12.0),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children : [Text("${widget.user.firstname} ${widget.user.lastname}",
                   style: Style.smallTitle),
+              null != widget.user.classYear ? Text("'${widget.user.classYear % 100}", style: Style.lightText,) : Container()]),
+              SizedBox(height: 5.0),
               Text(widget.user.school.name, style: Style.smallGreyText),
-              SizedBox(height: 10.0),
+              SizedBox(height: 15.0),
               ClipRRect(
                   borderRadius: new BorderRadius.circular(4.0),
                   child: Container(
@@ -50,7 +54,7 @@ class UserCardState extends State<UserCard> {
                         "${widget.user.nbFollowers} follower${widget.user.nbFollowers > 1 ? 's' : ''}",
                         style: Style.smallGreyText),
                   )),
-              SizedBox(height: 16.0),
+              SizedBox(height: 15.0),
               Button(
                 border: Border(
                     top: BorderSide(
@@ -58,8 +62,9 @@ class UserCardState extends State<UserCard> {
                         width: 1.0,
                         style: BorderStyle.solid)),
                 radius: null,
-                width: 180.0,
+                width: widget.width + 20,
                 height: 40.0,
+                fontSize: 12,
                 text: widget.user.followed ? 'Followed' : 'Follow',
                 background: Colors.white,
                 color: widget.user.followed ? Style.grey : Style.mainColor,

@@ -8,6 +8,7 @@ import 'package:twic_app/pages/posts/create.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/shared/form/form.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 enum ButtonEnum { Home, Discover, Create, Profile, Chat }
 
@@ -22,13 +23,15 @@ class BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 24),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.home,
-                size: 24.0,
+                current == ButtonEnum.Home
+                    ? TwicFont.home_plain : TwicFont.home,
+                size: 20.0,
                 color: Style.grey,
               ),
               onPressed: () {
@@ -97,8 +100,9 @@ class BottomNav extends StatelessWidget {
 
             IconButton(
               icon: Icon(
-                Icons.chat,
-                size: 24.0,
+                current == ButtonEnum.Chat
+                    ? TwicFont.conversation_plain : TwicFont.conversation,
+                size: 20.0,
                 color: Style.grey,
               ),
               onPressed: () {
