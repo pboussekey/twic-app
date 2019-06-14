@@ -9,7 +9,9 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/components/slider.dart';
 import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/pages/posts/post_view.dart';
+import 'package:twic_app/pages/profile/hashtag.dart';
 import 'package:twic_app/api/services/posts.dart';
+import 'package:flutter/gestures.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -45,14 +47,27 @@ class PostWidgetState extends State<PostWidget>
       String text = content.substring(idx, hashtag.start);
       String hash = content.substring(hashtag.start, hashtag.end);
       children.add(TextSpan(text: text, style: Style.text));
-      children.add(TextSpan(text: ' ' + hash + ' ', style: Style.hashtagStyle));
+      children.add(TextSpan(
+          text: ' ' + hash + ' ',
+          style: Style.hashtagStyle,
+          recognizer: new TapGestureRecognizer()
+            ..onTap = () {
+              Hashtag hashtag = widget.post.hashtags.firstWhere((Hashtag h) =>
+              h.name.toLowerCase() ==
+                  hash.replaceAll("#", "").toLowerCase());
+              if (null != hashtag) {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        HashtagProfile(hashtag_id: hashtag.id,)));
+              }
+            }));
       idx = hashtag.end;
     });
     children.add(TextSpan(text: content.substring(idx), style: Style.text));
     TextSpan first = children.removeAt(0);
     return RichText(
         text:
-            TextSpan(text: first.text, style: first.style, children: children));
+        TextSpan(text: first.text, style: first.style, children: children));
   }
 
   String _renderDate(DateTime date) {
@@ -73,7 +88,10 @@ class PostWidgetState extends State<PostWidget>
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     print(widget.post.user.toJson());
     return Container(
         color: Colors.white,
@@ -83,22 +101,25 @@ class PostWidgetState extends State<PostWidget>
           children: <Widget>[
             Container(
               padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
               child: Flex(
                 direction: Axis.horizontal,
                 children: <Widget>[
-                  !widget.hideHeader ? Avatar(
-                          href:  widget.post.user?.avatar?.href(),
-                          size: 40,
-                        ) : Container(),
-                  !widget.hideHeader ?Expanded(
+                  !widget.hideHeader
+                      ? Avatar(
+                    href: widget.post.user?.avatar?.href(),
+                    size: 40,
+                  )
+                      : Container(),
+                  !widget.hideHeader
+                      ? Expanded(
                     child: Column(
                       children: <Widget>[
                         Align(
                             alignment: Alignment.centerLeft,
                             child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0),
                               child: Text(
                                 widget.post.user.firstname +
                                     " " +
@@ -110,8 +131,8 @@ class PostWidgetState extends State<PostWidget>
                         Align(
                             alignment: Alignment.centerLeft,
                             child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0),
                               child: Text(
                                 widget.post.user.institution.name,
                                 style: Style.lightText,
@@ -120,7 +141,8 @@ class PostWidgetState extends State<PostWidget>
                             )),
                       ],
                     ),
-                  ) : Container(),
+                  )
+                      : Container(),
                   Text(
                     _renderDate(widget.post.createdAt),
                     style: Style.lightText,
@@ -130,24 +152,25 @@ class PostWidgetState extends State<PostWidget>
             ),
             null != widget.post.files && widget.post.files.length > 0
                 ? FileSlider(
-                    files: widget.post.files,
-                    builder: (TwicFile f) => Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: RoundPicture(
-                          picture: f.href(),
-                          fit: BoxFit.cover,
-                          width: width - 40,
-                          height: width * 0.4,
-                          radius: 8.0,
-                        )),
-                  )
+              files: widget.post.files,
+              builder: (TwicFile f) =>
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: RoundPicture(
+                        picture: f.href(),
+                        fit: BoxFit.cover,
+                        width: width - 40,
+                        height: width * 0.4,
+                        radius: 8.0,
+                      )),
+            )
                 : Container(),
             null != widget.post.content && widget.post.content.isNotEmpty
                 ? Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 20),
-                    child: postText(widget.post.content),
-                  )
+              padding: const EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: 20),
+              child: postText(widget.post.content),
+            )
                 : Container(),
             Row(
               children: <Widget>[
@@ -155,43 +178,43 @@ class PostWidgetState extends State<PostWidget>
                     padding: const EdgeInsets.only(right: 5.0, left: 20),
                     child: widget.post.isLiked
                         ? Posts.unlike(
-                            builder: (RunMutation runMutation,
-                                    QueryResult result) =>
-                                Button(
-                                  background: Colors.transparent,
-                                  padding: const EdgeInsets.all(0),
-                                  width: 25,
-                                  height: 25,
-                                  child: Icon(
-                                    Icons.favorite,
-                                    color: Style.red,
-                                  ),
-                                  onPressed: () {
-                                    runMutation({'post_id': widget.post.id});
-                                    widget.post.isLiked = false;
-                                    widget.post.nbLikes--;
-                                    setState(() {});
-                                  },
-                                ))
+                        builder: (RunMutation runMutation,
+                            QueryResult result) =>
+                            Button(
+                              background: Colors.transparent,
+                              padding: const EdgeInsets.all(0),
+                              width: 25,
+                              height: 25,
+                              child: Icon(
+                                Icons.favorite,
+                                color: Style.red,
+                              ),
+                              onPressed: () {
+                                runMutation({'post_id': widget.post.id});
+                                widget.post.isLiked = false;
+                                widget.post.nbLikes--;
+                                setState(() {});
+                              },
+                            ))
                         : Posts.like(
-                            builder: (RunMutation runMutation,
-                                    QueryResult result) =>
-                                Button(
-                                  background: Colors.transparent,
-                                  padding: const EdgeInsets.all(0),
-                                  width: 25,
-                                  height: 25,
-                                  child: Icon(
-                                    Icons.favorite_border,
-                                    color: Style.red,
-                                  ),
-                                  onPressed: () {
-                                    runMutation({'post_id': widget.post.id});
-                                    widget.post.isLiked = true;
-                                    widget.post.nbLikes++;
-                                    setState(() {});
-                                  },
-                                ))),
+                        builder: (RunMutation runMutation,
+                            QueryResult result) =>
+                            Button(
+                              background: Colors.transparent,
+                              padding: const EdgeInsets.all(0),
+                              width: 25,
+                              height: 25,
+                              child: Icon(
+                                Icons.favorite_border,
+                                color: Style.red,
+                              ),
+                              onPressed: () {
+                                runMutation({'post_id': widget.post.id});
+                                widget.post.isLiked = true;
+                                widget.post.nbLikes++;
+                                setState(() {});
+                              },
+                            ))),
                 Container(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: Text(
@@ -216,12 +239,14 @@ class PostWidgetState extends State<PostWidget>
                       width: 5,
                     )
                   ]),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => PostView(
-                                post: widget.post,
-                              ))),
+                  onPressed: () =>
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PostView(
+                                    post: widget.post,
+                                  ))),
                 ),
                 Expanded(
                   child: Align(

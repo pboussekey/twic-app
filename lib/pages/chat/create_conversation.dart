@@ -178,7 +178,6 @@ class CreateConversationState extends State<CreateConversation> {
                         search: search,
                         builder: (List<Hashtag> hashtags) => hashtags.length > 0
                             ? HashtagList(
-                                list: hashtags,
                                 renderAction: (Hashtag hashtag) => Container(),
                                 onClick: (Hashtag hashtag) {
                                   if (loading) return;

@@ -23,7 +23,11 @@ Post _$PostFromJson(Map<String, dynamic> json) {
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
       isLiked: json['isLiked'] as bool,
-      nbComments: json['nbComments'] as int);
+      nbComments: json['nbComments'] as int)
+    ..hashtags = (json['hashtags'] as List)
+        ?.map((e) =>
+            e == null ? null : Hashtag.fromJson(e as Map<String, dynamic>))
+        ?.toList();
 }
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
@@ -35,5 +39,6 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'nbLikes': instance.nbLikes,
       'isLiked': instance.isLiked,
       'user': instance.user?.toJson(),
-      'files': instance.files?.map((e) => e?.toJson())?.toList()
+      'files': instance.files?.map((e) => e?.toJson())?.toList(),
+      'hashtags': instance.hashtags?.map((e) => e?.toJson())?.toList()
     };

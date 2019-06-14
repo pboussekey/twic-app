@@ -52,7 +52,6 @@ class _TwicApp extends State<TwicApp> {
     timer = new Timer.periodic(Duration(seconds: 1), (Timer timer) async {
       time++;
       String requestToken = await Session.getRequest();
-      print([time, requestToken]);
       if (time == 1 && null != requestToken && requestToken.isNotEmpty) {
         Map<String, dynamic> data = await api
             .request(cmd: 'login', params: {'request_token': requestToken});

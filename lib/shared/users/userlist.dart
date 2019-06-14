@@ -60,7 +60,6 @@ class UserListState extends State<UserList>{
 
   void _fetch() async {
     if (loading) return;
-    print("FETCH USERS");
     loading = true;
     Users.loadUsers(
         hashtag_id: widget.hashtag_id,
@@ -78,7 +77,7 @@ class UserListState extends State<UserList>{
         .then((List<User> _users) {
       users.addAll(_users);
       loading = false;
-      setState(() {});
+      if(mounted){setState(() {});}
     });
     page++;
   }

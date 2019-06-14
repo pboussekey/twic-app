@@ -53,6 +53,7 @@ class Posts {
               nbComments 
               nbLikes 
               isLiked 
+              hashtags{ id name }
               user{ 
                 id
                 firstname 

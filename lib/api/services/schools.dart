@@ -3,6 +3,23 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:flutter/material.dart';
 
 class Schools {
+
+  static Widget get({int id, Function builder}) {
+    return api.query<School>(
+        query: """      
+         query school(\$id : ID) {
+          school(id : \$id){
+                id
+                name
+              logo{ name bucketname token }
+              }
+          }
+          """,
+        onComplete: (dynamic data) => School.fromJson(data['school']),
+        params: {'id': id},
+        builder: builder);
+  }
+
   static Widget getList({int university_id, String degree, String search, Function builder}) {
     return api.query<School>(
         query: """      

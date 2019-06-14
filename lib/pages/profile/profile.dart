@@ -13,6 +13,7 @@ import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/profile/profile_followers.dart';
 import 'package:twic_app/pages/profile/profile_followings.dart';
 import 'package:twic_app/pages/profile/profile_edition.dart';
+import 'package:twic_app/pages/profile/school.dart';
 import 'package:twic_app/pages/posts/create.dart';
 
 class Profile extends StatefulWidget {
@@ -36,16 +37,17 @@ class ProfileState extends State<Profile> {
                       description: user.description,
                       firstname: user.firstname,
                       lastname: user.lastname,
-                      major: user.major.name,
-                      minor: user.minor.name,
+                      major: user.major?.name,
+                      minor: user.minor?.name,
                       nb_followers: user.nbFollowers,
                       nb_followings: user.nbFollowings,
                       nb_posts: user.nbPosts,
                       classYear: user.classYear,
                       school: user.school.name,
-                      university: user.university?.name,
+                      university: user.institution.name,
+                      university_id: user.institution.id,
                       university_logo:
-                          (user.university ?? user.school).logo.href(),
+                          user.institution.logo.href(),
                       user_id: user.id,
                     ))),
         bottomNavigationBar: BottomNav(
@@ -62,6 +64,7 @@ class ProfileContent extends StatefulWidget {
   String lastname;
   String university;
   String school;
+  int university_id;
   String university_logo;
   String major;
   String minor;
@@ -87,6 +90,7 @@ class ProfileContent extends StatefulWidget {
       this.classYear,
       this.university,
       this.university_logo,
+        this.university_id,
       this.user_id});
 
   @override
@@ -156,7 +160,11 @@ class ProfileContentState extends State<ProfileContent> {
                         )
                       : Container()
                 ]),
-                Row(children: [
+                Button(
+                    background: Colors.transparent,
+                    padding: EdgeInsets.all(0),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SchoolProfile(school_id: widget.university_id,) )),
+                    child : Row(children: [
                   null != widget.university_logo
                       ? Container(
                           padding: EdgeInsets.all(4.0),
@@ -179,15 +187,15 @@ class ProfileContentState extends State<ProfileContent> {
                   Column(
                     children: <Widget>[
                       Text(widget.university, style: Style.hashtagStyle),
-                      null != widget.school
+                      null != widget.school && widget.school != widget.university
                           ? Text(widget.school, style: Style.smallGreyText)
                           : Container(),
                     ],
                   )
-                ]),
-                SizedBox(
+                ])),
+                null != widget.major || null != widget.minor ? SizedBox(
                   height: 10.0,
-                ),
+                ) : Container(),
                 Row(children: [
                   null != widget.major
                       ? Container(
@@ -223,9 +231,9 @@ class ProfileContentState extends State<ProfileContent> {
               ],
             ),
           ),
-          SizedBox(
+          null != widget.major || null != widget.minor ? SizedBox(
             height: 10.0,
-          ),
+          ) : Container(),
           null != widget.description
               ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -242,9 +250,6 @@ class ProfileContentState extends State<ProfileContent> {
                                       color: Style.border,
                                       style: BorderStyle.solid))),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
                       ),
                       Text(
                         widget.description,

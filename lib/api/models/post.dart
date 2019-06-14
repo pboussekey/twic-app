@@ -1,6 +1,7 @@
 import 'package:twic_app/api/models/user.dart';
 import 'abstract_model.dart';
 import 'twic_file.dart';
+import 'hashtag.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post.g.dart';
@@ -15,6 +16,7 @@ class Post extends AbstractModel {
   bool isLiked;
   User user;
   List<TwicFile> files = [];
+  List<Hashtag> hashtags = [];
 
   Post(
       {id,
