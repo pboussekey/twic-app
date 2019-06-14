@@ -45,7 +45,7 @@ Future<dynamic> execute(String query, Map<String, dynamic> params,
   ).then((QueryResult result) => result.data);
 }
 
-Widget query<T extends AbstractModel>(
+Widget query<T>(
     {String query,
     Map<String, dynamic> params,
     Function onComplete,

@@ -15,6 +15,7 @@ import 'package:twic_app/pages/profile/profile_followings.dart';
 import 'package:twic_app/pages/profile/profile_edition.dart';
 import 'package:twic_app/pages/profile/school.dart';
 import 'package:twic_app/pages/posts/create.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Profile extends StatefulWidget {
   final int user_id;
@@ -32,23 +33,23 @@ class ProfileState extends State<Profile> {
         body: RootPage(
             child: Users.get(
                 id: widget.user_id,
-                builder: (User user) => ProfileContent(
-                      avatar: user.avatar.href(),
-                      description: user.description,
-                      firstname: user.firstname,
-                      lastname: user.lastname,
-                      major: user.major?.name,
-                      minor: user.minor?.name,
-                      nb_followers: user.nbFollowers,
-                      nb_followings: user.nbFollowings,
-                      nb_posts: user.nbPosts,
-                      classYear: user.classYear,
-                      school: user.school.name,
-                      university: user.institution.name,
-                      university_id: user.institution.id,
+                builder: (List<User> users) => ProfileContent(
+                      avatar: users[0].avatar.href(),
+                      description: users[0].description,
+                      firstname: users[0].firstname,
+                      lastname: users[0].lastname,
+                      major: users[0].major?.name,
+                      minor: users[0].minor?.name,
+                      nb_followers: users[0].nbFollowers,
+                      nb_followings: users[0].nbFollowings,
+                      nb_posts: users[0].nbPosts,
+                      classYear: users[0].classYear,
+                      school: users[0].school.name,
+                      university: users[0].institution.name,
+                      university_id: users[0].institution.id,
                       university_logo:
-                          user.institution.logo.href(),
-                      user_id: user.id,
+                      users[0].institution.logo.href(),
+                      user_id: users[0].id,
                     ))),
         bottomNavigationBar: BottomNav(
           current: ButtonEnum.Profile,
@@ -175,10 +176,13 @@ class ProfileContentState extends State<ProfileContent> {
                                   width: 1,
                                   color: Style.border,
                                   style: BorderStyle.solid)),
-                          child: Image.network(
-                            widget.university_logo,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.university_logo,
                             height: 12.0,
                             width: 12.0,
+                            fit: BoxFit.fill,
+                            fadeOutDuration: new Duration(seconds: 1),
+                            fadeInDuration: new Duration(seconds: 1),
                           ))
                       : Container(),
                   SizedBox(

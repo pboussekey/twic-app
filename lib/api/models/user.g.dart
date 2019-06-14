@@ -30,7 +30,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
           : Field.fromJson(json['minor'] as Map<String, dynamic>),
       nbFollowers: json['nbFollowers'] as int,
       nbFollowings: json['nbFollowings'] as int,
-      nbPosts: json['nbPosts'] as int);
+      nbPosts: json['nbPosts'] as int)
+    ..university = json['university'] == null
+        ? null
+        : School.fromJson(json['university'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -40,6 +43,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'description': instance.description,
       'avatar': instance.avatar?.toJson(),
       'school': instance.school?.toJson(),
+      'university': instance.university?.toJson(),
       'major': instance.major?.toJson(),
       'minor': instance.minor?.toJson(),
       'isActive': instance.isActive,

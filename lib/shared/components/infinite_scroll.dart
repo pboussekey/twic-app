@@ -36,6 +36,7 @@ class InfiniteScrollState extends State<InfiniteScroll> {
 
   @override
   void initState() {
+    print("INIT INFINITE SCROLL");
     super.initState();
     widget.scroll.addListener(() {
       double maxScroll = widget.scroll.position.maxScrollExtent;

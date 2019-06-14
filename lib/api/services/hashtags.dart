@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 export 'package:twic_app/api/services/api_graphql.dart';
 
 class Hashtags {
-
   static Widget get({int id, Function builder}) {
     return api.query<Hashtag>(
         query: """      
@@ -23,11 +22,31 @@ class Hashtags {
         builder: builder);
   }
 
-  static Widget getList({bool followed, String search, int user_id, Function builder, bool cache = true}) {
+  static Widget getList(
+      {bool followed,
+      String search,
+      int user_id,
+      int  university_id,
+      int count,
+      int page,
+      Function builder,
+      bool cache = true}) {
     return api.query<Hashtag>(
         query: """      
-         query hashtags(\$followed: Boolean, \$search : String, \$user_id : ID) {
-          hashtags(followed: \$followed, search: \$search, user_id : \$user_id){
+         query hashtags(
+            \$followed: Boolean, 
+            \$search : String, 
+            \$user_id : ID, 
+            \$university_id : ID, 
+            \$page : Int, 
+            \$count : Int) {
+          hashtags(
+            followed: \$followed, 
+            search: \$search, 
+            user_id : \$user_id, 
+            university_id : \$university_id, 
+            count : \$count, 
+            page :  \$page){
                 id
                 name
                 followed
@@ -36,7 +55,14 @@ class Hashtags {
           }
           """,
         cache: search == null && cache,
-        params: {'followed': followed, 'search': search, 'user_id' : user_id},
+        params: {
+          'followed': followed,
+          'search': search,
+          'user_id': user_id,
+          'university_id': university_id,
+          'count': count,
+          'page': page
+        },
         onComplete: (dynamic data) =>
             ((data['hashtags'] ?? []) as List<dynamic>)
                 .map((dynamic hashtag) => Hashtag.fromJson(hashtag))
@@ -94,17 +120,15 @@ class Hashtags {
     return builder(_followed);
   }
 
-
-
   static Future<List<Hashtag>> load(
-      {bool followed, String search, int user_id, university_id, int count, int page, Function builder, bool cache = true}) {
-    print({
-      'user_id': user_id,
-      'search': search,
-      'university_id' : university_id,
-      'count': count,
-      'page': page
-    });
+      {bool followed,
+      String search,
+      int user_id,
+      university_id,
+      int count,
+      int page,
+      Function builder,
+      bool cache = true}) {
     return api.execute("""  
         query hashtags(
           \$followed: Boolean, 
@@ -130,13 +154,13 @@ class Hashtags {
       'user_id': user_id,
       'search': search,
       'followed': followed,
-      'university_id' : university_id,
+      'university_id': university_id,
       'count': count,
       'page': page
-    }, cache: false).then((dynamic data){ return (data['hashtags'] as List<dynamic>)
-        .map((dynamic hashtag) => Hashtag.fromJson(hashtag))
-        .toList(); });
-
+    }, cache: false).then((dynamic data) {
+      return (data['hashtags'] as List<dynamic>)
+          .map((dynamic hashtag) => Hashtag.fromJson(hashtag))
+          .toList();
+    });
   }
-
 }

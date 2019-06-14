@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/form/button.dart';
-import 'package:twic_app/shared/form/link.dart';
+import 'package:twic_app/shared/form/href.dart';
 import 'package:twic_app/pages/welcome/join.dart';
 import 'package:twic_app/pages/welcome/login.dart';
 import 'package:twic_app/pages/welcome/presentation.dart';
@@ -100,7 +100,7 @@ class Welcome extends StatelessWidget {
                         SizedBox(
                           height: 10.0,
                         ),
-                        Link(
+                        Href(
                           style: Style.lightText,
                           text: "Learn more",
                           context: context,

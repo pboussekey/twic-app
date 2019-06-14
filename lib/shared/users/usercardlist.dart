@@ -19,6 +19,7 @@ class UserCardList extends StatefulWidget {
   final int class_year;
   final Widget placeholder;
   final UniqueKey listKey;
+  final Function onFollow;
   final int page;
 
   UserCardList(
@@ -35,6 +36,7 @@ class UserCardList extends StatefulWidget {
       this.hashtag_id,
       this.class_year,
       this.placeholder,
+      this.onFollow,
       this.listKey,
       this.page});
 
@@ -45,28 +47,30 @@ class UserCardList extends StatefulWidget {
 class UserCardListState extends State<UserCardList> {
   int page = 0;
   bool loading = false;
-  final List<User> users = [];
+  bool inited = false;
+  final List<int> users = [];
   final ScrollController _controller = ScrollController();
+
   UserCardListState({this.page = 0});
 
   void _fetch() async {
     if (loading) return;
-    print("FETCH USERS");
     loading = true;
-    Users.loadUsers(
-            hashtag_id: widget.hashtag_id,
-            user_id: widget.user_id,
-            page: page,
-            school_id: widget.school_id,
-            university_id: widget.university_id,
-            search: widget.search,
-            follower: widget.follower,
-            following: widget.following,
-            major_id: widget.major_id,
-            minor_id: widget.minor_id,
-            class_year: widget.class_year,
-            count: 10)
-        .then((List<User> _users) {
+    inited = true;
+    Users.getId(
+        hashtag_id: widget.hashtag_id,
+        user_id: widget.user_id,
+        page: page,
+        school_id: widget.school_id,
+        university_id: widget.university_id,
+        search: widget.search,
+        follower: widget.follower,
+        following: widget.following,
+        major_id: widget.major_id,
+        minor_id: widget.minor_id,
+        class_year: widget.class_year,
+        count: 10,
+        onCompleted: () => setState(() {})).then((List<int> _users) {
       users.addAll(_users);
       loading = false;
       setState(() {});
@@ -76,7 +80,6 @@ class UserCardListState extends State<UserCardList> {
 
   @override
   void initState() {
-    print("INIT STATE");
     users.clear();
     page = 0;
     super.initState();
@@ -84,22 +87,20 @@ class UserCardListState extends State<UserCardList> {
 
   @override
   Widget build(BuildContext context) {
-    print(["BUILD", widget.listKey.toString()]);
-
-    return users.length > 0 || null == widget.placeholder
+    return users.length > 0 || null == widget.placeholder || inited == false
         ? Container(
-        key: widget.listKey,
-        height: widget.direction == Axis.horizontal ? 190.0 : null,
-        width: double.infinity,
-        child: InfiniteScroll(
-          scroll: _controller,
-          shrink: false,
-          direction: widget.direction,
-          fetch: _fetch,
-          builder: (BuildContext context, int index) =>
-              _build(context, index),
-          count: ((users.length) + 1 / 2).floor(),
-        ))
+            key: widget.listKey,
+            height: widget.direction == Axis.horizontal ? 250.0 : null,
+            width: double.infinity,
+            child: InfiniteScroll(
+              scroll: _controller,
+              shrink: false,
+              direction: widget.direction,
+              fetch: _fetch,
+              builder: (BuildContext context, int index) =>
+                  _build(context, index),
+              count: ((users.length) + 1 / 2).floor(),
+            ))
         : widget.placeholder;
   }
 
@@ -107,9 +108,11 @@ class UserCardListState extends State<UserCardList> {
     Size mediaSize = MediaQuery.of(context).size;
     if (widget.direction == Axis.horizontal) {
       return Padding(
-        padding: EdgeInsets.only(right: 10.0),
+        padding: EdgeInsets.only(
+            left: index == 0 ? 20 : 0, right: 10.0, top: 20, bottom: 40),
         child: UserCard(
-          user: users[index],
+          user_id: users[index],
+          onFollow: widget.onFollow,
         ),
       );
     } else {
@@ -121,7 +124,7 @@ class UserCardListState extends State<UserCardList> {
                   padding: EdgeInsets.only(
                       right: 5.0, top: index > 0 ? 0.0 : 10, bottom: 5),
                   child: UserCard(
-                    user: users[index],
+                    user_id: users[index],
                     width: (mediaSize.width - 45) / 2,
                   ),
                 ),
@@ -130,8 +133,9 @@ class UserCardListState extends State<UserCardList> {
                         padding: EdgeInsets.only(
                             top: index > 0 ? 0.0 : 10, bottom: 5),
                         child: UserCard(
-                          user: users[index + 1],
+                          user_id: users[index + 1],
                           width: (mediaSize.width - 45) / 2,
+                          onFollow: widget.onFollow,
                         ))
                     : Container()
               ],

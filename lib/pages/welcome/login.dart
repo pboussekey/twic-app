@@ -64,7 +64,7 @@ class LoginFormState extends State<LoginForm> {
                 size: Size(double.infinity, mediaSize.height * 0.55)),
           ),
           Container(
-            margin: EdgeInsets.only(top: 60.0, left: 50.0, right: 50.0),
+            margin: EdgeInsets.only(top: 50.0, left: 50.0, right: 50.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -74,17 +74,18 @@ class LoginFormState extends State<LoginForm> {
                     translations.text('login.title'),
                     style: Style.whiteTitle,
                   ),
-                  Link(
+                  Href(
                     text: translations.text('login.description'),
                     style: TextStyle(
                         color: Colors.white, fontSize: 15, fontFamily: 'Rubik'),
                     context: context,
                     href: (BuildContext context) => Join(),
                   ),
-                  SizedBox(height: 60),
+                  SizedBox(height: 50),
                   Input(
                     placeholder: translations.text('login.email_placeholder'),
                     icon: TwicFont.email,
+                    height: 72,
                     iconSize: 15,
                     validator: (String email) {
                       if (email.trim().isEmpty) {
@@ -135,7 +136,7 @@ class LoginFormState extends State<LoginForm> {
                                   content: Text('Email sent! Please check your inbox.', style : Style.whiteText, textAlign: TextAlign.center,),
                                   background: Style.darkPurple,
                                   context: context);
-                              if (null != data) {
+                              if (data['type'] != 'error') {
                                 await Session.setRequest(data['request_token']);
                                 setState(() {
                                     _requested = true;

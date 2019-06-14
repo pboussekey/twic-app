@@ -102,7 +102,6 @@ class _TwicApp extends State<TwicApp> {
         await FirebaseDynamicLinks.instance.retrieveDynamicLink();
     final Uri deepLink = data?.link;
     if (null != deepLink && null != deepLink.queryParameters['token']) {
-      print(deepLink.queryParameters['token']);
       final Map<String, dynamic> data = await api.request(
           cmd: 'login',
           params: {'magic_token': deepLink.queryParameters['token']});

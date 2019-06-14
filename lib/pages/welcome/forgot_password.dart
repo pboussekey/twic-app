@@ -6,7 +6,7 @@ import 'package:twic_app/api/session.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/components/notifier.dart' as notifier;
 import 'package:twic_app/shared/form/button.dart';
-import 'package:twic_app/shared/form/link.dart';
+import 'package:twic_app/shared/form/href.dart';
 import 'package:twic_app/shared/form/input.dart';
 import 'package:twic_app/shared/form/autocomplete.dart';
 
@@ -73,7 +73,7 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
                         fontSize: 22,
                         fontFamily: 'Rubik'),
                   ),
-                  Link(
+                  Href(
                     text: translations.text('forgot_pwd.description'),
                     style: TextStyle(
                         color: Colors.white, fontSize: 15, fontFamily: 'Rubik'),

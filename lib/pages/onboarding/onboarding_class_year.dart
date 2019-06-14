@@ -40,6 +40,7 @@ class OnboardingClassYear extends OnboardingContentState {
       radius: BorderRadius.all(Radius.circular(6.0)),
       border: Border.all(color: Style.border),
       width: size,
+      height: 60,
       background: active ? Style.darkPurple : Colors.white,
       color: active ? Colors.white : Style.darkGrey,
       onPressed: onPressed,
@@ -105,7 +106,7 @@ class OnboardingClassYear extends OnboardingContentState {
       ),
       Expanded(
           child: Input(
-            height: 52,
+            height: 60,
         controller: _classYearCtrl,
         focusNode: _focusNode,
         placeholder: "Class year",
@@ -140,6 +141,7 @@ class OnboardingClassYear extends OnboardingContentState {
                         radius: BorderRadius.all(Radius.circular(6.0)),
                         border: Border.all(color: Style.border),
                         width: mediaSize.width / 2 - 25.0,
+                        height: 60,
                         background:
                             'UNDERGRADUATE' == Session.instance.user.degree
                                 ? Style.darkPurple
@@ -150,16 +152,11 @@ class OnboardingClassYear extends OnboardingContentState {
                         onPressed: () => setState(() {
                               runMutation({
                                 'degree': 'UNDERGRADUATE',
-                                'school_id':
-                                    (Session.instance.user.university ??
-                                            Session.instance.user.school)
-                                        .id
+                                'school_id':null
                               });
                               Session.update({
                                 'degree': 'UNDERGRADUATE',
-                                'school': (Session.instance.user.university ??
-                                        Session.instance.user.school)
-                                    .toJson()
+                                'school': null
                               });
                             }),
                       ),
@@ -168,6 +165,7 @@ class OnboardingClassYear extends OnboardingContentState {
                         radius: BorderRadius.all(Radius.circular(6.0)),
                         border: Border.all(color: Style.border),
                         width: mediaSize.width / 2 - 25.0,
+                        height: 60,
                         background: 'GRADUATE' == Session.instance.user.degree
                             ? Style.darkPurple
                             : Colors.white,
@@ -179,24 +177,19 @@ class OnboardingClassYear extends OnboardingContentState {
                                 'degree': 'GRADUATE',
                                 'major_id': 0,
                                 'minor_id': 0,
-                                'school_id':
-                                    (Session.instance.user.university ??
-                                            Session.instance.user.school)
-                                        .id
+                                'school_id':null
                               });
                               Session.update({
                                 'degree': 'GRADUATE',
                                 'major': null,
                                 'minor': null,
-                                'school': (Session.instance.user.university ??
-                                        Session.instance.user.school)
-                                    .toJson()
+                                'school': null
                               });
                             }),
                       ),
                     ]),
                 SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 _renderButtons(runMutation, mediaSize.width),
               ],

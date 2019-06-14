@@ -67,7 +67,7 @@ class JoinFormState extends State<JoinForm> {
           ),
 
           Container(
-            margin: EdgeInsets.only(top: 60.0, left: 50.0, right: 50.0),
+            margin: EdgeInsets.only(top: 50.0, left: 50.0, right: 50.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -77,17 +77,18 @@ class JoinFormState extends State<JoinForm> {
                     translations.text('join.title'),
                     style: Style.whiteTitle,
                   ),
-                  Link(
+                  Href(
                     text: translations.text('join.description'),
                     style: TextStyle(
                         color: Colors.white, fontSize: 15, fontFamily: 'Rubik'),
                     context: context,
                     href: (BuildContext context) => Join(),
                   ),
-                  SizedBox(height: 60),
+                  SizedBox(height: 50),
                   Input(
                     placeholder: translations.text('join.email_placeholder'),
                     icon: TwicFont.email,
+                    height: 72,
                     iconSize: 15,
                     validator: (String email) {
                       if (email.trim().isEmpty) {
@@ -138,7 +139,7 @@ class JoinFormState extends State<JoinForm> {
                                   content: Text('Email sent! Please check your inbox.', style : Style.whiteText, textAlign: TextAlign.center,),
                                   background: Style.mainColor,
                                   context: context);
-                              if (null != data) {
+                              if (data['type'] != 'error') {
                                 await Session.setRequest(data['request_token']);
                                 setState(() {
                                   _requested = true;

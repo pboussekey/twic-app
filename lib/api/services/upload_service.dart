@@ -39,7 +39,6 @@ Future<Map<String, dynamic>> upload({ File file, bool stopOnFailure : false }) a
         return null;
       }
     }
-    print(["UPLOAD", data]);
     return data;
 
 

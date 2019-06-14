@@ -29,7 +29,6 @@ class ConversationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    print(list.length);
     return Container(
         child: ListView.builder(
       shrinkWrap: true,

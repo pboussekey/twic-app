@@ -24,6 +24,7 @@ class ProfileEditionState extends State<ProfileEdition> {
   String lastname = Session.instance.user.lastname;
   String description = Session.instance.user.description;
   School school = Session.instance.user.school;
+  School university = Session.instance.user.university;
   Field major = Session.instance.user.major;
   Field minor = Session.instance.user.minor;
   TwicFile avatar = Session.instance.user.avatar;
@@ -298,7 +299,6 @@ class ProfileEditionState extends State<ProfileEdition> {
                             padding: EdgeInsets.all(10),
                             child: Users.update(
                               onCompleted: (dynamic result){
-                                print(["RESULT", result]);
                                 if(null != result){
                                   Session.update({
                                     'major': major.toJson(),
@@ -315,14 +315,14 @@ class ProfileEditionState extends State<ProfileEdition> {
                                     'minor': minor.name,
                                     'school': school.name,
                                     'university':
-                                    school.university?.name,
+                                   university?.name,
                                     'firstname': firstname,
                                     'lastname': lastname,
                                     'description': description,
                                     'classYear': int.parse(classYear),
                                     'avatar': avatar.href(),
                                     'university_logo':
-                                    (school.university ?? school)
+                                    (university ?? school)
                                         .logo.href()
                                   });
                                 }
@@ -374,7 +374,6 @@ class ProfileEditionState extends State<ProfileEdition> {
                                           uploading = false;
                                           editingPicture = false;
                                           avatar = TwicFile.fromJson(fileData);
-                                          print(['AVATAR', avatar.toJson()]);
                                         });
                                       });
                                     }

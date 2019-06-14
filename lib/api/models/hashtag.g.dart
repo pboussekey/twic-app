@@ -7,7 +7,6 @@ part of 'hashtag.dart';
 // **************************************************************************
 
 Hashtag _$HashtagFromJson(Map<String, dynamic> json) {
-  print(json);
   return Hashtag(
       id: json['id'] == null ? null : AbstractModel.parseId(json['id']),
       name: json['name'] as String,

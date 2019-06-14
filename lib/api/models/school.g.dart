@@ -12,15 +12,11 @@ School _$SchoolFromJson(Map<String, dynamic> json) {
       name: json['name'] as String,
       logo: json['logo'] == null
           ? null
-          : TwicFile.fromJson(json['logo'] as Map<String, dynamic>),
-      university: json['university'] == null
-          ? null
-          : School.fromJson(json['university'] as Map<String, dynamic>));
+          : TwicFile.fromJson(json['logo'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$SchoolToJson(School instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'logo': instance.logo?.toJson(),
-      'university': instance.university?.toJson()
+      'logo': instance.logo?.toJson()
     };

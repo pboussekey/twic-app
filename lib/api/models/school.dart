@@ -9,9 +9,8 @@ part 'school.g.dart';
 class School extends AbstractModel {
   String name;
   TwicFile logo;
-  School university;
 
-  School({id, this.name,  this.logo, this.university}) : super(id : id);
+  School({id, this.name,  this.logo}) : super(id : id);
 
 
   factory School.fromJson(Map<String, dynamic> json) => _$SchoolFromJson(json);

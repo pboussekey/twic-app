@@ -92,7 +92,6 @@ class PostWidgetState extends State<PostWidget>
         .of(context)
         .size
         .width;
-    print(widget.post.user.toJson());
     return Container(
         color: Colors.white,
         margin: EdgeInsets.only(bottom: 20.0),

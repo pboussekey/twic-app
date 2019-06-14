@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 
-class Link extends StatelessWidget {
+class Href extends StatelessWidget {
   final String text;
   final TextStyle style;
   final Function onPressed;
   final BuildContext context;
   final  WidgetBuilder href;
 
-  Link({this.text, this.onPressed, this.href, this.context, this.style});
+  Href({this.text, this.onPressed, this.href, this.context, this.style});
 
   @override
   Widget build(BuildContext context) {

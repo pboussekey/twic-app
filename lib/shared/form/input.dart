@@ -31,7 +31,7 @@ class Input extends StatelessWidget {
       this.onSaved,
       this.controller,
       this.height,
-      this.padding = 10,
+      this.padding = 20,
       this.width,
       this.iconSize,
       this.color = Colors.white,

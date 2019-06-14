@@ -7,21 +7,18 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/fields.dart';
 import 'package:twic_app/api/services/schools.dart';
 import 'package:twic_app/api/services/users.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class OnboardingDetails extends OnboardingContentState {
-
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
   Widget _render() {
-    print(Session.instance.user.toJson());
     return Fields.getList(
         school_id: Session.instance.user.institution.id,
         builder: (List<Field> fields) {
           List<AutoCompleteElement> list = fields
               .map((Field field) => AutoCompleteElement(
-              id: field.id, name: field.name, data: field))
+                  id: field.id, name: field.name, data: field))
               .toList();
           return Users.update(
               builder: (RunMutation update, QueryResult result) => Form(
@@ -35,12 +32,14 @@ class OnboardingDetails extends OnboardingContentState {
   }
 
   Widget _child;
+
   @override
   void initState() {
     super.initState();
 
     _child = _render();
   }
+
   OnboardingDetails()
       : super(
             title: 'Collect some details',
@@ -147,25 +146,37 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
             ? SizedBox(height: 10)
             : Container(),
         Schools.getList(
-            university_id: null != Session.instance.user.university
-                ? Session.instance.user.university.id
-                : Session.instance.user.school.id,
+            university_id: Session.instance.user.university.id,
             degree: Session.instance.user.degree,
-            builder: (List<School> schools) => schools.length > 0
+            builder: (List<School> schools){
+              return schools.length > 0
                 ? Dropdown<School>(
-                    value: null != Session.instance.user.university
-                        ? Session.instance.user.school
-                        : null,
+                    value: Session.instance.user.school,
                     size: double.maxFinite,
                     hint: Text('UNDERGRADUATE' == Session.instance.user.degree
                         ? "Residential college"
                         : "Graduate school"),
                     items: schools
-                        .map<DropdownMenuItem<School>>(
-                            (School value) => DropdownMenuItem(
-                                  child: Text(value.name),
-                                  value: value,
-                                ))
+                        .map<DropdownMenuItem<School>>((School value) =>
+                            DropdownMenuItem(
+                              child: Row(
+                                children: <Widget>[
+                                  null != value.logo ? CachedNetworkImage(
+                                    imageUrl: value.logo?.href(),
+                                    height: 12.0,
+                                    width: 12.0,
+                                    fit: BoxFit.fill,
+                                    fadeOutDuration: new Duration(seconds: 1),
+                                    fadeInDuration: new Duration(seconds: 1),
+                                  ) : Container(),
+                                  null != value.logo ? SizedBox(
+                                    width: 5,
+                                  ): Container(),
+                                  Text(value.name)
+                                ],
+                              ),
+                              value: value,
+                            ))
                         .toList(),
                     onChanged: (School s) => setState(() {
                           Session.update({
@@ -178,6 +189,6 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
                           });
                         }),
                   )
-                : CircularProgressIndicator()),
+                : CircularProgressIndicator();}),
       ]);
 }

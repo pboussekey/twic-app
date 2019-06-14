@@ -85,7 +85,6 @@ class DiscoverState extends State<Discover> {
   }
 
   Widget _renderList() {
-    print(['RENDER LIST', currentTag]);
     switch (currentTag) {
       case DiscoverTags.School:
         return UserCardList(
