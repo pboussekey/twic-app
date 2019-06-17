@@ -20,14 +20,20 @@ class OnboardingDetails extends OnboardingContentState {
               .map((Field field) => AutoCompleteElement(
                   id: field.id, name: field.name, data: field))
               .toList();
-          return Users.update(
-              builder: (RunMutation update, QueryResult result) => Form(
-                  key: _formKey,
-                  child: _OnboardingDetails(
-                    fields: list,
-                    update: update,
-                    isCompleted: isCompleted,
-                  )));
+          return Schools.getList(
+              university_id: Session.instance.user.university.id,
+              degree: Session.instance.user.degree,
+              builder: (List<School> schools) {
+                return Users.update(
+                    builder: (RunMutation update, QueryResult result) => Form(
+                        key: _formKey,
+                        child: _OnboardingDetails(
+                          fields: list,
+                          schools: schools,
+                          update: update,
+                          isCompleted: isCompleted,
+                        )));
+              });
         });
   }
 
@@ -58,9 +64,11 @@ class OnboardingDetails extends OnboardingContentState {
 class _OnboardingDetails extends StatefulWidget {
   final RunMutation update;
   final List<AutoCompleteElement> fields;
+  final List<School> schools;
   final Function isCompleted;
 
-  _OnboardingDetails({this.update, this.fields, this.isCompleted});
+  _OnboardingDetails(
+      {this.update, this.fields, this.schools, this.isCompleted});
 
   @override
   State<StatefulWidget> createState() => _OnboardingDetailsState();
@@ -145,50 +153,50 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
         'UNDERGRADUATE' == Session.instance.user.degree
             ? SizedBox(height: 10)
             : Container(),
-        Schools.getList(
-            university_id: Session.instance.user.university.id,
-            degree: Session.instance.user.degree,
-            builder: (List<School> schools){
-              return schools.length > 0
-                ? Dropdown<School>(
-                    value: Session.instance.user.school,
-                    size: double.maxFinite,
-                    hint: Text('UNDERGRADUATE' == Session.instance.user.degree
-                        ? "Residential college"
-                        : "Graduate school"),
-                    items: schools
-                        .map<DropdownMenuItem<School>>((School value) =>
-                            DropdownMenuItem(
-                              child: Row(
-                                children: <Widget>[
-                                  null != value.logo ? CachedNetworkImage(
-                                    imageUrl: value.logo?.href(),
-                                    height: 12.0,
-                                    width: 12.0,
-                                    fit: BoxFit.fill,
-                                    fadeOutDuration: new Duration(seconds: 1),
-                                    fadeInDuration: new Duration(seconds: 1),
-                                  ) : Container(),
-                                  null != value.logo ? SizedBox(
-                                    width: 5,
-                                  ): Container(),
-                                  Text(value.name)
-                                ],
-                              ),
-                              value: value,
-                            ))
-                        .toList(),
-                    onChanged: (School s) => setState(() {
-                          Session.update({
-                            'school': s.toJson(),
-                            'isActive': widget.isCompleted()
-                          });
-                          widget.update({
-                            'school_id': s.id,
-                            'isActive': widget.isCompleted()
-                          });
-                        }),
-                  )
-                : CircularProgressIndicator();}),
+        widget.schools.length > 0
+            ? Dropdown<School>(
+                value: Session.instance.user.school,
+                size: double.maxFinite,
+                hint: Text('UNDERGRADUATE' == Session.instance.user.degree
+                    ? "Residential college"
+                    : "Graduate school"),
+                items: widget.schools
+                    .map<DropdownMenuItem<School>>((School value) =>
+                        DropdownMenuItem(
+                          child: Row(
+                            children: <Widget>[
+                              null != value.logo
+                                  ? CachedNetworkImage(
+                                      imageUrl: value.logo?.href(),
+                                      height: 12.0,
+                                      width: 12.0,
+                                      fit: BoxFit.fill,
+                                      fadeOutDuration: new Duration(seconds: 1),
+                                      fadeInDuration: new Duration(seconds: 1),
+                                    )
+                                  : Container(),
+                              null != value.logo
+                                  ? SizedBox(
+                                      width: 5,
+                                    )
+                                  : Container(),
+                              Text(value.name)
+                            ],
+                          ),
+                          value: value,
+                        ))
+                    .toList(),
+                onChanged: (School s) => setState(() {
+                      Session.update({
+                        'school': s.toJson(),
+                        'isActive': widget.isCompleted()
+                      });
+                      widget.update({
+                        'school_id': s.id,
+                        'isActive': widget.isCompleted()
+                      });
+                    }),
+              )
+            : Container(),
       ]);
 }

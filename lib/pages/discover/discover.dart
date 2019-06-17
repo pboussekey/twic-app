@@ -151,7 +151,7 @@ class DiscoverState extends State<Discover> {
           ],
           widget: showFilters
               ? Container(
-                  width: size.width - 40,
+                  width: size.width,
                   height: 60,
                   child: ListView(
                     scrollDirection: Axis.horizontal,

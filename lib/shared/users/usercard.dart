@@ -23,6 +23,7 @@ class UserCardState extends State<UserCard> {
     if(user == null){
       return Container();
     }
+    print(user.toJson());
     return Container(
         width: widget.width,
         padding: EdgeInsets.only(top: 12.0),
@@ -53,7 +54,7 @@ class UserCardState extends State<UserCard> {
                     : Container()
               ]),
               SizedBox(height: 5.0),
-              Text(user.school.name, style: Style.smallGreyText),
+              Text(user.institution.name, style: Style.smallGreyText),
               SizedBox(height: 15.0),
               ClipRRect(
                   borderRadius: new BorderRadius.circular(4.0),

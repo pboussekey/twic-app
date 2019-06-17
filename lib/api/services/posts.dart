@@ -58,7 +58,8 @@ class Posts {
                 id
                 firstname 
                 lastname 
-                school { id name university{ id name } } 
+                school { id name  } 
+                university{ id name }
                 avatar{ name bucketname token } 
               }
               files{ name bucketname token }

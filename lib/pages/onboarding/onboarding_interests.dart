@@ -56,13 +56,13 @@ class _OnboardingInterestsContentState
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
-    return Column(
+    return
+      Hashtags.getList(
+        search: search,
+        cache: false,
+        builder: (List<Hashtag> autocompleteSuggestions) => Column(
       key: _key,
-      children: <Widget>[
-        Hashtags.getList(
-            search: search,
-            cache: false,
-            builder: (List<Hashtag> autocompleteSuggestions) => Hashtags.follow(
+      children: <Widget>[ Hashtags.follow(
                 builder: (RunMutation runMutation, QueryResult result) =>
                     Autocomplete(
                       fieldKey: hashtagKey,
@@ -142,7 +142,7 @@ class _OnboardingInterestsContentState
                               runMutation({'hashtag_id': hashtag.id});
                             }
                           }),
-                    ))),
+                    )),
         widget.followed.length > 0
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,6 +200,6 @@ class _OnboardingInterestsContentState
               )
             : Container()
       ],
-    );
+    ));
   }
 }

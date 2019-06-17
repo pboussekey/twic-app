@@ -23,7 +23,6 @@ Future<ValueNotifier<GraphQLClient>> getClient() async {
   );
 
   final Link link = authLink.concat(httpLink as Link).concat(websocketLink);
-
   _client = ValueNotifier<GraphQLClient>(
     GraphQLClient(
       link: link,

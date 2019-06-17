@@ -29,8 +29,6 @@ class WelcomeSlider extends StatefulWidget {
 
 class WelcomeSliderState extends State<WelcomeSlider>
     with SingleTickerProviderStateMixin {
-  Size mediaSize;
-
   /// An array of Slide object
   final List<Slide> slides;
 
@@ -67,14 +65,12 @@ class WelcomeSliderState extends State<WelcomeSlider>
     if (onDonePress == null) {
       onDonePress = () {};
     }
-
-    _buildTabs();
   }
 
   @override
   Widget build(BuildContext context) {
     bool isDragging = false;
-    mediaSize = MediaQuery.of(context).size;
+    _buildTabs();
     return Container(
       child: DefaultTabController(
         length: slides.length,
@@ -210,6 +206,7 @@ class WelcomeSliderState extends State<WelcomeSlider>
       // Background color
       Color backgroundColor,
       bool isActive) {
+    Size mediaSize = MediaQuery.of(context).size;
     return Container(
         width: double.infinity,
         height: double.infinity,
@@ -223,62 +220,60 @@ class WelcomeSliderState extends State<WelcomeSlider>
                       child: CustomPaint(
                           painter:
                               CustomBackgroundPainter(color: backgroundColor),
-                          size: Size(
-                              null != this.mediaSize
-                                  ? this.mediaSize.width
-                                  : double.infinity,
-                              null != this.mediaSize
-                                  ? this.mediaSize.height * 0.55
-                                  : 350.0)),
+                          size: Size(mediaSize.width, mediaSize.height * 0.55)),
                     ),
                     Center(
                         child: Container(
-                      margin: EdgeInsets.only(
-                          top: null != this.mediaSize
-                              ? this.mediaSize.height * marginImage
-                              : marginImage * 100.0),
+                      width: mediaSize.width,
+                      margin:
+                          EdgeInsets.only(top: mediaSize.height * marginImage),
                       child: null != pathImage
                           ? Image.asset(
                               pathImage,
                               width: widthImage ?? null,
-                              height:
-                                  null != this.mediaSize && null != heightImage
-                                      ? this.mediaSize.height * heightImage
-                                      : null,
+                              height: null != heightImage
+                                  ? mediaSize.height * heightImage
+                                  : null,
                               fit: imageFit ?? BoxFit.fitWidth,
                             )
                           : Container(),
                     )),
+                    Container(height: mediaSize.height,),
+                    Positioned(
+                        bottom: 80,
+                        right: 0,
+                        left: 0,
+                        child: Container(
+                          alignment: Alignment(1, 1),
+                          height: mediaSize.height * 0.35,
+                          padding:
+                          EdgeInsets.only(right: 20.0, left: 20.0, bottom: 100.0, top : 25),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  title,
+                                  style: Style.titleStyle,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 25.0, right: 25.0),
+                                child: Text(
+                                  description,
+                                  style: Style.greyText,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 100,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
                   ],
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.only(right: 20.0, left: 20.0, bottom: 100.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(bottom: 20.0),
-                        child: Text(
-                          title,
-                          style: Style.titleStyle,
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 25.0, right: 25.0),
-                        child: Text(
-                          description,
-                          style: Style.greyText,
-                          textAlign: TextAlign.center,
-                          maxLines: 100,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),

@@ -19,7 +19,7 @@ class Tabs extends StatelessWidget {
         this.padding,
       this.tabsContent,
       this.widget,
-        this.scrollable,
+        this.scrollable = false,
       this.onTap,
       this.contentHeight,
       this.height,

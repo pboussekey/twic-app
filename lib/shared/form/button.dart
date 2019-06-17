@@ -7,6 +7,7 @@ class Button extends StatelessWidget {
   final Widget child;
   final Function onPressed;
   final Color background;
+  final Color disabledBackground;
   final Color color;
   final EdgeInsets padding;
   final double width;
@@ -20,6 +21,7 @@ class Button extends StatelessWidget {
       {this.text,
       this.onPressed,
       this.background = Style.mainColor,
+      this.disabledBackground = Style.darkGrey,
       this.color = Colors.white,
       this.padding,
       this.width,
@@ -32,23 +34,21 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      child: Container(
-          decoration: BoxDecoration(
-              color: background,
-              border: border,
-              borderRadius: radius),
-          height: height,
-          width: width,
-          child:
-              FlatButton(
-
-                padding: padding ?? EdgeInsets.only(left: 20.0, right: 20.0),
-                onPressed: disabled == true ? null : onPressed,
-                child:  child ?? Text(text, style: TextStyle(color: color, fontSize: fontSize), textAlign: TextAlign.center,
-                    overflow: TextOverflow.fade),
-              )),
-      opacity: disabled ? 0.5 : 1.0,
-    );
+    return Container(
+        decoration: BoxDecoration(
+            color: disabled ? disabledBackground : background,
+            border: border,
+            borderRadius: radius),
+        height: height,
+        width: width,
+        child: FlatButton(
+          padding: padding ?? EdgeInsets.only(left: 20.0, right: 20.0),
+          onPressed: disabled == true ? null : onPressed,
+          child: child ??
+              Text(text,
+                  style: TextStyle(color: color, fontSize: fontSize),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.fade),
+        ));
   }
 }

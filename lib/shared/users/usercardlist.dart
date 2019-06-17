@@ -71,6 +71,7 @@ class UserCardListState extends State<UserCardList> {
         class_year: widget.class_year,
         count: 10,
         onCompleted: () => setState(() {})).then((List<int> _users) {
+          print(_users);
       users.addAll(_users);
       loading = false;
       setState(() {});
