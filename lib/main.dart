@@ -73,6 +73,7 @@ class _TwicApp extends State<TwicApp> {
 
   void restartApp() {
     setState(() {
+      firstTime = false;
       _key = new UniqueKey();
     });
   }

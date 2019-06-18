@@ -14,8 +14,12 @@ class SchoolList extends StatelessWidget {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) => Row(children: [
-            SchoolCard(school: list[index * 2]),
-            SizedBox(width: 10.0,),
+            Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: SchoolCard(school: list[index * 2])),
+            SizedBox(
+              width: 10.0,
+            ),
             index * 2 + 1 < list.length
                 ? SchoolCard(school: list[index * 2 + 1])
                 : Container()

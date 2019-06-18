@@ -85,7 +85,7 @@ class Users {
           }
           """,
         cache: cache,
-        onComplete: (dynamic data){
+        onComplete: (dynamic data) {
           List<int> ids = (list as List<dynamic>)
               .map((dynamic json) => int.parse(json['id']))
               .toList();
@@ -164,6 +164,7 @@ class Users {
     int count,
     int page,
     List<int> id,
+    bool cache = true,
     bool getModel = false,
   }) {
     String fields = getModel
@@ -178,41 +179,6 @@ class Users {
       university{ id name logo { name bucketname token } }
       """
         : "id";
-    print("""      
-         query users(
-            \$follower: Boolean, 
-            \$following: Boolean, 
-            \$search : String, 
-            \$school_id : ID, 
-            \$university_id : ID, 
-            \$user_id : ID, 
-            \$major_id : ID, 
-            \$minor_id : ID,
-            \$hashtag_id : ID, 
-            \$class_year : Int, 
-            \$id : [ID], 
-            \$count : Int,  
-            \$page : Int
-          ) {
-          users(
-            follower: \$follower, 
-            following: \$following, 
-            search: \$search, 
-            school_id : \$school_id,  
-            university_id : \$university_id, 
-            user_id : \$user_id, 
-            major_id : \$major_id, 
-            minor_id : \$minor_id, 
-            hashtag_id : \$hashtag_id, 
-            class_year : \$class_year, 
-            id : \$id,
-            count : \$count,
-            page : \$page
-          ){
-              ${fields}
-            }
-          }
-          """);
     return api.execute("""      
          query users(
             \$follower: Boolean, 
@@ -257,10 +223,11 @@ class Users {
       'class_year': class_year,
       'follower': follower,
       'following': following,
+      'search' : search,
       'id': id,
       'count': count,
       'page': page
-    }, cache: false).then((dynamic list) {
+    }, cache: cache).then((dynamic list) {
       return list['users'] as List<dynamic>;
     });
   }
@@ -279,6 +246,7 @@ class Users {
       int count,
       int page,
       List<int> id,
+      bool cache = true,
       Function onCompleted}) {
     _load(
             school_id: school_id,
@@ -294,6 +262,7 @@ class Users {
             page: page,
             count: count,
             id: id,
+            cache: cache,
             getModel: true)
         .then((List<dynamic> _list) {
       _list.forEach(
@@ -338,7 +307,10 @@ class Users {
       List<int> ids = (list as List<dynamic>)
           .map((dynamic json) => int.parse(json['id']))
           .toList();
-      load(id: ids, onCompleted: onCompleted);
+      List<int> toLoad = ids.where((int id) => null == Users.list[id]).toList();
+      if(toLoad.length > 0) {
+        load(id: toLoad, cache: false, onCompleted: onCompleted);
+      }
       return ids;
     });
   }

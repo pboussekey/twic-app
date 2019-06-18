@@ -18,7 +18,6 @@ class UserCardList extends StatefulWidget {
   final int hashtag_id;
   final int class_year;
   final Widget placeholder;
-  final UniqueKey listKey;
   final Function onFollow;
   final int page;
 
@@ -37,8 +36,8 @@ class UserCardList extends StatefulWidget {
       this.class_year,
       this.placeholder,
       this.onFollow,
-      this.listKey,
-      this.page});
+      this.page,
+      Key key}) : super(key : key);
 
   @override
   State<StatefulWidget> createState() => UserCardListState(page: page);
@@ -71,7 +70,6 @@ class UserCardListState extends State<UserCardList> {
         class_year: widget.class_year,
         count: 10,
         onCompleted: () => setState(() {})).then((List<int> _users) {
-          print(_users);
       users.addAll(_users);
       loading = false;
       setState(() {});
@@ -90,7 +88,6 @@ class UserCardListState extends State<UserCardList> {
   Widget build(BuildContext context) {
     return users.length > 0 || null == widget.placeholder || inited == false
         ? Container(
-            key: widget.listKey,
             height: widget.direction == Axis.horizontal ? 250.0 : null,
             width: double.infinity,
             child: InfiniteScroll(
@@ -119,11 +116,11 @@ class UserCardListState extends State<UserCardList> {
     } else {
       return index % 2 == 0
           ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                      right: 5.0, top: index > 0 ? 0.0 : 10, bottom: 5),
+                      right: 5.0, top: index > 0 ? 0.0 : 10, bottom: 5, left: 20),
                   child: UserCard(
                     user_id: users[index],
                     width: (mediaSize.width - 45) / 2,

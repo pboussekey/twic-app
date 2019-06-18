@@ -22,8 +22,6 @@ class UserList extends StatefulWidget {
   final int hashtag_id;
   final int class_year;
   final Widget placeholder;
-  final UniqueKey listKey;
-  final int page;
 
   UserList(
       {this.list,
@@ -41,20 +39,25 @@ class UserList extends StatefulWidget {
       this.hashtag_id,
       this.class_year,
       this.placeholder,
-      this.listKey,
-      this.page = 0});
+      Key key})
+      : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => UserListState(page: page);
+  State<StatefulWidget> createState() => UserListState();
 }
 
 class UserListState extends State<UserList> {
-  int page = 0;
   bool loading = false;
   final List<int> users = [];
   final ScrollController _controller = ScrollController();
+  int page = 0;
 
-  UserListState({this.page = 0});
+  @override
+  void initState() {
+    users.clear();
+    page = 0;
+    super.initState();
+  }
 
   void _fetch() async {
     if (loading) return;
@@ -71,7 +74,11 @@ class UserListState extends State<UserList> {
             major_id: widget.major_id,
             minor_id: widget.minor_id,
             class_year: widget.class_year,
-            onCompleted: () => setState(() {}),
+            onCompleted: () {
+              if (this.mounted) {
+                setState(() {});
+              }
+            },
             count: 10)
         .then((List<int> _users) {
       users.addAll(_users);
@@ -93,7 +100,7 @@ class UserListState extends State<UserList> {
       count: users.length,
       builder: (BuildContext context, int index) {
         User user = Users.list[users[index]];
-        if(null == user){
+        if (null == user) {
           return Container();
         }
         return Button(
@@ -121,8 +128,7 @@ class UserListState extends State<UserList> {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                            "${user.firstname} ${user.lastname}",
+                        Text("${user.firstname} ${user.lastname}",
                             style: Style.text),
                         Text("${user.institution.name}",
                             style: Style.lightText),
@@ -137,9 +143,7 @@ class UserListState extends State<UserList> {
                           background: user.followed
                               ? Style.veryLightGrey
                               : Style.mainColor,
-                          color: user.followed
-                              ? Style.lightGrey
-                              : Colors.white,
+                          color: user.followed ? Style.lightGrey : Colors.white,
                         )
                       : widget.renderAction(user)
                 ]));

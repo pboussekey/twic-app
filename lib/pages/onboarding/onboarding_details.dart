@@ -12,8 +12,31 @@ import 'package:cached_network_image/cached_network_image.dart';
 class OnboardingDetails extends OnboardingContentState {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _render() {
-    return Fields.getList(
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  OnboardingDetails()
+      : super(
+            title: 'Collect some details',
+            text: 'Let’s confirm some details about your collegiate career.',
+            next: OnboardingState.Interests,
+            previous: OnboardingState.ClassYear,
+            isCompleted: () {
+              print(Session.instance.user.school?.toJson());
+              print(Session.instance.user.major?.toJson());
+              print(Session.instance.user.minor?.toJson());
+              print(null != Session.instance.user.school &&
+                  ('UNDERGRADUATE' != Session.instance.user.degree ||
+                      (Session.instance.user.major != null &&
+                          Session.instance.user.minor != null)));
+              return null != Session.instance.user.school &&
+                  ('UNDERGRADUATE' != Session.instance.user.degree ||
+                      (Session.instance.user.major != null &&
+                          Session.instance.user.minor != null));
+            }) {
+    this.child = Fields.getList(
         school_id: Session.instance.user.institution.id,
         builder: (List<Field> fields) {
           List<AutoCompleteElement> list = fields
@@ -32,32 +55,10 @@ class OnboardingDetails extends OnboardingContentState {
                           schools: schools,
                           update: update,
                           isCompleted: isCompleted,
+                          updateState: setState,
                         )));
               });
         });
-  }
-
-  Widget _child;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _child = _render();
-  }
-
-  OnboardingDetails()
-      : super(
-            title: 'Collect some details',
-            text: 'Let’s confirm some details about your collegiate career.',
-            next: OnboardingState.Interests,
-            previous: OnboardingState.ClassYear,
-            isCompleted: () =>
-                null != Session.instance.user.school &&
-                ('UNDERGRADUATE' != Session.instance.user.degree ||
-                    (Session.instance.user.major != null &&
-                        Session.instance.user.minor != null))) {
-    this.render = () => _child;
   }
 }
 
@@ -66,9 +67,10 @@ class _OnboardingDetails extends StatefulWidget {
   final List<AutoCompleteElement> fields;
   final List<School> schools;
   final Function isCompleted;
+  final Function updateState;
 
   _OnboardingDetails(
-      {this.update, this.fields, this.schools, this.isCompleted});
+      {this.update, this.fields, this.schools, this.isCompleted, this.updateState});
 
   @override
   State<StatefulWidget> createState() => _OnboardingDetailsState();
@@ -130,7 +132,7 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
                 suggestions: widget.fields,
                 minLength: 0,
                 itemSubmitted: (AutoCompleteElement item) {
-                  this.setState(() {
+                  widget.updateState(() {
                     Session.update({
                       'minor': (item.data as Field).toJson(),
                       'isActive': widget.isCompleted()
@@ -186,7 +188,7 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
                           value: value,
                         ))
                     .toList(),
-                onChanged: (School s) => setState(() {
+                onChanged: (School s) => widget.updateState(() {
                       Session.update({
                         'school': s.toJson(),
                         'isActive': widget.isCompleted()

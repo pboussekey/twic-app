@@ -23,7 +23,6 @@ class UserCardState extends State<UserCard> {
     if(user == null){
       return Container();
     }
-    print(user.toJson());
     return Container(
         width: widget.width,
         padding: EdgeInsets.only(top: 12.0),

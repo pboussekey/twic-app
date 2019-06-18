@@ -72,9 +72,9 @@ class DiscoverState extends State<Discover> {
   String filterTitle(DiscoverTags tag) {
     switch (tag) {
       case DiscoverTags.Major:
-        return Session.instance.user.major.name;
+        return Session.instance.user.major?.name;
       case DiscoverTags.Minor:
-        return Session.instance.user.minor.name;
+        return Session.instance.user.minor?.name;
       case DiscoverTags.ClassYear:
         return Session.instance.user.classYear.toString();
       case DiscoverTags.School:
@@ -178,8 +178,11 @@ class DiscoverState extends State<Discover> {
                                           DiscoverFilters(
                                               filters: widget.filters)),
                                 ).then((Map<String, dynamic> _filters) =>
-                                    setState(() => widget.filters =
-                                        _filters ?? widget.filters)),
+                                    setState(() {
+                                      listKey = UniqueKey();
+                                      widget.filters =
+                                          _filters ?? widget.filters;
+                                    })),
                             child: Row(
                               children: <Widget>[
                                 Icon(
@@ -208,8 +211,10 @@ class DiscoverState extends State<Discover> {
                               child: Button(
                                 height: 30,
                                 radius: BorderRadius.all(Radius.circular(8.0)),
-                                onPressed: () => setState(
-                                    () => widget.filters.remove('classYear')),
+                                  onPressed: () => setState(() {
+                                    listKey = UniqueKey();
+                                    widget.filters.remove('classYear');
+                                  }),
                                 padding: EdgeInsets.only(right: 12.0),
                                 child: Row(children: [
                                   Icon(
@@ -263,9 +268,10 @@ class DiscoverState extends State<Discover> {
                                           : widget.filters['university'].name,
                                       style: Style.smallWhiteText)
                                 ]),
-                                onPressed: () => setState(
-                                    () => widget.filters.remove('university')),
-                              ),
+                                  onPressed: () => setState(() {
+                                    listKey = UniqueKey();
+                                    widget.filters.remove('university');
+                                  })),
                             )
                           : Container(),
                       null != widget.filters['degree']
@@ -288,8 +294,10 @@ class DiscoverState extends State<Discover> {
                                   Text(widget.filters['degree'],
                                       style: Style.smallWhiteText)
                                 ]),
-                                onPressed: () => setState(
-                                    () => widget.filters.remove('degree')),
+                                  onPressed: () => setState(() {
+                                    listKey = UniqueKey();
+                                    widget.filters.remove('degree');
+                                  }),
                               ),
                             )
                           : Container(),
@@ -314,8 +322,10 @@ class DiscoverState extends State<Discover> {
                                     Text(widget.filters['major'].name,
                                         style: Style.smallWhiteText)
                                   ]),
-                                  onPressed: () => setState(
-                                      () => widget.filters.remove('major'))),
+                                  onPressed: () => setState(() {
+                                    listKey = UniqueKey();
+                                    widget.filters.remove('major');
+                                  })),
                             )
                           : Container(),
                       null != widget.filters['minor']
@@ -339,8 +349,10 @@ class DiscoverState extends State<Discover> {
                                     Text(widget.filters['minor'].name,
                                         style: Style.smallWhiteText)
                                   ]),
-                                  onPressed: () => setState(
-                                      () => widget.filters.remove('minor'))),
+                                  onPressed: () => setState(() {
+                                    listKey = UniqueKey();
+                                    widget.filters.remove('minor');
+                                  })),
                             )
                           : Container(),
                       null != widget.filters['school']
@@ -365,8 +377,10 @@ class DiscoverState extends State<Discover> {
                                     Text(widget.filters['school'].name,
                                         style: Style.smallWhiteText)
                                   ]),
-                                  onPressed: () => setState(
-                                      () => widget.filters.remove('school'))),
+                                  onPressed: () => setState(() {
+                                        listKey = UniqueKey();
+                                        widget.filters.remove('school');
+                                      })),
                             )
                           : Container(),
                     ],
@@ -376,19 +390,12 @@ class DiscoverState extends State<Discover> {
                 ),
           tabsContent: [
             UserList(
-                page: 0,
-                school_id: 'mine' == widget.filters['university']
-                    ? Session.instance.user.university.id
-                    : null,
-                major_id: null != widget.filters['major']
-                    ? widget.filters['major'].id
-                    : null,
-                minor_id: null != widget.filters['minor']
-                    ? widget.filters['minor'].id
-                    : null,
-                class_year: null != widget.filters['classYear']
-                    ? widget.filters['classYear']
-                    : null,
+                key: listKey,
+                university_id: widget.filters['university']?.id,
+                school_id: widget.filters['school']?.id,
+                major_id: widget.filters['major']?.id,
+                minor_id: widget.filters['minor']?.id,
+                class_year: widget.filters['classYear'],
                 search: widget.search),
             Hashtags.getList(
                 search: widget.search,
@@ -406,8 +413,11 @@ class DiscoverState extends State<Discover> {
   List<Widget> _renderFilters() {
     List<Widget> tags = [];
     DiscoverTags.values.forEach((DiscoverTags tag) {
-      if (tag != DiscoverTags.School ||
-          Session.instance.user.institution != Session.instance.user.school) {
+      if (!((tag == DiscoverTags.School &&
+              Session.instance.user.institution ==
+                  Session.instance.user.school) ||
+          (tag == DiscoverTags.Minor && null == Session.instance.user.minor) ||
+          (tag == DiscoverTags.Major && null == Session.instance.user.major))) {
         tags.add(Button(
           height: 40,
           padding: EdgeInsets.all(0),
@@ -431,7 +441,9 @@ class DiscoverState extends State<Discover> {
     return tags;
   }
 
-  DiscoverState() {
+  @override
+  void initState() {
+    super.initState();
     controller.addListener(() {
       if (controller.text.isEmpty) {
         setState(() {
