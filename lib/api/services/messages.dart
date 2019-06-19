@@ -9,8 +9,7 @@ class Messages {
   api.SocketClient socketClient = api.SocketClient('ws://10.0.2.2:3000/subscriptions');
 
   static Widget getList({int conversation_id, Function builder}) {
-    return api.query<Message>(
-        query: """      
+    return api.query<Message>( """      
          query messages(\$conversation_id: ID!) {
           messages(conversation_id: \$conversation_id){
                 id
@@ -26,8 +25,8 @@ class Messages {
               }
           }
           """,
+        {'conversation_id': conversation_id},
         cache: false,
-        params: {'conversation_id': conversation_id},
         onComplete: (dynamic data) =>
             ((data['messages'] ?? []) as List<dynamic>)
                 .map((dynamic message) => Message.fromJson(message))

@@ -21,6 +21,7 @@ class Onboarding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: true,
         body: RootPage(
             child: OnboardingContent(
           state: this.state,

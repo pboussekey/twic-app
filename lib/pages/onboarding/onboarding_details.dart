@@ -24,13 +24,6 @@ class OnboardingDetails extends OnboardingContentState {
             next: OnboardingState.Interests,
             previous: OnboardingState.ClassYear,
             isCompleted: () {
-              print(Session.instance.user.school?.toJson());
-              print(Session.instance.user.major?.toJson());
-              print(Session.instance.user.minor?.toJson());
-              print(null != Session.instance.user.school &&
-                  ('UNDERGRADUATE' != Session.instance.user.degree ||
-                      (Session.instance.user.major != null &&
-                          Session.instance.user.minor != null)));
               return null != Session.instance.user.school &&
                   ('UNDERGRADUATE' != Session.instance.user.degree ||
                       (Session.instance.user.major != null &&
@@ -70,7 +63,11 @@ class _OnboardingDetails extends StatefulWidget {
   final Function updateState;
 
   _OnboardingDetails(
-      {this.update, this.fields, this.schools, this.isCompleted, this.updateState});
+      {this.update,
+      this.fields,
+      this.schools,
+      this.isCompleted,
+      this.updateState});
 
   @override
   State<StatefulWidget> createState() => _OnboardingDetailsState();
@@ -79,6 +76,10 @@ class _OnboardingDetails extends StatefulWidget {
 class _OnboardingDetailsState extends State<_OnboardingDetails> {
   GlobalKey majorKey;
   GlobalKey minorKey;
+  TextEditingController _majorController =
+      TextEditingController(text: Session.instance.user?.major?.name);
+  TextEditingController _minorController =
+      TextEditingController(text: Session.instance.user?.minor?.name);
 
   @override
   void initState() {
@@ -92,9 +93,7 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
         'UNDERGRADUATE' == Session.instance.user.degree
             ? Autocomplete(
                 fieldKey: majorKey,
-                initialValue: Session.instance.user.major != null
-                    ? Session.instance.user.major.name
-                    : null,
+                controller: _majorController,
                 placeholder: 'What is your major ?',
                 suggestions: widget.fields,
                 minLength: 0,
@@ -125,9 +124,7 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
         'UNDERGRADUATE' == Session.instance.user.degree
             ? Autocomplete(
                 fieldKey: minorKey,
-                initialValue: Session.instance.user.minor != null
-                    ? Session.instance.user.minor.name
-                    : null,
+                controller: _minorController,
                 placeholder: 'What is your minor ?',
                 suggestions: widget.fields,
                 minLength: 0,

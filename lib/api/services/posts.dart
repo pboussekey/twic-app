@@ -7,8 +7,7 @@ export 'package:twic_app/api/services/api_graphql.dart';
 class Posts {
   static Widget getList(
       {int hashtag_id, int user_id, int parent_id, int count, int page, Function builder}) {
-    return api.query<Post>(
-        query: """      
+    return api.query<Post>("""      
          query posts( \$hashtag_id : ID, \$user_id : ID, \$parent_id : ID, \$count : Int,  \$page : Int) {
             posts(user_id: \$user_id, hashtag_id : \$hashtag_id, parent_id : \$parent_id, count : \$count, page : \$page){
               id
@@ -28,17 +27,17 @@ class Posts {
             }
           }
           """,
-        cache: false,
-        onComplete: (dynamic data){ return (data['posts'] as List<dynamic>)
-            .map((dynamic post) => Post.fromJson(post))
-            .toList(); },
-        params: {
+        {
           'hashtag_id': hashtag_id,
           'user_id': user_id,
           'parent_id': parent_id,
           'count': count,
           'page': page
         },
+        cache: false,
+        onComplete: (dynamic data){ return (data['posts'] as List<dynamic>)
+            .map((dynamic post) => Post.fromJson(post))
+            .toList(); },
         builder: builder);
   }
 

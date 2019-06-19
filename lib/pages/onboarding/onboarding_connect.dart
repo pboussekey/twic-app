@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/services/users.dart';
 import 'package:twic_app/api/services/hashtags.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/form/form.dart';
@@ -8,6 +7,7 @@ import 'package:twic_app/style/style.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/pages/onboarding/onboarding_states.dart';
 import 'package:twic_app/shared/users/usercardlist.dart';
+import 'package:twic_app/api/services/cache.dart';
 
 class OnboardingConnect extends OnboardingContentState {
   OnboardingConnect()
@@ -18,28 +18,10 @@ class OnboardingConnect extends OnboardingContentState {
                 'Discover and connect with students on campus and at other universities.',
             previous: OnboardingState.Details,
             isCompleted: () => true,
-            child: _OnboardingConnectContent(
-                sameClassYear: Users.getList(
-              follower: false,
-              class_year: Session.instance.user.classYear,
-            )));
+            child: _OnboardingConnectContent());
 }
 
 class _OnboardingConnectContent extends StatefulWidget {
-  final Widget sameClassYear;
-  final Widget sameFields;
-  final Widget sameSchool;
-  final Widget sameUniversity;
-  final Widget sameHashtag;
-  final Widget mostPopular;
-
-  _OnboardingConnectContent(
-      {this.sameClassYear,
-      this.sameFields,
-      this.sameHashtag,
-      this.mostPopular,
-      this.sameSchool,
-      this.sameUniversity});
 
   @override
   State createState() => _OnboardingConnectContentState();
@@ -48,6 +30,7 @@ class _OnboardingConnectContent extends StatefulWidget {
 class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
   Hashtag hashtag;
   Size mediaSize;
+  bool loaded = false;
 
   void _onFollow(User user, bool followed) {
     setState(() {});
@@ -87,7 +70,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
         Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Text(
-              'Class of ${Session.instance.user.classYear}',
+              'Same graduation year',
               style: Style.titleStyle,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.start,
@@ -103,7 +86,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
         Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
-              '${Session.instance.user.major.name} or ${Session.instance.user.minor.name}',
+              'Same major or minor',
               style: Style.titleStyle,
             )),
         UserCardList(
@@ -119,7 +102,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                 Padding(
                     padding: EdgeInsets.only(left: 20),
                     child: Text(
-                      'Most popular at ${Session.instance.user.school.name}',
+                      'Same ${Session.instance.user.degree == "UNDERGRADUATE" ? "Residential College" : "School"}',
                       style: Style.titleStyle,
                       textAlign: TextAlign.start,
                     )),
@@ -135,7 +118,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
         Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
-              'Most popular at ${Session.instance.user.institution.name}',
+              'Popular at ${Session.instance.user.institution.name}',
               style: Style.titleStyle,
               textAlign: TextAlign.start,
             )),
@@ -145,8 +128,12 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
           onFollow: _onFollow,
           placeholder: placeholder,
         ),
-        Hashtags.followed(
-            builder: (List<Hashtag> followed) => followed.length == 0
+        AppCache.getWidget<Hashtag>(
+            onCompleted: () => setState((){
+              loaded = true;
+            }),
+            params : {"followed" : true},
+            builder: (List<int> followed) => (followed.length == 0 || !loaded)
                 ? Container()
                 : Column(
                     children: <Widget>[
@@ -180,9 +167,11 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              value: hashtag ?? followed[0],
+                              value: hashtag ?? AppCache.getModel<Hashtag>(followed[0]),
                               items: followed
-                                  .map((Hashtag h) => DropdownMenuItem(
+                                  .map((int hashtag_id){
+                                    Hashtag h = AppCache.getModel<Hashtag>(hashtag_id);
+                                    return DropdownMenuItem(
                                         child: Container(
                                           padding: EdgeInsets.all(10),
                                           child: Text(h.name,
@@ -190,7 +179,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                                               style: Style.largeText),
                                         ),
                                         value: h,
-                                      ))
+                                      );})
                                   .toList(),
                               onChanged: (Hashtag h) => setState(() {
                                     hashtag = h;
@@ -199,7 +188,7 @@ class _OnboardingConnectContentState extends State<_OnboardingConnectContent> {
                           ])),
                       UserCardList(
                           follower: false,
-                          hashtag_id: (hashtag ?? followed[0]).id,
+                          hashtag_id: (hashtag?.id ?? followed[0]),
                           onFollow: _onFollow,
                           placeholder: placeholder)
                     ],

@@ -83,7 +83,7 @@ class OnboardingContentState extends State<OnboardingContent> {
               SizedBox(
                 height: 20,
               ),
-              Padding(child: child ?? render(), padding: padding ?? EdgeInsets.all(20.0)),
+              Padding(child: child ?? render((){ print("ALLO?!");if(this.mounted){setState((){});}}), padding: padding ?? EdgeInsets.all(20.0)),
             ],
           ),
         ));

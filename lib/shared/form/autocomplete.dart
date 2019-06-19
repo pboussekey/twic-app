@@ -30,7 +30,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
   final double size;
   final GlobalKey<AutoCompleteTextFieldState<T>> fieldKey;
 
-  final String initialValue;
+  final TextEditingController controller;
 
   static GlobalKey<AutoCompleteTextFieldState<AutoCompleteElement>> getKey() {
     return GlobalKey<AutoCompleteTextFieldState<AutoCompleteElement>>();
@@ -47,7 +47,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
       this.itemSorter,
       this.textChanged,
       this.suggestions,
-      this.initialValue,
+      this.controller,
       this.validator,
       this.fieldKey,
       this.suggestionsAmount,
@@ -80,6 +80,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
                         title: Text(
                           item.name,
                           style: Style.largeText,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )))),
       itemSorter: itemSorter ??
@@ -96,9 +97,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
       keyboardType: TextInputType.text,
       key: fieldKey,
       suggestions: suggestions,
-      controller: null != initialValue
-          ? TextEditingController(text: initialValue)
-          : null,
+      controller: controller,
       suggestionsAmount: this.suggestions.length,
       onFocusChanged: (bool focused) {},
       minLength: this.minLength,
@@ -114,9 +113,6 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
           fillColor: Style.grey,
           hintText: this.placeholder),
     );
-    if (null != this.initialValue && null != fieldKey.currentState) {
-      autocomplete.textField.controller.text = this.initialValue;
-    }
 
     return Container(
       padding: EdgeInsets.all(10.0),

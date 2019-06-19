@@ -3,8 +3,8 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/form/form.dart';
-import 'package:twic_app/api/services/users.dart';
 import 'package:twic_app/shared/components/infinite_scroll.dart';
+import 'package:twic_app/api/services/cache.dart';
 
 class UserList extends StatefulWidget {
   final List<User> list;
@@ -62,24 +62,25 @@ class UserListState extends State<UserList> {
   void _fetch() async {
     if (loading) return;
     loading = true;
-    Users.getId(
-            hashtag_id: widget.hashtag_id,
-            user_id: widget.user_id,
-            page: page,
-            school_id: widget.school_id,
-            university_id: widget.university_id,
-            search: widget.search,
-            follower: widget.follower,
-            following: widget.following,
-            major_id: widget.major_id,
-            minor_id: widget.minor_id,
-            class_year: widget.class_year,
+    AppCache.getId<User>(params: {
+      "hashtag_id": widget.hashtag_id,
+      "user_id": widget.user_id,
+      "page": page,
+      "school_id": widget.school_id,
+      "university_id": widget.university_id,
+      "search": widget.search,
+      "follower": widget.follower,
+      "following": widget.following,
+      "major_id": widget.major_id,
+      "minor_id": widget.minor_id,
+      "class_year": widget.class_year,
+      "count": 10
+    },
             onCompleted: () {
               if (this.mounted) {
                 setState(() {});
               }
-            },
-            count: 10)
+            })
         .then((List<int> _users) {
       users.addAll(_users);
       loading = false;
@@ -99,7 +100,7 @@ class UserListState extends State<UserList> {
       shrink: false,
       count: users.length,
       builder: (BuildContext context, int index) {
-        User user = Users.list[users[index]];
+        User user = AppCache.getModel<User>(users[index]);
         if (null == user) {
           return Container();
         }

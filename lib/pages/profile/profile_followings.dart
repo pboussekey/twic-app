@@ -9,6 +9,7 @@ import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/tabs.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/style/style.dart';
+import 'package:twic_app/api/services/cache.dart';
 
 class ProfileFollowings extends StatefulWidget {
   final int user_id;
@@ -49,13 +50,11 @@ class ProfileFollowingsState extends State<ProfileFollowings> {
                   ),
                 ),
                 tabsContent: [
-                  Users.getList(
-                      following: true,
-                      user_id: widget.user_id,
-                      builder: (List<User> users) => UserList(list: users)),
-                  Hashtags.getList(
-                      user_id: widget.user_id,
-                      builder: (List<Hashtag> hashtags) => HashtagList(list: hashtags))
+                  UserList(
+                    following: true,
+                    user_id: widget.user_id,
+                  ),
+                  HashtagList(user_id: widget.user_id)
                 ])),
         bottomNavigationBar: BottomNav(
           current: ButtonEnum.Profile,

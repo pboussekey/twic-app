@@ -3,6 +3,7 @@ import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/shared/form/form.dart';
+import 'package:twic_app/api/services/cache.dart';
 import 'package:twic_app/api/services/users.dart';
 
 class UserCard extends StatefulWidget {
@@ -19,7 +20,7 @@ class UserCard extends StatefulWidget {
 class UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
-    User user = Users.list[widget.user_id];
+    User user = AppCache.getModel<User>(widget.user_id);
     if(user == null){
       return Container();
     }

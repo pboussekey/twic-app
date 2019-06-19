@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/services/users.dart';
-import 'package:twic_app/api/services/hashtags.dart';
 import 'package:twic_app/api/services/schools.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/userlist.dart';
@@ -211,10 +209,10 @@ class DiscoverState extends State<Discover> {
                               child: Button(
                                 height: 30,
                                 radius: BorderRadius.all(Radius.circular(8.0)),
-                                  onPressed: () => setState(() {
-                                    listKey = UniqueKey();
-                                    widget.filters.remove('classYear');
-                                  }),
+                                onPressed: () => setState(() {
+                                      listKey = UniqueKey();
+                                      widget.filters.remove('classYear');
+                                    }),
                                 padding: EdgeInsets.only(right: 12.0),
                                 child: Row(children: [
                                   Icon(
@@ -250,28 +248,30 @@ class DiscoverState extends State<Discover> {
                               padding: EdgeInsets.only(
                                   left: 10, top: 10.0, bottom: 10.0),
                               child: Button(
-                                height: 30,
-                                radius: BorderRadius.all(Radius.circular(8.0)),
-                                padding: EdgeInsets.only(right: 12.0, left: 5),
-                                child: Row(children: [
-                                  Icon(
-                                    Icons.cancel,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                      'mine' == widget.filters['university']
-                                          ? 'My university'
-                                          : widget.filters['university'].name,
-                                      style: Style.smallWhiteText)
-                                ]),
+                                  height: 30,
+                                  radius:
+                                      BorderRadius.all(Radius.circular(8.0)),
+                                  padding:
+                                      EdgeInsets.only(right: 12.0, left: 5),
+                                  child: Row(children: [
+                                    Icon(
+                                      Icons.cancel,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                        'mine' == widget.filters['university']
+                                            ? 'My university'
+                                            : widget.filters['university'].name,
+                                        style: Style.smallWhiteText)
+                                  ]),
                                   onPressed: () => setState(() {
-                                    listKey = UniqueKey();
-                                    widget.filters.remove('university');
-                                  })),
+                                        listKey = UniqueKey();
+                                        widget.filters.remove('university');
+                                      })),
                             )
                           : Container(),
                       null != widget.filters['degree']
@@ -294,10 +294,10 @@ class DiscoverState extends State<Discover> {
                                   Text(widget.filters['degree'],
                                       style: Style.smallWhiteText)
                                 ]),
-                                  onPressed: () => setState(() {
-                                    listKey = UniqueKey();
-                                    widget.filters.remove('degree');
-                                  }),
+                                onPressed: () => setState(() {
+                                      listKey = UniqueKey();
+                                      widget.filters.remove('degree');
+                                    }),
                               ),
                             )
                           : Container(),
@@ -323,9 +323,9 @@ class DiscoverState extends State<Discover> {
                                         style: Style.smallWhiteText)
                                   ]),
                                   onPressed: () => setState(() {
-                                    listKey = UniqueKey();
-                                    widget.filters.remove('major');
-                                  })),
+                                        listKey = UniqueKey();
+                                        widget.filters.remove('major');
+                                      })),
                             )
                           : Container(),
                       null != widget.filters['minor']
@@ -350,9 +350,9 @@ class DiscoverState extends State<Discover> {
                                         style: Style.smallWhiteText)
                                   ]),
                                   onPressed: () => setState(() {
-                                    listKey = UniqueKey();
-                                    widget.filters.remove('minor');
-                                  })),
+                                        listKey = UniqueKey();
+                                        widget.filters.remove('minor');
+                                      })),
                             )
                           : Container(),
                       null != widget.filters['school']
@@ -397,11 +397,7 @@ class DiscoverState extends State<Discover> {
                 minor_id: widget.filters['minor']?.id,
                 class_year: widget.filters['classYear'],
                 search: widget.search),
-            Hashtags.getList(
-                search: widget.search,
-                followed: false,
-                builder: (List<Hashtag> hashtags) =>
-                    HashtagList(list: hashtags)),
+            HashtagList(search: widget.search, followed: false),
             Schools.getList(
                 search: widget.search,
                 degree: 'UNIVERSITY',

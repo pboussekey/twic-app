@@ -7,7 +7,6 @@ export 'package:twic_app/api/services/api_graphql.dart';
 class Conversations {
   static Widget getList({Function builder, String search, String type}) =>
       api.query<Conversation>(
-          query:
           """query conversations(\$type: String!, \$search : String) {
                conversations(type : \$type , search : \$search){
                   id 
@@ -19,8 +18,8 @@ class Conversations {
                   
               }
             }""",
+          {'search': search, 'type': type},
           cache: false,
-          params: {'search': search, 'type': type},
           onComplete: (dynamic data) =>
               (data['conversations'] as List<dynamic>)
                   .map((dynamic conversation) =>

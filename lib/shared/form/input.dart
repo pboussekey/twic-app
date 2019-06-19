@@ -62,6 +62,7 @@ class Input extends StatelessWidget {
               : null,
           border: InputBorder.none,
           fillColor: Style.mainColor,
+          hintStyle: Style.placeholder,
           hintText: this.placeholder),
       onSaved: this.onSaved,
       validator: this.validator,

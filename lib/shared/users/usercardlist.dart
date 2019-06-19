@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/users/usercard.dart';
-import 'package:twic_app/api/services/users.dart';
+import 'package:twic_app/api/services/cache.dart';
 import 'package:twic_app/shared/components/infinite_scroll.dart';
 
 class UserCardList extends StatefulWidget {
@@ -37,7 +37,8 @@ class UserCardList extends StatefulWidget {
       this.placeholder,
       this.onFollow,
       this.page,
-      Key key}) : super(key : key);
+      Key key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => UserCardListState(page: page);
@@ -56,20 +57,27 @@ class UserCardListState extends State<UserCardList> {
     if (loading) return;
     loading = true;
     inited = true;
-    Users.getId(
-        hashtag_id: widget.hashtag_id,
-        user_id: widget.user_id,
-        page: page,
-        school_id: widget.school_id,
-        university_id: widget.university_id,
-        search: widget.search,
-        follower: widget.follower,
-        following: widget.following,
-        major_id: widget.major_id,
-        minor_id: widget.minor_id,
-        class_year: widget.class_year,
-        count: 10,
-        onCompleted: () => setState(() {})).then((List<int> _users) {
+    AppCache.getId<User>(
+        params: {
+          "hashtag_id": widget.hashtag_id,
+          "user_id": widget.user_id,
+          "page": page,
+          "school_id": widget.school_id,
+          "university_id": widget.university_id,
+          "search": widget.search,
+          "follower": widget.follower,
+          "following": widget.following,
+          "major_id": widget.major_id,
+          "minor_id": widget.minor_id,
+          "class_year": widget.class_year,
+          "count": 10
+        },
+        onCompleted: () {
+          if (this.mounted) {
+            print("REBUILD USER CARD LIST");
+            setState(() {});
+          }
+        }).then((List<int> _users) {
       users.addAll(_users);
       loading = false;
       setState(() {});
@@ -120,7 +128,10 @@ class UserCardListState extends State<UserCardList> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                      right: 5.0, top: index > 0 ? 0.0 : 10, bottom: 5, left: 20),
+                      right: 5.0,
+                      top: index > 0 ? 0.0 : 10,
+                      bottom: 5,
+                      left: 20),
                   child: UserCard(
                     user_id: users[index],
                     width: (mediaSize.width - 45) / 2,

@@ -45,9 +45,9 @@ Future<dynamic> execute(String query, Map<String, dynamic> params,
 }
 
 Widget query<T>(
-    {String query,
+    String query,
     Map<String, dynamic> params,
-    Function onComplete,
+    {Function onComplete,
     bool cache: true,
     Widget whileLoading,
     Function builder}) {

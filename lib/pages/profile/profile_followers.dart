@@ -29,23 +29,24 @@ class ProfileFollowersState extends State<ProfileFollowers> {
           elevation: 0,
         ),
         body: RootPage(
-            child: Column(children:[
-
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child : Input(
-                    height: 50.0,
-                    color: Style.veryLightGrey,
-                    shadow: false,
-                    icon: Icons.search,
-                    placeholder: "Search",
-                  )),
-                  SizedBox(height: 10,),
-                  Users.getList(
-                      follower: true,
-                      user_id: widget.user_id,
-                      builder: (List<User> users) => UserList(list: users))
-                ])),
+            child: Column(children: [
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Input(
+                height: 50.0,
+                color: Style.veryLightGrey,
+                shadow: false,
+                icon: Icons.search,
+                placeholder: "Search",
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          UserList(
+            user_id: widget.user_id,
+            follower: true,
+          )
+        ])),
         bottomNavigationBar: BottomNav(
           current: ButtonEnum.Profile,
           refresh: setState,

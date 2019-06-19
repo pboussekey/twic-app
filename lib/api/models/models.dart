@@ -6,3 +6,4 @@ export 'post.dart';
 export 'school.dart';
 export 'twic_file.dart';
 export 'user.dart';
+export 'abstract_model.dart';

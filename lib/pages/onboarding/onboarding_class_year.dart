@@ -129,7 +129,7 @@ class OnboardingClassYear extends OnboardingContentState {
             isCompleted: () =>
                 Session.instance.user.classYear != null &&
                 Session.instance.user.degree != null) {
-    this.render = () => Users.update(
+    this.child =  Users.update(
         builder: (RunMutation runMutation, QueryResult result) => Column(
               children: <Widget>[
                 Flex(

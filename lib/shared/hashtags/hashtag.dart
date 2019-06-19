@@ -26,9 +26,7 @@ class _HashtagState extends State<HashtagWidget> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Style.shadow,
-              offset: Offset(10.0, 10.0),
-              blurRadius: 30.0)
+              color: Style.shadow, offset: Offset(10.0, 10.0), blurRadius: 30.0)
         ],
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
@@ -54,7 +52,11 @@ class _HashtagState extends State<HashtagWidget> {
                     child: ClipRRect(
                         borderRadius: new BorderRadius.circular(20.0),
                         child: Container(
-                          child: Icon(TwicFont.hashtag, color: Colors.white, size: 10,),
+                          child: Icon(
+                            TwicFont.hashtag,
+                            color: Colors.white,
+                            size: 10,
+                          ),
                           color: Style.mainColor,
                           height: 20,
                           width: 20,
@@ -70,7 +72,11 @@ class _HashtagState extends State<HashtagWidget> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("#" + hashtag.name, style: Style.text),
+                      Text(
+                        "#" + hashtag.name,
+                        style: Style.text,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       Text(
                           "${hashtag.nbfollowers} follower${hashtag.nbfollowers > 1 ? 's' : ''}",
                           style: Style.lightText),
@@ -78,43 +84,41 @@ class _HashtagState extends State<HashtagWidget> {
               ),
               Center(
                   child: hashtag.followed
-                      ? Hashtags.unfollow(
-                          builder:
-                              (RunMutation runMutation, QueryResult result) {
-                            return Button(
-                                text: 'Following',
-                                height: 20.0,
-                                color: Style.lightGrey,
-                                background: Style.veryLightGrey,
-                                padding: EdgeInsets.all(0),
-                                fontSize: 12.0,
-                                onPressed: () => setState(() {
-                                      hashtag.followed = false;
-                                      hashtag.nbfollowers--;
-                                      if (null != widget.onPressed) {
-                                        widget.onPressed(false);
-                                      }
-                                      runMutation({"hashtag_id" : hashtag.id});
-                                    }));
-                          })
-                      : Hashtags.follow(
-                          builder:
-                              (RunMutation runMutation, QueryResult result) {
-                            return Button(
-                                text: 'Follow',
-                                height: 24.0,
-                                width: 60,
-                                padding: EdgeInsets.all(0),
-                                fontSize: 12.0,
-                                onPressed: () => setState(() {
-                                      hashtag.followed = true;
-                                      hashtag.nbfollowers++;
-                                      if (null != widget.onPressed) {
-                                        widget.onPressed(true);
-                                      }
-                                      runMutation({"hashtag_id" : hashtag.id});
-                                    }));
-                          }))
+                      ? Hashtags.unfollow(builder:
+                          (RunMutation runMutation, QueryResult result) {
+                          return Button(
+                              text: 'Following',
+                              height: 24.0,
+                              color: Style.lightGrey,
+                              background: Style.veryLightGrey,
+                              padding: EdgeInsets.all(0),
+                              fontSize: 12.0,
+                              onPressed: () => setState(() {
+                                    hashtag.followed = false;
+                                    hashtag.nbfollowers--;
+                                    if (null != widget.onPressed) {
+                                      widget.onPressed(false);
+                                    }
+                                    runMutation({"hashtag_id": hashtag.id});
+                                  }));
+                        })
+                      : Hashtags.follow(builder:
+                          (RunMutation runMutation, QueryResult result) {
+                          return Button(
+                              text: 'Follow',
+                              height: 24.0,
+                              width: 60,
+                              padding: EdgeInsets.all(0),
+                              fontSize: 12.0,
+                              onPressed: () => setState(() {
+                                    hashtag.followed = true;
+                                    hashtag.nbfollowers++;
+                                    if (null != widget.onPressed) {
+                                      widget.onPressed(true);
+                                    }
+                                    runMutation({"hashtag_id": hashtag.id});
+                                  }));
+                        }))
             ],
           )),
     );

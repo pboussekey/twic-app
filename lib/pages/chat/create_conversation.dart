@@ -174,10 +174,8 @@ class CreateConversationState extends State<CreateConversation> {
                   }
                 },
                 builder: (RunMutation join, QueryResult result) =>
-                    Hashtags.getList(
-                        search: search,
-                        builder: (List<Hashtag> hashtags) => hashtags.length > 0
-                            ? HashtagList(
+                    HashtagList(
+                              search: search,
                                 renderAction: (Hashtag hashtag) => Container(),
                                 onClick: (Hashtag hashtag) {
                                   if (loading) return;
@@ -185,72 +183,69 @@ class CreateConversationState extends State<CreateConversation> {
                                     loading = true;
                                   });
                                   join({'hashtag_id': hashtag.id});
-                                })
-                            : Conversations.createChannel(
-                                onCompleted: (dynamic data) {
-                                  loading = false;
-                                  if (null != data) {
-                                    Conversation conversation =
-                                        Conversation.fromJson(
-                                            data['createChannel']);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                ConversationPage(
-                                                    conversation:
-                                                        conversation)));
-                                  }
                                 },
-                                builder:
-                                    (RunMutation create, QueryResult result) =>
-                                        Padding(
-                                          child: !loading
-                                              ? Button(
-                                                  text: 'Create Channel',
-                                                  height: 40,
-                                                  width: 150,
-                                                  disabled: hashtags.length > 0,
-                                                  onPressed: () {
-                                                    if (loading) return;
-                                                    setState(() {
-                                                      loading = true;
-                                                    });
-                                                    create({'name': search});
-                                                  })
-                                              : Container(
-                                                  width: 90,
-                                                  alignment: Alignment(0, 0),
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 20),
-                                        )))));
-        break;
-      default:
-        return Container(
-            height: mediaSize.height - 150,
-            child: Users.getList(
-                search: search,
-                builder: (List<User> list) => UserList(
-                    list: list,
-                    renderAction: (User user) => CreateState.OneToOne == state
-                        ? Container()
-                        : RadioButton(
-                            onPressed: () => setState(() => users.contains(user)
-                                ? users.remove(user)
-                                : users.add(user)),
-                            isChecked: users.contains(user)),
-                    onClick: CreateState.OneToOne == state
-                        ? (User user) => Navigator.push(
+                    placeholder: Conversations.createChannel(
+                        onCompleted: (dynamic data) {
+                          loading = false;
+                          if (null != data) {
+                            Conversation conversation =
+                            Conversation.fromJson(
+                                data['createChannel']);
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         ConversationPage(
-                                          user: user,
-                                        )))
-                            .then((dynamic value) => Navigator.pop(context))
-                        : null)));
+                                            conversation:
+                                            conversation)));
+                          }
+                        },
+                        builder:
+                            (RunMutation create, QueryResult result) =>
+                            Padding(
+                              child: !loading
+                                  ? Button(
+                                  text: 'Create Channel',
+                                  height: 40,
+                                  width: 150,
+                                  onPressed: () {
+                                    if (loading) return;
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    create({'name': search});
+                                  })
+                                  : Container(
+                                  width: 90,
+                                  alignment: Alignment(0, 0),
+                                  child:
+                                  CircularProgressIndicator()),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                            )),)
+                            ));
+        break;
+      default:
+        return Container(
+            height: mediaSize.height - 150,
+            child: UserList(
+                search: search,
+                renderAction: (User user) => CreateState.OneToOne == state
+                    ? Container()
+                    : RadioButton(
+                        onPressed: () => setState(() => users.contains(user)
+                            ? users.remove(user)
+                            : users.add(user)),
+                        isChecked: users.contains(user)),
+                onClick: CreateState.OneToOne == state
+                    ? (User user) => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => ConversationPage(
+                                  user: user,
+                                ))).then(
+                        (dynamic value) => Navigator.pop(context))
+                    : null));
         break;
     }
   }
