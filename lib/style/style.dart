@@ -31,7 +31,7 @@ abstract class Style {
   static TextStyle redTitle = TextStyle(
       fontSize: 18.0, fontWeight: FontWeight.bold, color: Style.red, fontFamily: 'Rubik');
   static TextStyle placeholder = TextStyle(
-      fontSize: 17.0, color: Style.darkPurple, fontFamily: 'Rubik');
+      fontSize: 17.0, color: Style.lightGrey, fontFamily: 'Rubik');
 
 
   static TextStyle largeText = TextStyle(

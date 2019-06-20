@@ -31,7 +31,7 @@ class BottomNav extends StatelessWidget {
               icon: Icon(
                 current == ButtonEnum.Home
                     ? TwicFont.home_plain : TwicFont.home,
-                size: 20.0,
+                size: 24.0,
                 color: Style.grey,
               ),
               onPressed: () {
@@ -45,7 +45,7 @@ class BottomNav extends StatelessWidget {
             ),
             IconButton(
                 icon: Icon(
-                  Icons.search,
+                  TwicFont.search,
                   size: 24.0,
                   color: Style.grey,
                 ),
@@ -102,7 +102,7 @@ class BottomNav extends StatelessWidget {
               icon: Icon(
                 current == ButtonEnum.Chat
                     ? TwicFont.conversation_plain : TwicFont.conversation,
-                size: 20.0,
+                size: 24.0,
                 color: Style.grey,
               ),
               onPressed: () {

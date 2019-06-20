@@ -12,6 +12,7 @@ class Dropdown<T> extends StatelessWidget {
   final List<BoxShadow> shadow;
   final BoxBorder border;
   final String label;
+  final Color background;
 
   Dropdown(
       {this.value,
@@ -22,7 +23,8 @@ class Dropdown<T> extends StatelessWidget {
       this.size,
       this.hint,
       this.shadow,
-      this.border});
+      this.border,
+      this.background});
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +51,31 @@ class Dropdown<T> extends StatelessWidget {
                   padding: EdgeInsets.only(left: 15),
                   child: Text(label, style: Style.smallLightText))
               : Container(),
-          Row(children: [
-            icon ?? Container(),
-            Expanded(
-                child: DropdownButtonHideUnderline(
+          Container(
+              color: background,
+              height: (null != label ? 62 : 48.0) -
+                  (null != border ? border.top.width + border.bottom.width : 0),
+              child: Row(children: [
+                icon ?? Container(),
+                DropdownButtonHideUnderline(
                     child: ButtonTheme(
-                        alignedDropdown: true,
-
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: DropdownButton<T>(
-                          elevation: 0,
-                          isExpanded: true,
-                          hint: hint,
-                          value: value,
-                          items: items,
-                          onChanged: onChanged,
-                        ))))
-          ])
+                      alignedDropdown: true,
+                        padding: EdgeInsets.all(0),
+                        child: Container(
+                            color: background,
+                            width: size -
+                                (null != border && null != size
+                                    ? border.top.width + border.bottom.width
+                                    : 0),
+                            child: DropdownButton<T>(
+                              elevation: 0,
+                              isExpanded: true,
+                              hint: hint,
+                              value: value,
+                              items: items,
+                              onChanged: onChanged,
+                            ))))
+              ]))
         ]));
   }
 }

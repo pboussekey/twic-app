@@ -53,6 +53,7 @@ class Posts {
               nbLikes 
               isLiked 
               hashtags{ id name }
+              mentions{ id firstname lastname }
               user{ 
                 id
                 firstname 
@@ -61,7 +62,7 @@ class Posts {
                 university{ id name }
                 avatar{ name bucketname token } 
               }
-              files{ name bucketname token }
+              files{ name bucketname token type }
             }
           }
           """, {
@@ -78,8 +79,18 @@ class Posts {
 
   static api.Mutation create({Function builder, Function onCompleted, Function update}) {
     return api.mutation(query: """      
-         mutation addPost(\$content: String, \$privacy : String,  \$files : [FileInputDef], \$parent_id : ID) {
-          addPost(content: \$content, privacy: \$privacy, files: \$files, parent_id : \$parent_id){
+         mutation addPost(
+         \$content: String, 
+         \$privacy : String,  
+         \$files : [FileInputDef], 
+         \$parent_id : ID, 
+         \$mentions : [ID]) {
+          addPost(
+          content: \$content, 
+          privacy: \$privacy, 
+          files: \$files, 
+          parent_id : \$parent_id, 
+          mentions: \$mentions){
               id
             }
           }

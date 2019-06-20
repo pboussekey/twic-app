@@ -10,7 +10,8 @@ import 'package:twic_app/shared/components/infinite_scroll.dart';
 class MessageList extends StatefulWidget {
   List<Message> list;
   final Function fetch;
-  MessageList({this.fetch, this.list});
+  final ScrollController scroll;
+  MessageList({this.fetch, this.list, @required this.scroll});
 
   @override
   MessageListState createState() => MessageListState();
@@ -51,6 +52,7 @@ class MessageListState extends State<MessageList> {
         child: InfiniteScroll(
           fetch: widget.fetch,
           reverse: true,
+
           shrink: false,
           builder: (BuildContext context, int index) => Padding(
               padding: EdgeInsets.only(

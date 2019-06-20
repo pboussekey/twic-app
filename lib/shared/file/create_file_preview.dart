@@ -11,20 +11,13 @@ class CreateFilePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    Widget content;
-    if (null == file.type || file.type.startsWith('image/')) {
-      content = RoundPicture(
-        picture : file.href(),
-        radius: 6,
-        fit: BoxFit.fitWidth,
-      );
-    }
-    else{
-      content = Icon(Icons.insert_drive_file, color : Style.genZBlue, size:  mediaSize.width / 3 - 40,);
-    }
 
     return Container(
-      child: content,
+      child: RoundPicture(
+        picture : file.preview(),
+        radius: 6,
+        fit: BoxFit.fitWidth,
+      ),
       alignment: Alignment(0, 0),
       width: mediaSize.width / 3 - 40,
       decoration:

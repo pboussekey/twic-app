@@ -17,6 +17,7 @@ class Post extends AbstractModel {
   User user;
   List<TwicFile> files = [];
   List<Hashtag> hashtags = [];
+  List<User> mentions = [];
 
   Post(
       {id,

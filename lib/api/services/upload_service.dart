@@ -28,6 +28,7 @@ Future<Map<String, dynamic>> upload({ File file, bool stopOnFailure : false }) a
     http.StreamedResponse stream = await fileUploadReq.send();
     final response = await http.Response.fromStream(stream);
     Map<String, dynamic> data = json.decode(response.body);
+    print(["UPLOADED", data]);
     if(response.statusCode != 200 && response.statusCode != 201){
       if(!stopOnFailure && data["error"]["code"] == "auth/invalid-custom-token"){
         Map<String, dynamic> data = await api.request(cmd: 'fbtoken');

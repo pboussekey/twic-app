@@ -23,10 +23,19 @@ class SchoolProfile extends StatefulWidget {
 }
 
 class SchoolProfileState extends State<SchoolProfile> {
+  ScrollController _scroll;
+
+  @override
+  void initState() {
+    _scroll = ScrollController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: RootPage(
+            scroll: _scroll,
             scrollable: false,
             child: Schools.get(
                 id: widget.school_id,
@@ -34,6 +43,7 @@ class SchoolProfileState extends State<SchoolProfile> {
                       logo: school?.logo?.href(),
                       name: school.name,
                       id: school.id,
+                      scroll: _scroll,
                     ))),
         bottomNavigationBar: BottomNav(
           current: ButtonEnum.Profile,
@@ -47,8 +57,10 @@ class SchoolProfileContent extends StatefulWidget {
   String name;
   int id;
   int nb_students;
+  ScrollController scroll;
 
-  SchoolProfileContent({this.logo, this.name, this.nb_students, this.id});
+  SchoolProfileContent(
+      {this.logo, this.name, this.nb_students, this.id, this.scroll});
 
   @override
   State<SchoolProfileContent> createState() => SchoolProfileContentState();
@@ -136,6 +148,7 @@ class SchoolProfileContentState extends State<SchoolProfileContent> {
           ],
           tabsContent: <Widget>[
             Feed(
+              scroll: widget.scroll,
               school_id: widget.id,
             ),
             UserList(

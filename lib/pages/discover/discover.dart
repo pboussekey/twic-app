@@ -136,8 +136,8 @@ class DiscoverState extends State<Discover> {
       ]);
     } else {
       return Tabs(
-          height: size.height - 145,
-          contentHeight: size.height - 251,
+          height: size.height - 150,
+          contentHeight: size.height - 260,
           onTap: (int index) => setState(() => showFilters = index == 0),
           tabs: [
             Text(

@@ -44,7 +44,7 @@ class Tabs extends StatelessWidget {
                       child: TabBar(
                         isScrollable: scrollable ?? true,
                         indicatorColor: indicatorColor ?? Style.mainColor,
-                        labelStyle: labelStyle ?? Style.smallText,
+                        labelStyle: labelStyle ?? Style.text,
                         unselectedLabelColor: unselectedLabelColor ?? Style.lightGrey,
                         indicatorWeight: 2.0,
                         indicatorPadding: EdgeInsets.only(bottom: -1.0),
@@ -57,7 +57,7 @@ class Tabs extends StatelessWidget {
                     height: 10.0,
                   ),
                   Container(
-                    height: contentHeight ?? mediaSize.height - 210,
+                    height: contentHeight ?? mediaSize.height - 21,
                     width: mediaSize.width,
                     child: TabBarView(children: tabsContent),
                   )

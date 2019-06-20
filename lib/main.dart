@@ -125,6 +125,7 @@ class _TwicApp extends State<TwicApp> {
         theme: ThemeData(
           primarySwatch: Colors.grey,
           accentColor: Style.darkGrey,
+          canvasColor: Colors.white,
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
           fontFamily: 'Rubiks',
           textTheme: TextTheme(

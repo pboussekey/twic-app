@@ -98,7 +98,8 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
                 suggestions: widget.fields,
                 minLength: 0,
                 itemSubmitted: (AutoCompleteElement item) {
-                  this.setState(() {
+                  setState(() {
+                    _majorController.text = item.name;
                     Session.update({
                       'major': (item.data as Field).toJson(),
                       'isActive': widget.isCompleted()
@@ -129,7 +130,8 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
                 suggestions: widget.fields,
                 minLength: 0,
                 itemSubmitted: (AutoCompleteElement item) {
-                  widget.updateState(() {
+                  setState(() {
+                    _minorController.text = item.name;
                     Session.update({
                       'minor': (item.data as Field).toJson(),
                       'isActive': widget.isCompleted()

@@ -12,18 +12,15 @@ class InfiniteScroll extends StatefulWidget {
   final Axis direction;
   final Function onScroll;
 
-  InfiniteScroll(
-      {this.fetch,
-      this.direction = Axis.vertical,
-      this.shrink = true,
-      this.builder,
-      this.onScroll,
-      this.count,
-      this.scroll,
-      this.delta = 200,
-      this.reverse = false}) {
-    if (null == scroll) scroll = RootPage.scroll;
-  }
+  InfiniteScroll({this.fetch,
+    this.direction = Axis.vertical,
+    this.shrink = true,
+    this.builder,
+    this.onScroll,
+    this.count,
+    @required this.scroll,
+    this.delta = 200,
+    this.reverse = false});
 
   @override
   InfiniteScrollState createState() => InfiniteScrollState();
@@ -34,31 +31,40 @@ class InfiniteScrollState extends State<InfiniteScroll> {
   bool loading = false;
   double previousScroll = 0;
 
+  void _listener() {
+    double maxScroll = widget.scroll.position.maxScrollExtent;
+    double currentScroll = widget.scroll.offset;
+    bool scrolled = widget.reverse
+        ? widget.scroll.offset < previousScroll
+        : widget.scroll.offset > previousScroll;
+    double scroll =
+    widget.reverse ? currentScroll : maxScroll - currentScroll;
+    if (scrolled && scroll <= widget.delta) {
+      widget.fetch();
+    }
+    if (null != widget.onScroll) {
+      widget.onScroll();
+    }
+    previousScroll = widget.scroll.offset;
+  }
+
+
   @override
   void initState() {
-    print("INIT INFINITE SCROLL");
     super.initState();
-    widget.scroll.addListener(() {
-      double maxScroll = widget.scroll.position.maxScrollExtent;
-      double currentScroll = widget.scroll.offset;
-      bool scrolled = widget.reverse
-          ? widget.scroll.offset < previousScroll
-          : widget.scroll.offset > previousScroll;
-      double scroll =
-          widget.reverse ? currentScroll : maxScroll - currentScroll;
-      if (scrolled && scroll <= widget.delta) {
-        widget.fetch();
-      }
-      if (null != widget.onScroll) {
-        widget.onScroll();
-      }
-      previousScroll = widget.scroll.offset;
-    });
+    widget.scroll.addListener(_listener);
     widget.fetch();
   }
 
   @override
-  Widget build(BuildContext context) => ListView.builder(
+  void dispose() {
+    widget.scroll.removeListener(_listener);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      ListView.builder(
         scrollDirection: widget.direction,
         controller: widget.scroll,
         shrinkWrap: widget.shrink,

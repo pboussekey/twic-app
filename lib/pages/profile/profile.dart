@@ -34,7 +34,7 @@ class ProfileState extends State<Profile> {
             child: Users.get(
                 id: widget.user_id,
                 builder: (User user) => ProfileContent(
-                      avatar: user.avatar.href(),
+                      avatar: user.avatar?.href(),
                       description: user.description,
                       firstname: user.firstname,
                       lastname: user.lastname,
@@ -44,7 +44,7 @@ class ProfileState extends State<Profile> {
                       nb_followings: user.nbFollowings,
                       nb_posts: user.nbPosts,
                       classYear: user.classYear,
-                      school: user.school.name,
+                      school: user.school?.name,
                       university: user.institution.name,
                       university_id: user.institution.id,
                       university_logo:

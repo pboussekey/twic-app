@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:twic_app/shared/form/button.dart';
 import 'package:twic_app/style/style.dart';
 
-class RadioButton extends StatelessWidget{
+class CheckBox extends StatelessWidget{
 
   final Function onPressed;
   final bool isChecked;
 
-  RadioButton({this.onPressed, this.isChecked = false});
+  CheckBox({this.onPressed, this.isChecked = false});
 
   @override
   Widget build(BuildContext context) => Button(

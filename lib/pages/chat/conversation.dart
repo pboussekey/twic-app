@@ -24,6 +24,7 @@ class ConversationPage extends StatefulWidget {
 
 class ConversationPageState extends State<ConversationPage> {
   List<Message> _messages = [];
+  final ScrollController _scroll = ScrollController();
 
   void onNewMessage(Message message) {
     _messages.add(message);
@@ -33,12 +34,13 @@ class ConversationPageState extends State<ConversationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: RootPage(
+            scroll: _scroll,
             child: null != widget.conversation
                 ? _ConversationPage(
-                        conversation: widget.conversation,
-                        messages: _messages,
-                        onNewMessage: onNewMessage,
-                      )
+                    conversation: widget.conversation,
+                    messages: _messages,
+                    onNewMessage: onNewMessage,
+                  )
                 : _ConversationPage(
                     user: widget.user,
                   )));
@@ -50,9 +52,10 @@ class _ConversationPage extends StatefulWidget {
   final User user;
   List<Message> messages;
   final Function onNewMessage;
+  ScrollController scroll;
 
   _ConversationPage(
-      {this.conversation, this.messages, this.onNewMessage, this.user});
+      {this.conversation, this.messages, this.onNewMessage, this.user, this.scroll});
 
   @override
   State<StatefulWidget> createState() => null != conversation
@@ -69,14 +72,13 @@ class _ConversationPageState extends State<_ConversationPage> {
   bool finished = false;
   int page = 0;
 
-
   void _fetch() async {
-    if(loading || finished) return;
+    if (loading || finished) return;
     loading = true;
     Messages.load(
-        conversation_id: widget.conversation.id,
-        offset: widget.messages.length,
-        count: 20)
+            conversation_id: widget.conversation.id,
+            offset: widget.messages.length,
+            count: 20)
         .then((List<Message> _messages) {
       widget.messages.insertAll(0, _messages.reversed.toList());
       finished = _messages.length == 0;
@@ -86,7 +88,6 @@ class _ConversationPageState extends State<_ConversationPage> {
     page++;
   }
 
-
   String _printUsers(List<User> users) {
     if (users.length == 1) {
       return "${users[0].firstname} ${users[0].lastname}";
@@ -95,7 +96,6 @@ class _ConversationPageState extends State<_ConversationPage> {
     users.forEach((User user) => name += ", ${user.firstname}");
     return name;
   }
-
 
   Mutation _renderMessageInput(BuildContext context, Size mediaSize) {
     return Messages.send(
@@ -377,7 +377,8 @@ class _ConversationPageState extends State<_ConversationPage> {
             width: mediaSize.width,
             height: mediaSize.height - 130,
             color: Style.greyBackground,
-            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 0, bottom: 70),
+            padding:
+                EdgeInsets.only(left: 20.0, right: 20.0, top: 0, bottom: 70),
             child: Messages.onMessage(
                 conversation_id: widget.conversation.id,
                 builder: ({
@@ -391,7 +392,7 @@ class _ConversationPageState extends State<_ConversationPage> {
                       widget.onNewMessage(message);
                     }
                   }
-                  return MessageList(list: widget.messages, fetch: _fetch);
+                  return MessageList(list: widget.messages, fetch: _fetch, scroll: widget.scroll,);
                 })),
         _renderMessageInput(context, mediaSize)
       ])

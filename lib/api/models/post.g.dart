@@ -27,6 +27,10 @@ Post _$PostFromJson(Map<String, dynamic> json) {
     ..hashtags = (json['hashtags'] as List)
         ?.map((e) =>
             e == null ? null : Hashtag.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..mentions = (json['mentions'] as List)
+        ?.map(
+            (e) => e == null ? null : User.fromJson(e as Map<String, dynamic>))
         ?.toList();
 }
 
@@ -40,5 +44,6 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'isLiked': instance.isLiked,
       'user': instance.user?.toJson(),
       'files': instance.files?.map((e) => e?.toJson())?.toList(),
-      'hashtags': instance.hashtags?.map((e) => e?.toJson())?.toList()
+      'hashtags': instance.hashtags?.map((e) => e?.toJson())?.toList(),
+      'mentions': instance.mentions?.map((e) => e?.toJson())?.toList()
     };

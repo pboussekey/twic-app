@@ -111,7 +111,7 @@ class UserListState extends State<UserList> {
                 top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
             height: 51,
             onPressed: () =>
-                null != widget.onClick ? widget.onClick(users[index]) : null,
+                null != widget.onClick ? widget.onClick(user) : null,
             child: Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

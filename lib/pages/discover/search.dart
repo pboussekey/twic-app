@@ -172,7 +172,7 @@ class SearchState extends State<SearchPage> {
                                             : Container()
                                       ],
                                     ),
-                                    RadioButton(
+                                    CheckBox(
                                         isChecked: null != selected &&
                                             selected.id == list[index % list.length].id),
                                   ],

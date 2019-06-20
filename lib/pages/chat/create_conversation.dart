@@ -232,7 +232,7 @@ class CreateConversationState extends State<CreateConversation> {
                 search: search,
                 renderAction: (User user) => CreateState.OneToOne == state
                     ? Container()
-                    : RadioButton(
+                    : CheckBox(
                         onPressed: () => setState(() => users.contains(user)
                             ? users.remove(user)
                             : users.add(user)),

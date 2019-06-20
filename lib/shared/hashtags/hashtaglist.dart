@@ -89,7 +89,7 @@ class HashtagListState extends State<HashtagList> {
                   return Button(
                       background: Colors.transparent,
                       onPressed: () => null != widget.onClick
-                          ? widget.onClick(hashtags[index])
+                          ? widget.onClick(hashtag)
                           : Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -168,7 +168,7 @@ class HashtagListState extends State<HashtagList> {
                                         ? Colors.white
                                         : Style.lightGrey,
                                   )
-                                : widget.renderAction(hashtags[index])
+                                : widget.renderAction(hashtag)
                           ]));
                 },
               )

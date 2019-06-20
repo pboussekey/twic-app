@@ -6,15 +6,18 @@ import 'root_page.dart';
 import 'package:twic_app/shared/feed/feed.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
 
-
 class Home extends StatefulWidget {
   @override
   State createState() => HomeState();
 }
 
-class HomeState extends State<Home>{
+class HomeState extends State<Home> {
+  ScrollController _scroll;
+
+
   @override
   Widget build(BuildContext context) {
+    _scroll = ScrollController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -33,8 +36,15 @@ class HomeState extends State<Home>{
             ),
             preferredSize: Size.fromHeight(1.0)),
       ),
-      body: RootPage(child: Feed()),
-      bottomNavigationBar: BottomNav(current: ButtonEnum.Home, refresh: setState,),
+      body: RootPage(
+          scroll: _scroll,
+          child: Feed(
+            scroll: _scroll,
+          )),
+      bottomNavigationBar: BottomNav(
+        current: ButtonEnum.Home,
+        refresh: setState,
+      ),
     );
   }
 }
