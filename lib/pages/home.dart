@@ -12,12 +12,9 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  ScrollController _scroll;
-
 
   @override
   Widget build(BuildContext context) {
-    _scroll = ScrollController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -37,10 +34,7 @@ class HomeState extends State<Home> {
             preferredSize: Size.fromHeight(1.0)),
       ),
       body: RootPage(
-          scroll: _scroll,
-          child: Feed(
-            scroll: _scroll,
-          )),
+          child: Feed()),
       bottomNavigationBar: BottomNav(
         current: ButtonEnum.Home,
         refresh: setState,

@@ -12,7 +12,10 @@ TwicFile _$TwicFileFromJson(Map<String, dynamic> json) {
       name: json['name'] as String,
       bucketname: json['bucketname'] as String,
       token: json['token'] as String,
-      type: json['type'] as String);
+      type: json['type'] as String)
+    ..preview = json['preview'] == null
+        ? null
+        : TwicFile.fromJson(json['preview'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$TwicFileToJson(TwicFile instance) => <String, dynamic>{
@@ -20,5 +23,6 @@ Map<String, dynamic> _$TwicFileToJson(TwicFile instance) => <String, dynamic>{
       'name': instance.name,
       'bucketname': instance.bucketname,
       'type': instance.type,
-      'token': instance.token
+      'token': instance.token,
+      'preview': instance.preview?.toJson()
     };

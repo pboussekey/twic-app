@@ -11,15 +11,13 @@ class Feed extends StatefulWidget {
   final int user_id;
   final bool hideHeaders;
   final Widget placeholder;
-  final ScrollController scroll;
 
   Feed(
       {this.hashtag_id,
       this.user_id,
       this.hideHeaders = false,
       this.placeholder,
-      this.school_id,
-      this.scroll });
+      this.school_id });
 
   @override
   State<Feed> createState() => FeedState();
@@ -55,7 +53,6 @@ class FeedState extends State<Feed> {
       posts.length > 0 || null == widget.placeholder || !initialized
           ? InfiniteScroll(
               fetch: _fetch,
-              scroll: widget.scroll,
               builder: (BuildContext context, int index) => PostWidget(
                     post: posts[index],
                     hideHeader: widget.hideHeaders,

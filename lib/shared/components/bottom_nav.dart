@@ -47,7 +47,7 @@ class BottomNav extends StatelessWidget {
                 icon: Icon(
                   TwicFont.search,
                   size: 24.0,
-                  color: Style.grey,
+                  color: Style.lightGrey,
                 ),
                 onPressed: () {
                   current == ButtonEnum.Discover

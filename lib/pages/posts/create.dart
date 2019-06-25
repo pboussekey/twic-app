@@ -384,7 +384,7 @@ class CreatePostState extends State<CreatePost> {
                         color: Style.mainColor,
                       ),
                       onPressed: () =>
-                          ImagePicker.pickImage(source: ImageSource.camera)
+                          ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 480, maxWidth: 640)
                               .then((File file) {
                             if (null != file) {
                               setState(() => uploading = true);

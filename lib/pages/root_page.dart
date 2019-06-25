@@ -10,10 +10,10 @@ class RootPage extends StatefulWidget {
   final Function builder;
   final bool scrollable;
   final Color backgroundColor;
-  ScrollController scroll;
+  static ScrollController scroll;
 
   RootPage(
-      {this.child, this.builder, this.backgroundColor, this.scrollable = true, this.scroll});
+      {this.child, this.builder, this.backgroundColor, this.scrollable = true});
 
   @override
   State createState() => _RootPageState();
@@ -28,9 +28,6 @@ class _RootPageState extends ReceiveShareState<RootPage> {
   void initState() {
     super.initState();
     enableShareReceiving();
-    if(null == widget.scroll){
-      widget.scroll = ScrollController();
-    }
     api.getClient().then((client) {
       setState(() {
         _client = client;
@@ -41,6 +38,7 @@ class _RootPageState extends ReceiveShareState<RootPage> {
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
+    RootPage.scroll = ScrollController();
     return null != _client
         ? GestureDetector(
             onTap: () {
@@ -55,7 +53,7 @@ class _RootPageState extends ReceiveShareState<RootPage> {
                     child: CacheProvider(
                         child: widget.scrollable
                             ? SingleChildScrollView(
-                                controller: widget.scroll,
+                                controller: RootPage.scroll,
                                 child: SafeArea(
                                     child: widget.child ?? widget.builder()))
                             : Container(

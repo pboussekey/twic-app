@@ -14,7 +14,7 @@ class CreateFilePreview extends StatelessWidget {
 
     return Container(
       child: RoundPicture(
-        picture : file.preview(),
+        picture : file.getPreview(),
         radius: 6,
         fit: BoxFit.fitWidth,
       ),

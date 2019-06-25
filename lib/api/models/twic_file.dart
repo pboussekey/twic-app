@@ -1,6 +1,5 @@
 import 'abstract_model.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 part 'twic_file.g.dart';
 
 @JsonSerializable()
@@ -9,6 +8,7 @@ class TwicFile extends AbstractModel {
   String bucketname;
   String type;
   String token;
+  TwicFile preview;
 
   TwicFile({id, this.name, this.bucketname, this.token, this.type})
       : super(id: id);
@@ -23,7 +23,10 @@ class TwicFile extends AbstractModel {
         token;
   }
 
-  String preview() {
+  String getPreview() {
+    if (type.startsWith('video/') && null != preview) {
+      return preview.href();
+    }
     if (type.startsWith('image/')) {
       return href();
     }
@@ -58,6 +61,6 @@ class TwicFile extends AbstractModel {
     if (null != types[type]) {
       return types[type];
     }
-    return 'assets/icon-document-generic.png';
+    return 'assets/files/icon-document-generic.png';
   }
 }

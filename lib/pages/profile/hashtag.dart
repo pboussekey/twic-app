@@ -26,11 +26,9 @@ class HashtagProfile extends StatefulWidget {
 }
 
 class HashtagProfileState extends State<HashtagProfile> {
-  ScrollController _scroll;
 
   @override
   void initState() {
-    _scroll = ScrollController();
     super.initState();
   }
 
@@ -38,7 +36,6 @@ class HashtagProfileState extends State<HashtagProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RootPage(
-          scroll: _scroll,
           child: Hashtags.get(
               id: widget.hashtag_id,
               builder: (Hashtag hashtag) => HashtagProfileContent(
@@ -56,14 +53,12 @@ class HashtagProfileContent extends StatefulWidget {
   String name;
   int nb_followers;
   bool followed;
-  final ScrollController scroll;
 
   HashtagProfileContent(
       {this.hashtag_id,
       this.name,
       this.nb_followers,
-      this.followed,
-      this.scroll});
+      this.followed});
 
   @override
   State<HashtagProfileContent> createState() => HashtagProfileContentState();
@@ -228,7 +223,6 @@ class HashtagProfileContentState extends State<HashtagProfileContent> {
             )
           ])),
       Feed(
-          scroll: widget.scroll,
           hashtag_id: widget.hashtag_id,
           placeholder: Button(
             background: Colors.transparent,

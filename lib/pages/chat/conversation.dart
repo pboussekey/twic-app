@@ -24,7 +24,6 @@ class ConversationPage extends StatefulWidget {
 
 class ConversationPageState extends State<ConversationPage> {
   List<Message> _messages = [];
-  final ScrollController _scroll = ScrollController();
 
   void onNewMessage(Message message) {
     _messages.add(message);
@@ -34,7 +33,6 @@ class ConversationPageState extends State<ConversationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: RootPage(
-            scroll: _scroll,
             child: null != widget.conversation
                 ? _ConversationPage(
                     conversation: widget.conversation,

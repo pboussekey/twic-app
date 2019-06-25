@@ -62,7 +62,14 @@ class Posts {
                 university{ id name }
                 avatar{ name bucketname token } 
               }
-              files{ name bucketname token type }
+              files{ 
+                name 
+                bucketname 
+                token 
+                type
+                preview{ name bucketname token type } 
+              
+               }
             }
           }
           """, {

@@ -4,6 +4,8 @@ import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:camera_utils/camera_utils.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 
@@ -28,19 +30,37 @@ Future<Map<String, dynamic>> upload({ File file, bool stopOnFailure : false }) a
     http.StreamedResponse stream = await fileUploadReq.send();
     final response = await http.Response.fromStream(stream);
     Map<String, dynamic> data = json.decode(response.body);
-    print(["UPLOADED", data]);
+    print(['RESPONSE?', response.statusCode, data]);
     if(response.statusCode != 200 && response.statusCode != 201){
+      print(["WRONG STATUS", data["error"]]);
       if(!stopOnFailure && data["error"]["code"] == "auth/invalid-custom-token"){
+        print("GET NEW TOKEN");
         Map<String, dynamic> data = await api.request(cmd: 'fbtoken');
         session.fbtoken = data['fbtoken'];
         Session.set(session.toJson());
+
         return upload(file : file, stopOnFailure:true);
       }
       else{
         return null;
       }
     }
-    return data;
+    print(["???",data]);
+    if(data['type'].toString().startsWith('video')){
+      var appDocDir = await getApplicationDocumentsDirectory();
+      print(["!!!",appDocDir.path, file.path]);
+      final folderPath = appDocDir.path;
+      print(["ALLO?!",folderPath]);
+        String thumb = await  CameraUtils.getThumbnail(file.path);
+        print(['THUMB', thumb]);
+        Map<String, dynamic> preview = await upload(file: File(thumb), stopOnFailure: true);
+        data['preview'] = preview;
+        print(["preview", preview]);
+        return data;
+    }
+    else{
+      return data;
+    }
 
 
   }

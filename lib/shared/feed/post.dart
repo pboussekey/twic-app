@@ -14,6 +14,8 @@ import 'package:twic_app/pages/profile/hashtag.dart';
 import 'package:twic_app/pages/profile/profile.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:flutter/gestures.dart';
+import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -168,42 +170,70 @@ class PostWidgetState extends State<PostWidget>
             null != widget.post.files && widget.post.files.length > 0
                 ? FileSlider(
                     files: widget.post.files,
-                    builder: (TwicFile f){
+                    builder: (TwicFile f) {
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: f.type.startsWith('image')
-                            ? RoundPicture(
-                                picture: f.preview(),
-                                fit: BoxFit.cover,
-                                width: width - 40,
-                                height: width * 0.4,
-                                radius: 8.0,
-                              )
-                            : Container(
-                                width: width - 40,
-                                height: width * 0.4,
-                                alignment: Alignment(0, 0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Style.border),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8.0))),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    RoundPicture(
-                                      picture: f.preview(),
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
-                                      radius: 0,
-                                    ),
-                                    null != f.name ? SizedBox(
-                                      height: 10,
-                                    ) : Container(),
-                                    null != f.name ? Text(f.name, style: Style.largeText) : Container()
-                                  ],
-                                ),
-                              ));},
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: f.type.startsWith('image')
+                              ? RoundPicture(
+                                  picture: f.getPreview(),
+                                  fit: BoxFit.cover,
+                                  width: width - 40,
+                                  height: width * 0.4,
+                                  radius: 8.0,
+                                )
+                              : ((f.type.startsWith('video') &&
+                                      null != f.preview)
+                                  ? Chewie(
+                                      controller: ChewieController(
+                                      videoPlayerController:
+                                          VideoPlayerController.network(
+                                              f.href()),
+                                      autoPlay: true,
+                                      looping: true,
+                                      placeholder: null != f.preview
+                                          ?
+                                                  RoundPicture(
+                                                    picture: f.getPreview(),
+                                                    fit: BoxFit.cover,
+                                                    width: width - 40,
+                                                    height: width * 0.4,
+                                                    radius: 0,
+                                                  )
+                                          : Container(),
+                                    ))
+                                  : Container(
+                                      width: width - 40,
+                                      height: width * 0.4,
+                                      alignment: Alignment(0, 0),
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Style.border),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0))),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          RoundPicture(
+                                            picture: f.getPreview(),
+                                            fit: BoxFit.cover,
+                                            width: 40,
+                                            height: 40,
+                                            radius: 0,
+                                          ),
+                                          null != f.name
+                                              ? SizedBox(
+                                                  height: 10,
+                                                )
+                                              : Container(),
+                                          null != f.name
+                                              ? Text(f.name,
+                                                  style: Style.largeText)
+                                              : Container()
+                                        ],
+                                      ),
+                                    )));
+                    },
                   )
                 : Container(),
             null != widget.post.content && widget.post.content.isNotEmpty
