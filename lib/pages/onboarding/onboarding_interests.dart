@@ -174,7 +174,7 @@ class _OnboardingInterestsContentState
                                 search = "";
                                 _controller.text = "";
                                 _key = UniqueKey();
-                                hashtag.nbfollowers++;
+                                hashtag.nbFollowers++;
                                 hashtag.followed = true;
                                 widget.followed.insert(0, hashtag.id);
                                 widget.suggestions.remove(hashtag.id);

@@ -98,8 +98,8 @@ class HashtagListState extends State<HashtagList> {
                                         hashtag_id: hashtags[index],
                                       ))),
                       padding: EdgeInsets.only(
-                          top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
-                      height: 51,
+                          top: 15.0,  left: 20.0, right: 20.0),
+                      height: 50,
                       width: mediaSize.width,
                       child: Flex(
                           direction: Axis.horizontal,
@@ -145,11 +145,11 @@ class HashtagListState extends State<HashtagList> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text("${hashtag.name}",
+                                      Text("#${hashtag.name}",
                                           style: Style.text),
                                       Text(
-                                          "${hashtag.nbfollowers} follower${hashtag.nbfollowers > 1 ? 's' : ''}",
-                                          style: Style.lightText),
+                                          "${hashtag.nbFollowers} follower${hashtag.nbFollowers > 1 ? 's' : ''}",
+                                          style: Style.smallGreyText),
                                     ],
                                   ))
                                 ]),

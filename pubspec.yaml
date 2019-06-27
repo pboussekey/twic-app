@@ -7,7 +7,7 @@ description: A new Flutter project.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.0+11
+version: 1.0.0+12
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -70,8 +70,11 @@ flutter:
         - asset: assets/fonts/Rubik/Rubik-Light.ttf
           weight: 300
         - asset: assets/fonts/Rubik/Rubik-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/Rubik/Rubik-Medium.ttf
+          weight: 600
         - asset: assets/fonts/Rubik/Rubik-Bold.ttf
-          weight: 900
+          weight: 700
     - family:  TwicFont
       fonts:
         - asset: assets/fonts/TwicFont.ttf

@@ -295,7 +295,7 @@ class PostWidgetState extends State<PostWidget>
                       style: Style.get(
                           color: Style.darkGrey,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500)),
+                          fontWeight: FontWeight.w600)),
                 ),
                 Button(
                   padding: EdgeInsets.all(0),
@@ -314,7 +314,7 @@ class PostWidgetState extends State<PostWidget>
                         style: Style.get(
                             color: Style.darkGrey,
                             fontSize: 14,
-                            fontWeight: FontWeight.w500)),
+                            fontWeight: FontWeight.w600)),
                     SizedBox(
                       width: 5,
                     )

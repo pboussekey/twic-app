@@ -11,7 +11,6 @@ import 'package:twic_app/pages/onboarding/onboarding_interests.dart';
 import 'package:twic_app/pages/onboarding/onboarding_connect.dart';
 import 'package:twic_app/pages/home.dart';
 
-
 class Onboarding extends StatelessWidget {
   final OnboardingState state;
 
@@ -19,13 +18,10 @@ class Onboarding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: true,
-        body: RootPage(
-            child: OnboardingContent(
-          state: this.state,
-        )));
+    return RootPage(
+        child: OnboardingContent(
+      state: this.state,
+    ));
   }
 }
 

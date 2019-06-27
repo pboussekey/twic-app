@@ -58,128 +58,129 @@ class SearchState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: RootPage(
-            scrollable: false,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Button(
-                              padding: EdgeInsets.all(5),
-                              height: 40,
-                              width: 40,
-                              background: Colors.transparent,
-                              child: Icon(
-                                Icons.arrow_back,
-                                size: 30,
-                                color: Style.lightGrey,
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            Button(
-                              background: Style.genZBlue,
-                              text: "Apply",
-                              height: 40,
-                              disabled: null == selected,
-                              onPressed: () => Navigator.pop(context, selected),
-                            )
-                          ],
+    return RootPage(
+        resizable: false,
+        scrollable: false,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Button(
+                          padding: EdgeInsets.all(5),
+                          height: 40,
+                          width: 40,
+                          background: Colors.transparent,
+                          child: Icon(
+                            Icons.arrow_back,
+                            size: 30,
+                            color: Style.lightGrey,
+                          ),
+                          onPressed: () => Navigator.pop(context),
                         ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Text(widget.title, style: Style.titleStyle),
-                        null != widget.at
-                            ?SizedBox(height: 10,) : Container(),
-                        null != widget.at
-                            ? Row(children: [
-                                Text(
-                                  'at',
-                                  style: Style.lightText,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(widget.at.name, style: Style.hashtagStyle)
-                              ])
-                            : Container(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Input(
-                          width: mediaSize.width - 40,
-                          height: 48.0,
-                          color: Style.veryLightGrey,
-                          shadow: false,
-                          icon: Icons.search,
-                          controller: controller,
-                          placeholder: "Search",
-                        ),
-                        SizedBox(
-                          width: 10.0,
+                        Button(
+                          background: Style.genZBlue,
+                          text: "Apply",
+                          height: 40,
+                          disabled: null == selected,
+                          onPressed: () => Navigator.pop(context, selected),
                         )
-                      ])),
-              SizedBox(height: 10,),
-              Container(
-                  width: mediaSize.width ,
-                  height: mediaSize.height - (null != widget.at ? 275 : 250),
-                  child: widget.provider(
-                      controller.text,
-                      (List<dynamic> list) => ListView.builder(
-                          itemCount: list.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            SearchElement element = widget.map(list[index]);
-                            return Button(
-                                width: mediaSize.width,
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                onPressed: () =>
-                                    setState(() => selected = list[index]),
-                                background: Colors.transparent,
-                                radius: BorderRadius.all(Radius.circular(0)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                      ],
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Text(widget.title, style: Style.titleStyle),
+                    null != widget.at
+                        ? SizedBox(
+                            height: 10,
+                          )
+                        : Container(),
+                    null != widget.at
+                        ? Row(children: [
+                            Text(
+                              'at',
+                              style: Style.lightText,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(widget.at.name, style: Style.hashtagStyle)
+                          ])
+                        : Container(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Input(
+                      width: mediaSize.width - 40,
+                      height: 48.0,
+                      color: Style.veryLightGrey,
+                      shadow: false,
+                      icon: Icons.search,
+                      controller: controller,
+                      placeholder: "Search",
+                    ),
+                    SizedBox(
+                      width: 10.0,
+                    )
+                  ])),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              width: mediaSize.width,
+              height: mediaSize.height - (null != widget.at ? 275 : 250),
+              child: widget.provider(
+                  controller.text,
+                  (List<dynamic> list) => ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        SearchElement element = widget.map(list[index]);
+                        return Button(
+                            width: mediaSize.width,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            onPressed: () =>
+                                setState(() => selected = list[index]),
+                            background: Colors.transparent,
+                            radius: BorderRadius.all(Radius.circular(0)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    Row(
                                       children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Text(element.name,
-                                                style: Style.text),
-                                            SizedBox(width: 5),
-                                            widget.isMine(list[index])
-                                                ? Icon(
-                                                    TwicFont.star,
-                                                    color: Style.genZYellow,
-                                                    size: 12,
-                                                  )
-                                                : Container()
-                                          ],
-                                        ),
-                                        null != element.info
-                                            ? Text(element.info,
-                                                style: Style.smallLightText)
+                                        Text(element.name, style: Style.text),
+                                        SizedBox(width: 5),
+                                        widget.isMine(list[index])
+                                            ? Icon(
+                                                TwicFont.star,
+                                                color: Style.genZYellow,
+                                                size: 12,
+                                              )
                                             : Container()
                                       ],
                                     ),
-                                    CheckBox(
-                                        isChecked: null != selected &&
-                                            selected.id == list[index % list.length].id),
+                                    null != element.info
+                                        ? Text(element.info,
+                                            style: Style.smallLightText)
+                                        : Container()
                                   ],
-                                ));
-                          })))
-            ])),
-        bottomNavigationBar: BottomNav(
+                                ),
+                                CheckBox(
+                                    isChecked: null != selected &&
+                                        selected.id ==
+                                            list[index % list.length].id),
+                              ],
+                            ));
+                      })))
+        ]),
+        bottomBar: BottomNav(
           current: ButtonEnum.Discover,
           refresh: setState,
         ));

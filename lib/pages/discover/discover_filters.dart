@@ -27,7 +27,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
     int currentYear = new DateTime.now().year;
-    return Scaffold(
+    return RootPage(
         appBar: AppBar(
           backgroundColor: Colors.white,
           centerTitle: true,
@@ -42,8 +42,8 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
             )
           ],
         ),
-        body: RootPage(
-            builder: () => Padding(
+        builder: () =>
+            Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                         decoration: BoxDecoration(
                             color: Style.purple,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
+                            BorderRadius.all(Radius.circular(8.0)),
                             border: Border.all(color: Style.border)),
                         child: Row(
                           children: <Widget>[
@@ -67,22 +67,23 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                               radius: BorderRadius.all(Radius.circular(8.0)),
                               width: (mediaSize.width - 42) / 3,
                               color: null != filters['university'] &&
-                                      Session.instance.user.institution.id ==
-                                          filters['university'].id
+                                  Session.instance.user.institution.id ==
+                                      filters['university'].id
                                   ? Style.darkGrey
                                   : Style.lightGrey,
                               background: null != filters['university'] &&
-                                      Session.instance.user.institution.id ==
-                                          filters['university'].id
+                                  Session.instance.user.institution.id ==
+                                      filters['university'].id
                                   ? Colors.white
                                   : Colors.transparent,
                               border: null != filters['university'] &&
-                                      Session.instance.user.institution.id ==
-                                          filters['university'].id
+                                  Session.instance.user.institution.id ==
+                                      filters['university'].id
                                   ? Border.all(color: Style.border)
                                   : Border.all(
-                                      color: Colors.transparent, width: 0),
-                              onPressed: () => setState(() {
+                                  color: Colors.transparent, width: 0),
+                              onPressed: () =>
+                                  setState(() {
                                     filters.remove('school');
                                     filters['university'] =
                                         Session.instance.user.institution;
@@ -102,62 +103,65 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                               border: null == filters['university']
                                   ? Border.all(color: Style.border)
                                   : Border.all(
-                                      color: Colors.transparent, width: 0),
-                              onPressed: () => setState(() {
+                                  color: Colors.transparent, width: 0),
+                              onPressed: () =>
+                                  setState(() {
                                     filters.remove('school');
                                     filters.remove('university');
                                   }),
                             ),
                             Button(
                               text: null != filters['university'] &&
-                                      Session.instance.user.institution.id !=
-                                          filters['university'].id
+                                  Session.instance.user.institution.id !=
+                                      filters['university'].id
                                   ? Session.instance.user.institution.name
                                   : "Select",
                               height: 60,
                               radius: BorderRadius.all(Radius.circular(8.0)),
                               width: (mediaSize.width - 42) / 3,
                               color: null != filters['university'] &&
-                                      Session.instance.user.institution.id !=
-                                          filters['university'].id
+                                  Session.instance.user.institution.id !=
+                                      filters['university'].id
                                   ? Style.darkGrey
                                   : Style.lightGrey,
                               background: null != filters['university'] &&
-                                      Session.instance.user.institution.id !=
-                                          filters['university'].id
+                                  Session.instance.user.institution.id !=
+                                      filters['university'].id
                                   ? Colors.white
                                   : Colors.transparent,
                               border: null != filters['university'] &&
-                                      Session.instance.user.institution.id !=
-                                          filters['university'].id
+                                  Session.instance.user.institution.id !=
+                                      filters['university'].id
                                   ? Border.all(color: Style.border)
                                   : Border.all(
-                                      color: Colors.transparent, width: 0),
-                              onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          SearchPage(
-                                            title: 'Search for a University',
-                                            at: null,
-                                            isMine: (School school) =>
+                                  color: Colors.transparent, width: 0),
+                              onPressed: () =>
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              SearchPage(
+                                                title: 'Search for a University',
+                                                at: null,
+                                                isMine: (School school) =>
                                                 school.id ==
-                                                Session.instance.user
-                                                    .institution.id,
-                                            map: (School school) =>
-                                                SearchElement(
-                                                    name: school.name),
-                                            provider: (String search,
+                                                    Session.instance.user
+                                                        .institution.id,
+                                                map: (School school) =>
+                                                    SearchElement(
+                                                        name: school.name),
+                                                provider: (String search,
                                                     Function builder) =>
-                                                Schools.getList(
-                                                    degree: 'University',
-                                                    search: search,
-                                                    builder: builder),
-                                          ))).then(
-                                  (dynamic school) => setState(() {
-                                        filters.remove('school');
-                                        filters['university'] = school;
-                                      })),
+                                                    Schools.getList(
+                                                        degree: 'University',
+                                                        search: search,
+                                                        builder: builder),
+                                              ))).then(
+                                          (dynamic school) =>
+                                          setState(() {
+                                            filters.remove('school');
+                                            filters['university'] = school;
+                                          })),
                             ),
                           ],
                         )),
@@ -170,15 +174,16 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                           Text('Graduating class', style: Style.titleStyle),
                           null != filters['classYear']
                               ? Button(
-                                  height: 20,
-                                  width: 20,
-                                  padding: EdgeInsets.all(0),
-                                  background: Colors.transparent,
-                                  child: Icon(Icons.cancel,
-                                      color: Style.lightGrey, size: 16),
-                                  onPressed: () => setState(
-                                      () => filters.remove('classYear')),
-                                )
+                            height: 20,
+                            width: 20,
+                            padding: EdgeInsets.all(0),
+                            background: Colors.transparent,
+                            child: Icon(Icons.cancel,
+                                color: Style.lightGrey, size: 16),
+                            onPressed: () =>
+                                setState(
+                                        () => filters.remove('classYear')),
+                          )
                               : Container()
                         ]),
                     SizedBox(
@@ -191,11 +196,11 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                           controller: ScrollController(
                               initialScrollOffset: null != filters['classYear']
                                   ? (filters['classYear'] - currentYear + 50) *
-                                      90.0
+                                  90.0
                                   : (Session.instance.user.classYear -
-                                          currentYear +
-                                          50) *
-                                      90.0),
+                                  currentYear +
+                                  50) *
+                                  90.0),
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) =>
                               Padding(
@@ -204,42 +209,43 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                                     width: 80,
                                     padding: EdgeInsets.only(right: 10.0),
                                     radius:
-                                        BorderRadius.all(Radius.circular(8.0)),
+                                    BorderRadius.all(Radius.circular(8.0)),
                                     border: null != filters['classYear'] &&
-                                            currentYear - 50 + index ==
-                                                filters['classYear']
+                                        currentYear - 50 + index ==
+                                            filters['classYear']
                                         ? null
                                         : Border.all(color: Style.border),
                                     background: null != filters['classYear'] &&
-                                            currentYear - 50 + index ==
-                                                filters['classYear']
+                                        currentYear - 50 + index ==
+                                            filters['classYear']
                                         ? Style.mainColor
                                         : Colors.white,
                                     child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: [
                                           currentYear - 50 + index ==
-                                                  Session
-                                                      .instance.user.classYear
+                                              Session
+                                                  .instance.user.classYear
                                               ? Icon(Icons.star,
-                                                  color: Style.genZYellow)
+                                              color: Style.genZYellow)
                                               : Container(),
                                           Text(
                                               (currentYear - 50 + index)
                                                   .toString(),
                                               textAlign: TextAlign.left,
                                               style: null !=
-                                                          filters[
-                                                              'classYear'] &&
-                                                      currentYear -
-                                                              50 +
-                                                              index ==
-                                                          filters['classYear']
+                                                  filters[
+                                                  'classYear'] &&
+                                                  currentYear -
+                                                      50 +
+                                                      index ==
+                                                      filters['classYear']
                                                   ? Style.whiteText
                                                   : Style.text),
                                         ]),
-                                    onPressed: () => setState(() =>
+                                    onPressed: () =>
+                                        setState(() =>
                                         filters['classYear'] =
                                             currentYear - 50 + index),
                                   )),
@@ -293,172 +299,177 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                           radius: BorderRadius.all(Radius.circular(8.0)),
                           width: (mediaSize.width - 50) / 2,
                           text: "Graduate",
-                          onPressed: () => setState(() {
+                          onPressed: () =>
+                              setState(() {
                                 filters.remove('school');
                                 filters.remove('major');
                                 filters.remove('minor');
                                 filters['degree'] =
-                                    filters['degree'] == 'Graduate'
-                                        ? null
-                                        : 'Graduate';
+                                filters['degree'] == 'Graduate'
+                                    ? null
+                                    : 'Graduate';
                               })),
                     ]),
                     'Undergraduate' == filters['degree']
                         ? Column(children: [
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Degree focus', style: Style.titleStyle),
-                                  null != filters['major'] ||
-                                          null != filters['minor']
-                                      ? Button(
-                                          height: 20,
-                                          width: 60,
-                                          padding: EdgeInsets.all(0),
-                                          background: Colors.transparent,
-                                          child: Row(children: [
-                                            Text(
-                                                null != filters['major']
-                                                    ? 'Major'
-                                                    : 'Minor',
-                                                style: Style.smallLightText),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Icon(Icons.cancel,
-                                                color: Style.lightGrey,
-                                                size: 16)
-                                          ]),
-                                          onPressed: () => setState(() {
-                                                filters.remove('major');
-                                                filters.remove('minor');
-                                              }),
-                                        )
-                                      : Container(),
-                                ]),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            null == filters['major'] && null == filters['minor']
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Degree focus', style: Style.titleStyle),
+                            null != filters['major'] ||
+                                null != filters['minor']
+                                ? Button(
+                              height: 20,
+                              width: 60,
+                              padding: EdgeInsets.all(0),
+                              background: Colors.transparent,
+                              child: Row(children: [
+                                Text(
+                                    null != filters['major']
+                                        ? 'Major'
+                                        : 'Minor',
+                                    style: Style.smallLightText),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(Icons.cancel,
+                                    color: Style.lightGrey,
+                                    size: 16)
+                              ]),
+                              onPressed: () =>
+                                  setState(() {
+                                    filters.remove('major');
+                                    filters.remove('minor');
+                                  }),
+                            )
+                                : Container(),
+                          ]),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      null == filters['major'] && null == filters['minor']
+                          ? Row(children: [
+                        Button(
+                          background: Colors.white,
+                          color: Style.grey,
+                          border: Border.all(color: Style.border),
+                          height: 60,
+                          radius: BorderRadius.all(
+                              Radius.circular(8.0)),
+                          width: (mediaSize.width - 50) / 2,
+                          text: "Major",
+                          onPressed: () =>
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SearchPage(
+                                            title: 'Search for a Major',
+                                            at: filters['university'],
+                                            isMine: (Field field) =>
+                                            field.id ==
+                                                Session.instance.user
+                                                    .major.id,
+                                            map: (Field field) =>
+                                                SearchElement(
+                                                    name: field.name),
+                                            provider: (String search,
+                                                Function builder) =>
+                                                Fields.getList(
+                                                    school_id: filters[
+                                                    'university']
+                                                        ?.id,
+                                                    search: search,
+                                                    builder: builder),
+                                          ))).then((dynamic field) =>
+                                  setState(
+                                          () => filters['major'] = field)),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Button(
+                          background: Colors.white,
+                          color: Style.grey,
+                          border: Border.all(color: Style.border),
+                          height: 60,
+                          radius: BorderRadius.all(
+                              Radius.circular(8.0)),
+                          width: (mediaSize.width - 50) / 2,
+                          text: "Minor",
+                          onPressed: () =>
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SearchPage(
+                                            title: 'Search for a Minor',
+                                            at: filters['university'],
+                                            isMine: (Field field) =>
+                                            field.id ==
+                                                Session.instance.user
+                                                    .minor.id,
+                                            map: (Field field) =>
+                                                SearchElement(
+                                                    name: field.name),
+                                            provider: (String search,
+                                                Function builder) =>
+                                                Fields.getList(
+                                                    school_id: filters[
+                                                    'university']
+                                                        ?.id,
+                                                    search: search,
+                                                    builder: builder),
+                                          ))).then((dynamic field) =>
+                                  setState(
+                                          () => filters['minor'] = field)),
+                        )
+                      ])
+                          : Button(
+                        child: Row(
+                          children: <Widget>[
+                            ((null != filters['major'] &&
+                                filters['major'].id ==
+                                    Session.instance.user
+                                        .major.id) ||
+                                (null != filters['minor'] &&
+                                    filters['minor'].id ==
+                                        Session.instance.user
+                                            .minor.id))
                                 ? Row(children: [
-                                    Button(
-                                      background: Colors.white,
-                                      color: Style.grey,
-                                      border: Border.all(color: Style.border),
-                                      height: 60,
-                                      radius: BorderRadius.all(
-                                          Radius.circular(8.0)),
-                                      width: (mediaSize.width - 50) / 2,
-                                      text: "Major",
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  SearchPage(
-                                                    title: 'Search for a Major',
-                                                    at: filters['university'],
-                                                    isMine: (Field field) =>
-                                                        field.id ==
-                                                        Session.instance.user
-                                                            .major.id,
-                                                    map: (Field field) =>
-                                                        SearchElement(
-                                                            name: field.name),
-                                                    provider: (String search,
-                                                            Function builder) =>
-                                                        Fields.getList(
-                                                            school_id: filters[
-                                                                    'university']
-                                                                ?.id,
-                                                            search: search,
-                                                            builder: builder),
-                                                  ))).then((dynamic field) =>
-                                          setState(
-                                              () => filters['major'] = field)),
-                                    ),
-                                    SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    Button(
-                                      background: Colors.white,
-                                      color: Style.grey,
-                                      border: Border.all(color: Style.border),
-                                      height: 60,
-                                      radius: BorderRadius.all(
-                                          Radius.circular(8.0)),
-                                      width: (mediaSize.width - 50) / 2,
-                                      text: "Minor",
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  SearchPage(
-                                                    title: 'Search for a Minor',
-                                                    at: filters['university'],
-                                                    isMine: (Field field) =>
-                                                        field.id ==
-                                                        Session.instance.user
-                                                            .minor.id,
-                                                    map: (Field field) =>
-                                                        SearchElement(
-                                                            name: field.name),
-                                                    provider: (String search,
-                                                            Function builder) =>
-                                                        Fields.getList(
-                                                            school_id: filters[
-                                                                    'university']
-                                                                ?.id,
-                                                            search: search,
-                                                            builder: builder),
-                                                  ))).then((dynamic field) =>
-                                          setState(
-                                              () => filters['minor'] = field)),
-                                    )
-                                  ])
-                                : Button(
-                                    child: Row(
-                                      children: <Widget>[
-                                        ((null != filters['major'] &&
-                                                    filters['major'].id ==
-                                                        Session.instance.user
-                                                            .major.id) ||
-                                                (null != filters['minor'] &&
-                                                    filters['minor'].id ==
-                                                        Session.instance.user
-                                                            .minor.id))
-                                            ? Row(children: [
-                                                Icon(
-                                                  TwicFont.star,
-                                                  color: Style.genZYellow,
-                                                  size: 12,
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                )
-                                              ])
-                                            : Container(),
-                                        Text(
-                                            (filters['major'] ??
-                                                    filters['minor'])
-                                                .name,
-                                            style: Style.whiteText),
-                                      ],
-                                    ),
-                                    radius:
-                                        BorderRadius.all(Radius.circular(6)),
-                                    height: 60,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    onPressed: () => setState(() {
-                                          filters.remove('major');
-                                          filters.remove('minor');
-                                        }),
-                                  )
-                          ])
+                              Icon(
+                                TwicFont.star,
+                                color: Style.genZYellow,
+                                size: 12,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              )
+                            ])
+                                : Container(),
+                            Text(
+                                (filters['major'] ??
+                                    filters['minor'])
+                                    .name,
+                                style: Style.whiteText),
+                          ],
+                        ),
+                        radius:
+                        BorderRadius.all(Radius.circular(6)),
+                        height: 60,
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 10),
+                        onPressed: () =>
+                            setState(() {
+                              filters.remove('major');
+                              filters.remove('minor');
+                            }),
+                      )
+                    ])
                         : Container(),
                     SizedBox(
                       height: 20.0,
@@ -473,18 +484,18 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                               style: Style.titleStyle),
                           null != filters['school']
                               ? Button(
-                                  height: 20,
-                                  width: 20,
-                                  padding: EdgeInsets.all(0),
-                                  background: Colors.transparent,
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: Style.lightGrey,
-                                    size: 16,
-                                  ),
-                                  onPressed: () =>
-                                      setState(() => filters.remove('school')),
-                                )
+                            height: 20,
+                            width: 20,
+                            padding: EdgeInsets.all(0),
+                            background: Colors.transparent,
+                            child: Icon(
+                              Icons.cancel,
+                              color: Style.lightGrey,
+                              size: 16,
+                            ),
+                            onPressed: () =>
+                                setState(() => filters.remove('school')),
+                          )
                               : Container(),
                         ]),
                     SizedBox(
@@ -492,66 +503,73 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                     ),
                     null == filters['school']
                         ? Button(
-                            background: Colors.white,
-                            color: Style.grey,
-                            border: Border.all(color: Style.border),
-                            height: 60,
-                            radius: BorderRadius.all(Radius.circular(8.0)),
-                            width: (mediaSize.width - 40),
-                            text:
-                                "Select a ${'Undergraduate' == filters['degree'] ? 'Residential College' : 'School'}",
-                            onPressed: () => Navigator.push(
+                        background: Colors.white,
+                        color: Style.grey,
+                        border: Border.all(color: Style.border),
+                        height: 60,
+                        radius: BorderRadius.all(Radius.circular(8.0)),
+                        width: (mediaSize.width - 40),
+                        text:
+                        "Select a ${'Undergraduate' == filters['degree']
+                            ? 'Residential College'
+                            : 'School'}",
+                        onPressed: () =>
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         SearchPage(
                                           title:
-                                              'Search for a ${'Undergraduate' == filters['degree'] ? 'Residential College' : 'School'}',
+                                          'Search for a ${'Undergraduate' ==
+                                              filters['degree']
+                                              ? 'Residential College'
+                                              : 'School'}',
                                           at: filters['university'],
                                           isMine: (School school) =>
-                                              school.id ==
+                                          school.id ==
                                               Session.instance.user.school.id,
                                           map: (School school) =>
                                               SearchElement(name: school.name),
                                           provider: (String search,
-                                                  Function builder) =>
+                                              Function builder) =>
                                               Schools.getList(
                                                   degree: filters['degree']
                                                       ?.toString()
                                                       ?.toUpperCase(),
                                                   university_id:
-                                                      filters['university']?.id,
+                                                  filters['university']?.id,
                                                   search: search,
                                                   builder: builder),
                                         ))).then((dynamic school) =>
                                 setState(() => filters['school'] = school)))
                         : Button(
-                            child: Row(
-                              children: <Widget>[
-                                (filters['school'].id ==
-                                        Session.instance.user.school.id)
-                                    ? Row(children: [
-                                        Icon(
-                                          TwicFont.star,
-                                          color: Style.genZYellow,
-                                          size: 12,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        )
-                                      ])
-                                    : Container(),
-                                Text(filters['school'].name,
-                                    style: Style.whiteText),
-                              ],
-                            ),
-                            radius: BorderRadius.all(Radius.circular(6)),
-                            height: 60,
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            onPressed: () => setState(() {
-                                  filters.remove('major');
-                                  filters.remove('minor');
-                                })),
+                        child: Row(
+                          children: <Widget>[
+                            (filters['school'].id ==
+                                Session.instance.user.school.id)
+                                ? Row(children: [
+                              Icon(
+                                TwicFont.star,
+                                color: Style.genZYellow,
+                                size: 12,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              )
+                            ])
+                                : Container(),
+                            Text(filters['school'].name,
+                                style: Style.whiteText),
+                          ],
+                        ),
+                        radius: BorderRadius.all(Radius.circular(6)),
+                        height: 60,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        onPressed: () =>
+                            setState(() {
+                              filters.remove('major');
+                              filters.remove('minor');
+                            })),
                     SizedBox(
                       height: 40.0,
                     ),
@@ -563,6 +581,6 @@ class DiscoverFiltersState extends State<DiscoverFilters> {
                           setState(() => Navigator.pop(context, filters)),
                     )
                   ],
-                ))));
+                )));
   }
 }

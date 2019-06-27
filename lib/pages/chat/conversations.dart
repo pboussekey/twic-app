@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/api/services/conversations.dart';
+import 'package:twic_app/api/services/cache.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/shared/chat/conversationlist.dart';
 import '../root_page.dart';
@@ -8,6 +8,7 @@ import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/components/tabs.dart';
 import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/chat/create_conversation.dart';
+import 'package:twic_app/api/services/messages.dart';
 
 class ConversationsList extends StatefulWidget {
   String search;
@@ -34,81 +35,159 @@ class ConversationsState extends State<ConversationsList> {
     });
   }
 
+  void _reload() {
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        body: RootPage(
-            builder: () => Column(children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text('Conversations', style: Style.titleStyle),
-                        Button(
-                            background: Colors.transparent,
-                            width: 25.0,
-                            padding: EdgeInsets.all(0.0),
-                            child: Icon(
-                              Icons.add,
-                              color: Style.mainColor,
-                            ),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        CreateConversation())))
-                      ],
-                    ),
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Container(
-                        width: mediaSize.width - 40,
-                        child: Input(
-                          height: 50.0,
-                          color: Style.veryLightGrey,
-                          shadow: false,
-                          icon: Icons.search,
-                          controller: controller,
-                          placeholder: "Search",
-                        )),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Tabs(tabs: [
+    return RootPage(
+      builder: () => Column(children: [
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Conversations', style: Style.hugeTitle),
+                  Button(
+                      background: Colors.transparent,
+                      width: 25.0,
+                      padding: EdgeInsets.all(0.0),
+                      child: Icon(
+                        Icons.add,
+                        color: Style.mainColor,
+                      ),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  CreateConversation())))
+                ],
+              ),
+            ),
+            Form(
+              key: _formKey,
+              child: Container(
+                  width: mediaSize.width - 40,
+                  child: Input(
+                    height: 50.0,
+                    color: Style.veryLightGrey,
+                    shadow: false,
+                    icon: Icons.search,
+                    controller: controller,
+                    placeholder: "Search for chats or people",
+                  )),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Tabs(
+                tabs: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Text(
-                      'My Messages',
+                      'My messages',
                       textAlign: TextAlign.center,
                     ),
-                    Text('Groups', textAlign: TextAlign.center),
-                    Text('Channels', textAlign: TextAlign.center),
-                  ], tabsContent: [
-                    Conversations.getList(
-                        search: controller.text,
-                        type: 'MESSAGE',
-                        builder: (List<Conversation> conversations) =>
-                            ConversationList(list: conversations)),
-                    Conversations.getList(
-                        search: controller.text,
-                        type: 'GROUP',
-                        builder: (List<Conversation> conversations) =>
-                            ConversationList(list: conversations)),
-                    Conversations.getList(
-                        search: controller.text,
-                        type: 'CHANNEL',
-                        builder: (List<Conversation> conversations) =>
-                            ConversationList(list: conversations)),
-                  ])
-                ])),
-        bottomNavigationBar: BottomNav(
-          current: ButtonEnum.Chat,
-          refresh: setState,
-        ));
+                    SizedBox(
+                      width: 0 != Messages.unread['MESSAGE'] ? 5 : 0,
+                    ),
+                    0 != Messages.unread['MESSAGE']
+                        ? Container(
+                            height: 16,
+                            width: 16,
+                            alignment: Alignment(0, 0),
+                            decoration: BoxDecoration(
+                                color: Style.mainColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: Text(Messages.unread['MESSAGE'].toString(),
+                                textAlign: TextAlign.center,
+                                style: Style.smallWhiteText))
+                        : Container()
+                  ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      'Groups',
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      width: 0 != Messages.unread['GROUP'] ? 5 : 0,
+                    ),
+                    0 != Messages.unread['GROUP']
+                        ? Container(
+                            height: 16,
+                            width: 16,
+                            alignment: Alignment(0, 0),
+                            decoration: BoxDecoration(
+                                color: Style.mainColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: Text(Messages.unread['GROUP'].toString(),
+                                textAlign: TextAlign.center,
+                                style: Style.smallWhiteText))
+                        : Container()
+                  ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      'Channels',
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      width: 0 != Messages.unread['CHANNEL'] ? 5 : 0,
+                    ),
+                    0 != Messages.unread['CHANNEL']
+                        ? Container(
+                            height: 16,
+                            width: 16,
+                            alignment: Alignment(0, 0),
+                            decoration: BoxDecoration(
+                                color: Style.mainColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: Text(Messages.unread['CHANNEL'].toString(),
+                                textAlign: TextAlign.center,
+                                style: Style.smallWhiteText))
+                        : Container()
+                  ]),
+                ],
+                contentHeight: mediaSize.height - 50,
+                tabsContent: [
+                  AppCache.getWidget<Conversation>(
+                      params: {
+                        'search': controller.text,
+                        'type': 'MESSAGE',
+                      },
+                      onCompleted: _reload,
+                      builder: (List<int> conversations) =>
+                          ConversationList(list: conversations)),
+                  AppCache.getWidget<Conversation>(
+                      params: {
+                        'search': controller.text,
+                        'type': 'GROUP',
+                      },
+                      onCompleted: _reload,
+                      builder: (List<int> conversations) =>
+                          ConversationList(list: conversations)),
+                  AppCache.getWidget<Conversation>(
+                      params: {
+                        'search': controller.text,
+                        'type': 'CHANNEL',
+                      },
+                      onCompleted: _reload,
+                      builder: (List<int> conversations) =>
+                          ConversationList(list: conversations)),
+                ])
+          ]),
+      bottomBar: BottomNav(
+        current: ButtonEnum.Chat,
+        refresh: setState,
+      ),
+    );
   }
 }

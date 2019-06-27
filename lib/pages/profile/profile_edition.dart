@@ -48,8 +48,7 @@ class ProfileEditionState extends State<ProfileEdition> {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        body: RootPage(
+    return RootPage(
             scrollable: false,
             child: GestureDetector(
                 onTap: () {
@@ -402,6 +401,6 @@ class ProfileEditionState extends State<ProfileEdition> {
                           onCancel: () => setState(() => editingPicture = false),
                         )
                       : Container()
-                ]))));
+                ])));
   }
 }

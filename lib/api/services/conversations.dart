@@ -1,32 +1,32 @@
 import 'package:twic_app/api/services/api_graphql.dart' as api;
 import 'package:twic_app/api/models/models.dart';
-import 'package:flutter/material.dart';
+
+import 'package:twic_app/api/services/abstract_service.dart';
 
 export 'package:twic_app/api/services/api_graphql.dart';
 
-class Conversations {
-  static Widget getList({Function builder, String search, String type}) =>
-      api.query<Conversation>(
-          """query conversations(\$type: String!, \$search : String) {
-               conversations(type : \$type , search : \$search){
-                  id 
+class Conversations extends ApiService<Conversation> {
+  Conversations()
+      : super(
+      methodName: 'conversations',
+      queryParams: {
+        "type": "String",
+        "search": "String",
+        "id" : "[ID]"
+      },
+      queryFields: """
+               id 
                   name 
                   last 
                   lastDate  
+                  lastId
+                  unread
+                  type
                   users{id firstname lastname avatar{ name bucketname token }}
+                  hashtag{id name nbFollowers}
                   picture{ name bucketname token }
-                  
-              }
-            }""",
-          {'search': search, 'type': type},
-          cache: false,
-          onComplete: (dynamic data) =>
-              (data['conversations'] as List<dynamic>)
-                  .map((dynamic conversation) =>
-                  Conversation.fromJson(conversation))
-                  .toList(),
-          builder: builder);
-
+            """,
+      map: (dynamic json) => Conversation.fromJson(json));
 
 
   static api.Mutation create({Function builder, Function onCompleted, Function update}) => api.mutation(query: """      
@@ -36,8 +36,12 @@ class Conversations {
                 name 
                 last 
                 lastDate  
+                lastId
+                unread
+                type
                 users{id firstname lastname avatar{ name bucketname token }}
                 picture{ name bucketname token }
+                hashtag{id name nbFollowers}
             }
           }
           """, builder: builder, onCompleted: onCompleted, update: update);
@@ -49,7 +53,11 @@ class Conversations {
                 name 
                 last 
                 lastDate  
+                lastId
+                unread
+                type
                 picture{ name bucketname token }
+                hashtag{id name nbFollowers}
             }
           }
           """, builder: builder, onCompleted: onCompleted, update: update);
@@ -60,12 +68,28 @@ class Conversations {
                 id 
                 name 
                 last 
-                lastDate  
-                users{id firstname lastname avatar{ name bucketname token }}
+                lastDate 
+                lastId
+                unread 
+                type
+                hashtag{id name nbFollowers}
                 picture{ name bucketname token }
             }
           }
           """, builder: builder, onCompleted: onCompleted, update: update);
+
+
+
+
+  static void read(int conversation_id){
+    api.execute("""      
+         mutation readConversation( \$id : ID) {
+          readConversation( id: \$id){
+                success
+            }
+          }
+          """, { "id" : conversation_id});
+  }
 
 
 

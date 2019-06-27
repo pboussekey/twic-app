@@ -21,35 +21,35 @@ class ProfileFollowers extends StatefulWidget {
 class ProfileFollowersState extends State<ProfileFollowers> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text('Followers', style: Style.titleStyle),
-          elevation: 0,
+    return RootPage(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text('Followers', style: Style.titleStyle),
+        elevation: 0,
+      ),
+      child: Column(children: [
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Input(
+              height: 50.0,
+              color: Style.veryLightGrey,
+              shadow: false,
+              icon: Icons.search,
+              placeholder: "Search",
+            )),
+        SizedBox(
+          height: 10,
         ),
-        body: RootPage(
-            child: Column(children: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Input(
-                height: 50.0,
-                color: Style.veryLightGrey,
-                shadow: false,
-                icon: Icons.search,
-                placeholder: "Search",
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          UserList(
-            user_id: widget.user_id,
-            follower: true,
-          )
-        ])),
-        bottomNavigationBar: BottomNav(
-          current: ButtonEnum.Profile,
-          refresh: setState,
-        ));
+        UserList(
+          user_id: widget.user_id,
+          follower: true,
+        )
+      ]),
+      bottomBar: BottomNav(
+        current: ButtonEnum.Profile,
+        refresh: setState,
+      ),
+    );
   }
 }

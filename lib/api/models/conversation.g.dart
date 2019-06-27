@@ -17,10 +17,17 @@ Conversation _$ConversationFromJson(Map<String, dynamic> json) {
       users: (json['users'] as List)
           ?.map((e) =>
               e == null ? null : User.fromJson(e as Map<String, dynamic>))
-          ?.toList())
+          ?.toList(),
+      hashtag: json['hashtag'] == null
+          ? null
+          : Hashtag.fromJson(json['hashtag'] as Map<String, dynamic>),
+      unread: json['unread'] as int ?? 0)
     ..picture = json['picture'] == null
         ? null
-        : TwicFile.fromJson(json['picture'] as Map<String, dynamic>);
+        : TwicFile.fromJson(json['picture'] as Map<String, dynamic>)
+    ..type = json['type'] as String
+    ..lastId =
+        json['lastId'] == null ? null : AbstractModel.parseId(json['lastId']);
 }
 
 Map<String, dynamic> _$ConversationToJson(Conversation instance) =>
@@ -30,5 +37,9 @@ Map<String, dynamic> _$ConversationToJson(Conversation instance) =>
       'last': instance.last,
       'users': instance.users?.map((e) => e?.toJson())?.toList(),
       'lastDate': instance.lastDate?.toIso8601String(),
-      'picture': instance.picture?.toJson()
+      'picture': instance.picture?.toJson(),
+      'hashtag': instance.hashtag?.toJson(),
+      'type': instance.type,
+      'lastId': instance.lastId,
+      'unread': instance.unread
     };

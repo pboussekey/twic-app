@@ -124,339 +124,339 @@ class CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        body: RootPage(
-            builder: () => Stack(children: [
-                  Container(height: mediaSize.height - 40),
-                  Column(
+    return RootPage(
+      builder: () => Stack(children: [
+            Container(height: mediaSize.height - 40),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(left: 6.0, right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                            icon: Icon(Icons.clear, color: Style.lightGrey),
+                            onPressed: () => Navigator.pop(context)),
+                        content.isEmpty && files.length == 0
+                            ? Container()
+                            : Padding(
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, right: 10),
+                                child: Posts.create(
+                                    builder: (RunMutation runMutation,
+                                            QueryResult result) =>
+                                        Button(
+                                          text: "Post",
+                                          onPressed: () {
+                                            runMutation({
+                                              'content': content,
+                                              'privacy': privacy,
+                                              'mentions': mentions
+                                                  .where((User user) =>
+                                                      content.indexOf(
+                                                          "@${user.firstname}${user.lastname}") >=
+                                                      0)
+                                                  .map((User user) => user.id)
+                                                  .toList(),
+                                              'files': files
+                                                  .map((TwicFile f) =>
+                                                      f.toJson())
+                                                  .toList()
+                                            });
+                                          },
+                                        ),
+                                    onCompleted: (dynamic result) =>
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        Home())))),
+                      ],
+                    )),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      "Create a post",
+                      style: Style.titleStyle,
+                      textAlign: TextAlign.start,
+                    )),
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
                     children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              IconButton(
-                                  icon: Icon(Icons.clear, color: Style.grey),
-                                  onPressed: () => Navigator.pop(context)),
-                              content.isEmpty && files.length == 0
-                                  ? Container()
-                                  : Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 5, bottom: 5, right: 10),
-                                      child: Posts.create(
-                                          builder: (RunMutation runMutation,
-                                                  QueryResult result) =>
-                                              Button(
-                                                text: "Post",
-                                                onPressed: () {
-                                                  runMutation({
-                                                    'content': content,
-                                                    'privacy': privacy,
-                                                    'mentions': mentions
-                                                        .where((User user) =>
-                                                            content.indexOf(
-                                                                "@${user.firstname}${user.lastname}") >=
-                                                            0)
-                                                        .map((User user) =>
-                                                            user.id)
-                                                        .toList(),
-                                                    'files': files
-                                                        .map((TwicFile f) =>
-                                                            f.toJson())
-                                                        .toList()
-                                                  });
-                                                },
-                                              ),
-                                          onCompleted: (dynamic result) =>
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          Home())))),
-                            ],
-                          )),
-                      Text("Create a post", style: Style.titleStyle),
-                      Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          children: <Widget>[
-                            Dropdown<String>(
-                              shadow: [],
-                              size: mediaSize.width - 40,
-                              background: Colors.white,
-                              border: Border.all(
-                                  color: Style.border,
-                                  width: 1,
-                                  style: BorderStyle.solid),
-                              items: [
-                                DropdownMenuItem(
-                                  child: Container(
-                                      width: mediaSize.width - 40,
-                                      color: Colors.white,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Container(
-                                              width: 30,
-                                              height: 30,
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: Style.veryLightGrey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6))),
-                                              child: Icon(
-                                                TwicFont.eye,
-                                                color: privacy == "PUBLIC"
-                                                    ? Style.mainColor
-                                                    : Style.lightGrey,
-                                                size: 18,
-                                              )),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(
-                                                "Public Post",
-                                                style: Style.largeText,
-                                              ),
-                                              Text(
-                                                "Everyone can view this post",
-                                                style: Style.smallGreyText,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      )),
-                                  value: "PUBLIC",
-                                ),
-                                DropdownMenuItem(
-                                  child: Container(
-                                      color: Colors.white,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Container(
-                                              width: 30,
-                                              height: 30,
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: Style.veryLightGrey,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(6))),
-                                              child: Icon(
-                                                TwicFont.private,
-                                                color: privacy == "PRIVATE"
-                                                    ? Style.mainColor
-                                                    : Style.lightGrey,
-                                                size: 18,
-                                              )),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(
-                                                "Private",
-                                                style: Style.largeText,
-                                              ),
-                                              Text(
-                                                "Only people I tag can see this post",
-                                                style: Style.smallGreyText,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      )),
-                                  value: "PRIVATE",
-                                ),
-                              ],
-                              onChanged: (String value) =>
-                                  setState(() => privacy = value),
-                              value: privacy,
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Form(
-                                key: _formKey,
-                                child: Textarea(
-                                    maxLength: 300,
-                                    color: Style.veryLightGrey,
-                                    controller: _controller)),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            _renderFiles()
-                          ],
-                        ),
-                      )
+                      Dropdown<String>(
+                        shadow: [],
+                        size: mediaSize.width - 40,
+                        background: Colors.white,
+                        border: Border.all(
+                            color: Style.border,
+                            width: 1,
+                            style: BorderStyle.solid),
+                        items: [
+                          DropdownMenuItem(
+                            child: Container(
+                                width: mediaSize.width - 40,
+                                color: Colors.white,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                        width: 30,
+                                        height: 30,
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: Style.veryLightGrey,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                        child: Icon(
+                                          TwicFont.eye,
+                                          color: privacy == "PUBLIC"
+                                              ? Style.mainColor
+                                              : Style.lightGrey,
+                                          size: 18,
+                                        )),
+                                    SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          "Public Post",
+                                          style: Style.largeText,
+                                        ),
+                                        Text(
+                                          "Everyone can view this post",
+                                          style: Style.smallGreyText,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )),
+                            value: "PUBLIC",
+                          ),
+                          DropdownMenuItem(
+                            child: Container(
+                                color: Colors.white,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                        width: 30,
+                                        height: 30,
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: Style.veryLightGrey,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                        child: Icon(
+                                          TwicFont.private,
+                                          color: privacy == "PRIVATE"
+                                              ? Style.mainColor
+                                              : Style.lightGrey,
+                                          size: 18,
+                                        )),
+                                    SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          "Private",
+                                          style: Style.largeText,
+                                        ),
+                                        Text(
+                                          "Only people I tag can see this post",
+                                          style: Style.smallGreyText,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )),
+                            value: "PRIVATE",
+                          ),
+                        ],
+                        onChanged: (String value) =>
+                            setState(() => privacy = value),
+                        value: privacy,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Form(
+                          key: _formKey,
+                          child: Textarea(
+                              maxLength: 300,
+                              color: Style.veryLightGrey,
+                              controller: _controller)),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _renderFiles()
                     ],
                   ),
-                  searching || mentionning
-                      ? Positioned(
-                          top: 200.0 + line * 20.0,
-                          left: 40,
-                          right: 40,
-                          height: 500,
-                          child: mentionning
-                              ? Container(
-                                  color: Colors.white,
-                                  child: UserList(
-                                    key: _searchingKey,
-                                    search: search,
-                                    renderAction: (User user) => Container(),
-                                    onClick: (User user) {
-                                      int i = searchIndex;
-                                      _controller.text = _controller.text
-                                          .replaceFirst(
-                                              new RegExp(r'@' + search),
-                                              "@${user.firstname}${user.lastname} ",
-                                              i - 1);
-                                      i += user.firstname.length +
-                                          user.lastname.length +
-                                          1;
-                                      _controller.selection = TextSelection(
-                                          baseOffset: i, extentOffset: i);
-                                      searchIndex = null;
-                                      mentionning = false;
-                                      searching = false;
-                                      if (!mentions.contains(user)) {
-                                        mentions.add(user);
-                                      }
-                                    },
-                                  ))
-                              : Container(
-                                  color: Colors.white,
-                                  child: HashtagList(
-                                    key: _searchingKey,
-                                    search: search,
-                                    renderAction: (Hashtag hashtag) =>
-                                        Container(),
-                                    onClick: (Hashtag hashtag) {
-                                      int i = searchIndex;
-                                      _controller.text = _controller.text
-                                          .replaceFirst(
-                                              new RegExp(r'#' + search),
-                                              "#${hashtag.name} ",
-                                              i - 1);
-                                      i += hashtag.name.length + 1;
-                                      _controller.selection = TextSelection(
-                                          baseOffset: i, extentOffset: i);
-                                      searchIndex = null;
-                                      mentionning = false;
-                                      searching = false;
-                                      if (!hashtags.contains(hashtag)) {
-                                        hashtags.add(hashtag);
-                                      }
-                                    },
-                                  )))
-                      : Container()
-                ])),
-        bottomNavigationBar: Container(
-            color: Colors.white,
-            child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Button(
-                      background: Style.mainColor.withAlpha(40),
-                      radius: BorderRadius.all(Radius.circular(25.0)),
-                      padding: EdgeInsets.only(right: 4),
-                      width: 50.0,
-                      child: Icon(
-                        TwicFont.dessin,
-                        size: 14.0,
-                        color: Style.mainColor,
-                      ),
-                      onPressed: () =>
-                          ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 480, maxWidth: 640)
-                              .then((File file) {
-                            if (null != file) {
-                              setState(() => uploading = true);
-                              upload_service
-                                  .upload(file: file)
-                                  .then((Map<String, dynamic> fileData) {
-                                setState(() {
-                                  uploading = false;
-                                  files = List.from(files)
-                                    ..add(TwicFile.fromJson(fileData));
-                                });
-                              });
-                            }
-                          }),
+                )
+              ],
+            ),
+            searching || mentionning
+                ? Positioned(
+                    top: 200.0 + line * 20.0,
+                    left: 40,
+                    right: 40,
+                    height: 500,
+                    child: mentionning
+                        ? Container(
+                            color: Colors.white,
+                            child: UserList(
+                              key: _searchingKey,
+                              search: search,
+                              renderAction: (User user) => Container(),
+                              onClick: (User user) {
+                                int i = searchIndex;
+                                _controller.text = _controller.text
+                                    .replaceFirst(
+                                        new RegExp(r'@' + search),
+                                        "@${user.firstname}${user.lastname} ",
+                                        i - 1);
+                                i += user.firstname.length +
+                                    user.lastname.length +
+                                    1;
+                                _controller.selection = TextSelection(
+                                    baseOffset: i, extentOffset: i);
+                                searchIndex = null;
+                                mentionning = false;
+                                searching = false;
+                                if (!mentions.contains(user)) {
+                                  mentions.add(user);
+                                }
+                              },
+                            ))
+                        : Container(
+                            color: Colors.white,
+                            child: HashtagList(
+                              key: _searchingKey,
+                              search: search,
+                              renderAction: (Hashtag hashtag) => Container(),
+                              onClick: (Hashtag hashtag) {
+                                int i = searchIndex;
+                                _controller.text = _controller.text
+                                    .replaceFirst(new RegExp(r'#' + search),
+                                        "#${hashtag.name} ", i - 1);
+                                i += hashtag.name.length + 1;
+                                _controller.selection = TextSelection(
+                                    baseOffset: i, extentOffset: i);
+                                searchIndex = null;
+                                mentionning = false;
+                                searching = false;
+                                if (!hashtags.contains(hashtag)) {
+                                  hashtags.add(hashtag);
+                                }
+                              },
+                            )))
+                : Container()
+          ]),
+      bottomBar: Container(
+          color: Colors.white,
+          child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Button(
+                    background: Style.mainColor.withAlpha(40),
+                    radius: BorderRadius.all(Radius.circular(25.0)),
+                    padding: EdgeInsets.only(right: 4),
+                    width: 50.0,
+                    child: Icon(
+                      TwicFont.dessin,
+                      size: 14.0,
+                      color: Style.mainColor,
                     ),
-                    Button(
-                      background: Style.genZYellow.withAlpha(40),
-                      radius: BorderRadius.all(Radius.circular(25.0)),
-                      padding: EdgeInsets.all(0),
-                      width: 50.0,
-                      child: Icon(
-                        Icons.play_arrow,
-                        size: 24.0,
-                        color: Style.genZYellow,
-                      ),
-                      onPressed: () =>
-                          ImagePicker.pickVideo(source: ImageSource.camera)
-                              .then((File file) {
-                            if (null != file) {
-                              setState(() => uploading = true);
-                              upload_service
-                                  .upload(file: file)
-                                  .then((Map<String, dynamic> fileData) {
-                                setState(() {
-                                  print(["UPLOADED", fileData]);
-                                  uploading = false;
-                                  files = List.from(files)
-                                    ..add(TwicFile.fromJson(fileData));
-                                });
+                    onPressed: () => ImagePicker.pickImage(
+                                source: ImageSource.camera,
+                                maxHeight: 480,
+                                maxWidth: 640)
+                            .then((File file) {
+                          if (null != file) {
+                            setState(() => uploading = true);
+                            upload_service
+                                .upload(file: file)
+                                .then((Map<String, dynamic> fileData) {
+                              setState(() {
+                                uploading = false;
+                                files = List.from(files)
+                                  ..add(TwicFile.fromJson(fileData));
                               });
-                            }
-                          }),
+                            });
+                          }
+                        }),
+                  ),
+                  Button(
+                    background: Style.genZYellow.withAlpha(40),
+                    radius: BorderRadius.all(Radius.circular(25.0)),
+                    padding: EdgeInsets.all(0),
+                    width: 50.0,
+                    child: Icon(
+                      Icons.play_arrow,
+                      size: 24.0,
+                      color: Style.genZYellow,
                     ),
-                    Button(
-                      background: Style.genZGreen.withAlpha(40),
-                      radius: BorderRadius.all(Radius.circular(25.0)),
-                      padding: EdgeInsets.all(0),
-                      width: 50.0,
-                      child: Icon(
-                        TwicFont.library_icon,
-                        size: 15.0,
-                        color: Style.genZGreen,
-                      ),
-                      onPressed: () =>
-                          FilePicker.getFilePath(type: FileType.ANY)
-                              .then((String path) {
-                            File file = File(path);
-                            if (null != file) {
-                              setState(() => uploading = true);
-                              upload_service
-                                  .upload(file: file)
-                                  .then((Map<String, dynamic> fileData) {
-                                setState(() {
-                                  uploading = false;
-                                  files = List.from(files)
-                                    ..add(TwicFile.fromJson(fileData));
-                                });
+                    onPressed: () =>
+                        ImagePicker.pickVideo(source: ImageSource.camera)
+                            .then((File file) {
+                          if (null != file) {
+                            setState(() => uploading = true);
+                            upload_service
+                                .upload(file: file)
+                                .then((Map<String, dynamic> fileData) {
+                              setState(() {
+                                print(["UPLOADED", fileData]);
+                                uploading = false;
+                                files = List.from(files)
+                                  ..add(TwicFile.fromJson(fileData));
                               });
-                            }
-                          }),
+                            });
+                          }
+                        }),
+                  ),
+                  Button(
+                    background: Style.genZGreen.withAlpha(40),
+                    radius: BorderRadius.all(Radius.circular(25.0)),
+                    padding: EdgeInsets.all(0),
+                    width: 50.0,
+                    child: Icon(
+                      TwicFont.library_icon,
+                      size: 15.0,
+                      color: Style.genZGreen,
                     ),
-                  ],
-                ))));
+                    onPressed: () => FilePicker.getFilePath(type: FileType.ANY)
+                            .then((String path) {
+                          File file = File(path);
+                          if (null != file) {
+                            setState(() => uploading = true);
+                            upload_service
+                                .upload(file: file)
+                                .then((Map<String, dynamic> fileData) {
+                              setState(() {
+                                uploading = false;
+                                files = List.from(files)
+                                  ..add(TwicFile.fromJson(fileData));
+                              });
+                            });
+                          }
+                        }),
+                  ),
+                ],
+              ))),
+    );
   }
 }

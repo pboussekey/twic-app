@@ -18,12 +18,12 @@ Post _$PostFromJson(Map<String, dynamic> json) {
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      nbLikes: json['nbLikes'] as int,
+      nbLikes: json['nbLikes'] as int ?? 0,
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
-      isLiked: json['isLiked'] as bool,
-      nbComments: json['nbComments'] as int)
+      isLiked: json['isLiked'] as bool ?? false,
+      nbComments: json['nbComments'] as int ?? 0)
     ..hashtags = (json['hashtags'] as List)
         ?.map((e) =>
             e == null ? null : Hashtag.fromJson(e as Map<String, dynamic>))

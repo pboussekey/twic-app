@@ -91,7 +91,7 @@ class _HashtagState extends State<HashtagWidget> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                              "${hashtag.nbfollowers} follower${hashtag.nbfollowers > 1 ? 's' : ''}",
+                              "${hashtag.nbFollowers} follower${hashtag.nbFollowers > 1 ? 's' : ''}",
                               style: Style.lightText),
                         ]),
                   ),
@@ -108,7 +108,7 @@ class _HashtagState extends State<HashtagWidget> {
                                   fontSize: 12.0,
                                   onPressed: () => setState(() {
                                         hashtag.followed = false;
-                                        hashtag.nbfollowers--;
+                                        hashtag.nbFollowers--;
                                         if (null != widget.onPressed) {
                                           widget.onPressed(false);
                                         }
@@ -125,7 +125,7 @@ class _HashtagState extends State<HashtagWidget> {
                                   fontSize: 12.0,
                                   onPressed: () => setState(() {
                                         hashtag.followed = true;
-                                        hashtag.nbfollowers++;
+                                        hashtag.nbFollowers++;
                                         if (null != widget.onPressed) {
                                           widget.onPressed(true);
                                         }

@@ -11,6 +11,7 @@ class MessageList extends StatefulWidget {
   List<Message> list;
   final Function fetch;
   final ScrollController scroll;
+
   MessageList({this.fetch, this.list, @required this.scroll});
 
   @override
@@ -52,12 +53,9 @@ class MessageListState extends State<MessageList> {
         child: InfiniteScroll(
           fetch: widget.fetch,
           reverse: true,
-
           shrink: false,
           builder: (BuildContext context, int index) => Padding(
-              padding: EdgeInsets.only(
-                  bottom: 10,
-                  top: index == 0 ? 10 : 0),
+              padding: EdgeInsets.only(bottom: 10, top: index == 0 ? 10 : 0),
               child: Column(
                 crossAxisAlignment:
                     widget.list[index].user.id == Session.instance.user.id
@@ -88,7 +86,6 @@ class MessageListState extends State<MessageList> {
                                 _renderDate(widget.list[index].createdAt),
                                 style: Style.lightText))
                         : Container(),
-
                   ]),
                   Row(children: [
                     widget.list[index].user.id == Session.instance.user.id
@@ -96,7 +93,7 @@ class MessageListState extends State<MessageList> {
                         : SizedBox(width: 25.0),
                     widget.list[index].user.id == Session.instance.user.id
                         ? Container(
-                      width: mediaSize.width * 0.55,
+                            width: mediaSize.width * 0.55,
                             padding: null != widget.list[index].text
                                 ? EdgeInsets.only(
                                     left: 10.0,
@@ -111,35 +108,53 @@ class MessageListState extends State<MessageList> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0))),
                             child: null != widget.list[index].text
-                                ? Text(widget.list[index].text,
-                                    style: Style.whiteText, textAlign: TextAlign.start,)
+                                ? Text(
+                                    widget.list[index].text,
+                                    style: Style.whiteText,
+                                    textAlign: TextAlign.start,
+                                  )
                                 : RoundPicture(
                                     picture:
                                         widget.list[index].attachment.href(),
                                   ),
                           )
                         : Container(
-                      width: mediaSize.width * 0.55,
+                            width: mediaSize.width * 0.55,
                             padding: EdgeInsets.only(
                                 left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0))),
-                            child: null != widget.list[index].text
-                                ? Text(widget.list[index].text,
-                                    style: Style.text)
-                                : RoundPicture(
-                                    picture:
-                                        widget.list[index].attachment.href(),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.list[index].user.firstname,
+                                    style: Style.get(
+                                        fontSize: 12, color: Style.genZOrange),
+                                    textAlign: TextAlign.start,
                                   ),
-                          )
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  null != widget.list[index].text
+                                      ? Text(
+                                          widget.list[index].text,
+                                          style: Style.text,
+                                          textAlign: TextAlign.start,
+                                        )
+                                      : RoundPicture(
+                                          picture: widget.list[index].attachment
+                                              .href(),
+                                        ),
+                                ]))
                   ]),
                 ],
               )),
           count: widget.list.length,
           scroll: _scrollController,
-          onScroll: (){
+          onScroll: () {
             _isBottom = _scrollController.position.pixels >
                 _scrollController.position.maxScrollExtent - 100;
           },

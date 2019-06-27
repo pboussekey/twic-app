@@ -10,6 +10,7 @@ import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/api/services/upload_service.dart' as upload_service;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 class CreateGroup extends StatefulWidget {
   final List<User> users;
@@ -38,79 +39,82 @@ class CreateGroupState extends State<CreateGroup> {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        body: RootPage(
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 80,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          IconButton(
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Style.lightGrey,
-                              ),
-                              onPressed: () => Navigator.pop(context)),
-                          SizedBox(
-                            width: 40,
+    return RootPage(
+        resizable: false,
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Style.lightGrey,
                           ),
-                          Text("New Group", style: Style.largeText),
-                          Conversations.create(
-                              onCompleted: (dynamic data) {
-                                creating = false;
-                                if (null != data) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              ConversationPage(
-                                                conversation:
-                                                    Conversation.fromJson(data[
-                                                        'addConversation']),
-                                              )));
-                                }
-                              },
-                              builder: (RunMutation create,
-                                      QueryResult result) =>
-                                  Padding(
-                                    child: !creating
-                                        ? Button(
-                                            text: 'Create',
-                                            height: 40,
-                                            width: 90,
-                                            disabled: name.isEmpty || uploading,
-                                            onPressed: () {
-                                              if (creating) return;
-                                              setState(() {
-                                                creating = true;
-                                              });
-                                              create({
-                                                'name': name,
-                                                'users': widget.users
-                                                    .map((User u) => u.id)
-                                                    .toList(),
-                                                'picture': picture?.toJson()
-                                              });
-                                            })
-                                        : Container(
-                                            width: 90,
-                                            alignment: Alignment(0, 0),
-                                            child: CircularProgressIndicator()),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
-                                  ))
-                        ],
+                          onPressed: () => Navigator.pop(context)),
+                      SizedBox(
+                        width: 40,
                       ),
-                    ),
-                    Input(
-                        controller: _nameController,
-                        before: !uploading
-                            ? Button(
+                      Text("New Group", style: Style.largeText),
+                      Conversations.create(
+                          onCompleted: (dynamic data) {
+                            creating = false;
+                            if (null != data) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConversationPage(
+                                            conversation: Conversation.fromJson(
+                                                data['addConversation']),
+                                          )));
+                            }
+                          },
+                          builder: (RunMutation create, QueryResult result) =>
+                              Padding(
+                                child: !creating
+                                    ? Button(
+                                        text: 'Create',
+                                        height: 40,
+                                        width: 90,
+                                        disabled: name.isEmpty || uploading,
+                                        onPressed: () {
+                                          if (creating) return;
+                                          setState(() {
+                                            creating = true;
+                                          });
+                                          create({
+                                            'name': name,
+                                            'users': widget.users
+                                                .map((User u) => u.id)
+                                                .toList(),
+                                            'picture': picture?.toJson()
+                                          });
+                                        })
+                                    : Container(
+                                        width: 90,
+                                        alignment: Alignment(0, 0),
+                                        child: CircularProgressIndicator()),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                              ))
+                    ],
+                  ),
+                ),
+                Input(
+                    controller: _nameController,
+                    height: 70,
+                    placeholder: "Type a group subject here",
+                    padding: 10,
+                    before: !uploading
+                        ? Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Button(
                                 height: 35,
                                 width: 35,
                                 padding: EdgeInsets.all(0),
@@ -142,38 +146,37 @@ class CreateGroupState extends State<CreateGroup> {
                                           });
                                         });
                                       }
-                                    }))
-                            : CircularProgressIndicator()),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      '${widget.users.length.toString()} participant${widget.users.length > 1 ? "s" : ""}',
-                      textAlign: TextAlign.start,
-                      style: Style.text,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        width: mediaSize.width,
-                        height: 70,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.users.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Column(children: <Widget>[
-                                    Avatar(
-                                      size: 50,
-                                      href: widget.users[index].avatar?.href(),
-                                    ),
-                                    Text(widget.users[index].firstname,
-                                        style: Style.smallLightText)
-                                  ])),
-                        ))
-                  ],
-                ))));
+                                    })))
+                        : CircularProgressIndicator()),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  '${widget.users.length.toString()} participant${widget.users.length > 1 ? "s" : ""}',
+                  textAlign: TextAlign.start,
+                  style: Style.text,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                    width: mediaSize.width,
+                    height: 70,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.users.length,
+                      itemBuilder: (BuildContext context, int index) => Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: Column(children: <Widget>[
+                            Avatar(
+                              size: 50,
+                              href: widget.users[index].avatar?.href(),
+                            ),
+                            Text(widget.users[index].firstname,
+                                style: Style.smallText)
+                          ])),
+                    ))
+              ],
+            )));
   }
 }

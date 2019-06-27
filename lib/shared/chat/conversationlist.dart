@@ -5,9 +5,12 @@ import 'package:twic_app/shared/form/form.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/style/style.dart';
 import 'package:intl/intl.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
+import 'package:twic_app/shared/components/round_picture.dart';
+import 'package:twic_app/api/services/cache.dart';
 
 class ConversationList extends StatelessWidget {
-  final List<Conversation> list;
+  final List<int> list;
 
   ConversationList({this.list});
 
@@ -33,66 +36,134 @@ class ConversationList extends StatelessWidget {
         child: ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (BuildContext context, int index) => Button(
-        background: Colors.white,
-          radius: BorderRadius.all(Radius.circular(0)),
-          onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      ConversationPage(conversation: list[index]))),
-          padding:
-              EdgeInsets.only(top: 5.0, bottom: 5.0, left: 20.0, right: 20.0),
-          height: 50,
-          width: mediaSize.width,
-          child: Flex(
-              direction: Axis.horizontal,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                list[index].users.length == 1 ? Avatar(
-                  href: list[index].users[0].avatar?.href(),
-                ) : (
-                    null != list[index].picture ? Avatar(href : list[index].picture.href()) :
-                    Container(
-                      alignment: Alignment(0, 0),
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color : Style.darkGrey,
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                        
+      itemBuilder: (BuildContext context, int index) {
+        Conversation conversation = AppCache.getModel(list[index]);
+        return null != conversation
+            ? Button(
+                background: Colors.white,
+                radius: BorderRadius.all(Radius.circular(0)),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            ConversationPage(conversation: conversation))),
+                padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+                height: 45,
+                width: mediaSize.width,
+                child: Flex(
+                    direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      null != conversation.users &&
+                              conversation.users.length == 1
+                          ? Avatar(
+                              href: conversation.users[0].avatar?.href(),
+                              size: 35,
+                            )
+                          : (null != conversation.picture ||
+                                  null != conversation.hashtag
+                              ? Stack(children: [
+                                  null != conversation.hashtag
+                                      ? RoundPicture(
+                                          width: 25,
+                                          padding: EdgeInsets.all(5),
+                                          height: 25,
+                                          background: Style.darkPurple,
+                                          picture: 'assets/logo-white.png',
+                                        )
+                                      : Avatar(
+                                          href: conversation.picture.href(),
+                                          size: 35),
+                                  null != conversation.hashtag
+                                      ? Container(
+                                          alignment: Alignment.bottomRight,
+                                          height: 35.0,
+                                          width: 35.0,
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      20.0),
+                                              child: Container(
+                                                child: Icon(
+                                                  TwicFont.hashtag,
+                                                  color: Colors.white,
+                                                  size: 10,
+                                                ),
+                                                color: Style.mainColor,
+                                                height: 20,
+                                                width: 20,
+                                                alignment: Alignment.center,
+                                              )),
+                                        )
+                                      : Container()
+                                ])
+                              : Container(
+                                  alignment: Alignment(0, 0),
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                      color: Style.darkGrey,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Text(
+                                      (conversation.users.length + 1)
+                                          .toString(),
+                                      style: Style.whiteTitle),
+                                )),
+                      SizedBox(
+                        width: 10,
                       ),
-                      child: Text((list[index].users.length + 1).toString(), style : Style.whiteTitle),
-                    )
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(top: 5.0),
-                        child : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                        "${list[index].users[0].firstname} ${list[index].users[0].lastname}",
-                        style: Style.text),
-                    null != list[index].last ? Text("${list[index].last}", style: Style.lightText) : Container(),
-                  ],
-                ))),
-                Container(
-                    height: 50.0,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        null != list[index].lastDate ? Text(
-                          "${_renderDate(list[index].lastDate)}",
-                          style: Style.lightText,
-                        ): Container()
-                      ],
-                    )),
-              ])),
+                      Expanded(
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                      null != conversation.name
+                                          ? conversation.name
+                                          : "${conversation.users[0].firstname} ${conversation.users[0].lastname}",
+                                      style: Style.get(
+                                          fontWeight: FontWeight.w600,
+                                          color: Style.darkGrey,
+                                          fontSize: 16)),
+                                  null != conversation.last
+                                      ? Text("${conversation.last}",
+                                          style: Style.smallGreyText)
+                                      : Container(),
+                                ],
+                              ))),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 5,),
+                          null != conversation.lastDate
+                              ? Text(
+                                  "${_renderDate(conversation.lastDate)}",
+                                  style: Style.lightText,
+                                )
+                              : Container(),
+                          SizedBox(height: 5,),
+                          conversation.unread > 0
+                              ? Container(
+                              height: 16,
+                              width: 16,
+                              alignment: Alignment(0, 0),
+                              decoration: BoxDecoration(
+                                  color: Style.mainColor,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(8))),
+                              child: Text(
+                                  conversation.unread.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: Style.smallWhiteText))
+                              : Container()
+                        ],
+                      ),
+                    ]))
+            : Container();
+      },
       itemCount: list.length,
     ));
   }

@@ -88,11 +88,11 @@ class Input extends StatelessWidget {
               : null,
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
-        child: null != before && null != after ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: null != before || null != after ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             before ?? Container(),
             SizedBox(
-              width: null != before ? 10 : 0,
+              width: null != before ? 5 : 0,
             ),
             Expanded(child: this.field),
             after ??

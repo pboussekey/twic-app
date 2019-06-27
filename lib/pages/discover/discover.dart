@@ -130,9 +130,12 @@ class DiscoverState extends State<Discover> {
                 filterTitle(currentTag),
                 style: Style.titleStyle,
                 textAlign: TextAlign.start,
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
             ])),
-        Container(key: listKey, height: size.height - 250, child: _renderList())
+        Container(key: listKey, height: size.height - 260, child: _renderList())
       ]);
     } else {
       return Tabs(
@@ -196,7 +199,7 @@ class DiscoverState extends State<Discover> {
                                 Text(
                                   'Filter',
                                   style: widget.filters.length == 0
-                                      ? Style.smallText
+                                      ? Style.smallLightText
                                       : Style.smallWhiteText,
                                 )
                               ],
@@ -460,54 +463,52 @@ class DiscoverState extends State<Discover> {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: RootPage(
-            scrollable: false,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                  padding: EdgeInsets.only(
-                      left: 0, right: 20.0, top: 20, bottom: 10),
-                  child: Row(children: [
-                    SizedBox(
-                      width: currentMode == DiscoverModes.Discover ? 20 : 10,
+    return RootPage(
+      resizable: false,
+      scrollable: false,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Container(
+            padding: EdgeInsets.only(left: 0, right: 20.0, top: 20, bottom: 10),
+            child: Row(children: [
+              SizedBox(
+                width: currentMode == DiscoverModes.Discover ? 20 : 10,
+              ),
+              currentMode == DiscoverModes.Discover
+                  ? Container()
+                  : Button(
+                      padding: EdgeInsets.all(5),
+                      height: 40,
+                      width: 40,
+                      background: Colors.transparent,
+                      child: Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                        color: Style.lightGrey,
+                      ),
+                      onPressed: () => setState(() {
+                            currentMode = DiscoverModes.Discover;
+                            controller.text = '';
+                          }),
                     ),
-                    currentMode == DiscoverModes.Discover
-                        ? Container()
-                        : Button(
-                            padding: EdgeInsets.all(5),
-                            height: 40,
-                            width: 40,
-                            background: Colors.transparent,
-                            child: Icon(
-                              Icons.arrow_back,
-                              size: 30,
-                              color: Style.lightGrey,
-                            ),
-                            onPressed: () => setState(() {
-                                  currentMode = DiscoverModes.Discover;
-                                  controller.text = '';
-                                }),
-                          ),
-                    Container(
-                        width: currentMode == DiscoverModes.Discover
-                            ? mediaSize.width - 40
-                            : mediaSize.width - 70,
-                        child: Input(
-                          color: Style.veryLightGrey,
-                          shadow: false,
-                          icon: TwicFont.search_3,
-                          iconSize: 16,
-                          controller: controller,
-                          placeholder: "Search",
-                        ))
-                  ])),
-              _renderContent(mediaSize)
+              Container(
+                  width: currentMode == DiscoverModes.Discover
+                      ? mediaSize.width - 40
+                      : mediaSize.width - 70,
+                  child: Input(
+                    color: Style.veryLightGrey,
+                    shadow: false,
+                    icon: TwicFont.search_3,
+                    iconSize: 16,
+                    controller: controller,
+                    placeholder: "Search",
+                  ))
             ])),
-        bottomNavigationBar: BottomNav(
-          current: ButtonEnum.Discover,
-          refresh: setState,
-        ));
+        _renderContent(mediaSize)
+      ]),
+      bottomBar: BottomNav(
+        current: ButtonEnum.Discover,
+        refresh: setState,
+      ),
+    );
   }
 }

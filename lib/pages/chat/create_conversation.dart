@@ -11,6 +11,7 @@ import 'package:twic_app/pages/chat/conversation.dart';
 import 'package:twic_app/pages/chat/create_group.dart';
 import 'package:twic_app/shared/users/avatar.dart';
 import 'package:twic_app/shared/hashtags/hashtaglist.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 enum CreateState { OneToOne, Group, Channel }
 
@@ -25,12 +26,16 @@ class CreateConversationState extends State<CreateConversation> {
   CreateState state = CreateState.OneToOne;
   List<User> users = [];
   bool loading = false;
+  UniqueKey _peopleKey = UniqueKey();
+  UniqueKey _channelKey = UniqueKey();
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(() => setState(() {
           search = _searchController.text;
+          _peopleKey = UniqueKey();
+          _channelKey = UniqueKey();
         }));
   }
 
@@ -83,7 +88,7 @@ class CreateConversationState extends State<CreateConversation> {
         break;
       case CreateState.Channel:
         return Container(
-            height: 50,
+            height: 60,
             alignment: Alignment(0, 0),
             child: Text(
               'Join the channel below, or create a new one',
@@ -104,18 +109,18 @@ class CreateConversationState extends State<CreateConversation> {
                   Container(
                     height: 32,
                     width: 32,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    child: Icon(
+                      TwicFont.group,
                       color: Style.mainColor,
+                      size: 32,
                     ),
-                    child: Icon(Icons.people, color: Colors.white),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   Text('New group',
                       style: Style.get(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           fontSize: 15,
                           color: Style.darkGrey))
                 ],
@@ -135,14 +140,18 @@ class CreateConversationState extends State<CreateConversation> {
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                       color: Style.mainColor,
                     ),
-                    child: Text('#', style: Style.whiteTitle),
+                    child: Icon(
+                      TwicFont.hashtag,
+                      color: Colors.white,
+                      size: 16,
+                    ),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   Text('New channel',
                       style: Style.get(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           fontSize: 15,
                           color: Style.darkGrey))
                 ],
@@ -158,7 +167,7 @@ class CreateConversationState extends State<CreateConversation> {
     switch (state) {
       case CreateState.Channel:
         return Container(
-            height: mediaSize.height - 150,
+            height: mediaSize.height - 206,
             child: Conversations.join(
                 onCompleted: (dynamic data) {
                   loading = false;
@@ -173,70 +182,74 @@ class CreateConversationState extends State<CreateConversation> {
                                 )));
                   }
                 },
-                builder: (RunMutation join, QueryResult result) =>
-                    HashtagList(
-                              search: search,
-                                renderAction: (Hashtag hashtag) => Container(),
-                                onClick: (Hashtag hashtag) {
-                                  if (loading) return;
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  join({'hashtag_id': hashtag.id});
-                                },
-                    placeholder: Conversations.createChannel(
-                        onCompleted: (dynamic data) {
-                          loading = false;
-                          if (null != data) {
-                            Conversation conversation =
-                            Conversation.fromJson(
-                                data['createChannel']);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        ConversationPage(
-                                            conversation:
-                                            conversation)));
-                          }
-                        },
-                        builder:
-                            (RunMutation create, QueryResult result) =>
-                            Padding(
-                              child: !loading
-                                  ? Button(
-                                  text: 'Create Channel',
-                                  height: 40,
-                                  width: 150,
-                                  onPressed: () {
-                                    if (loading) return;
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    create({'name': search});
-                                  })
-                                  : Container(
-                                  width: 90,
-                                  alignment: Alignment(0, 0),
-                                  child:
-                                  CircularProgressIndicator()),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                            )),)
-                            ));
+                builder: (RunMutation join, QueryResult result) => Container(
+                    height: mediaSize.height - 194,
+                    child: HashtagList(
+                      key: _channelKey,
+                      search: search,
+                      renderAction: (Hashtag hashtag) => Container(),
+                      onClick: (Hashtag hashtag) {
+                        if (loading) return;
+                        setState(() {
+                          loading = true;
+                        });
+                        join({'hashtag_id': hashtag.id});
+                      },
+                      placeholder: Conversations.createChannel(
+                          onCompleted: (dynamic data) {
+                            loading = false;
+                            if (null != data) {
+                              Conversation conversation =
+                                  Conversation.fromJson(data['createChannel']);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ConversationPage(
+                                              conversation: conversation)));
+                            }
+                          },
+                          builder: (RunMutation create, QueryResult result) =>
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("#${search}", style: Style.titleStyle),
+                                    Padding(
+                                      child: !loading
+                                          ? Button(
+                                              text: 'Create now',
+                                              height: 40,
+                                              width: 150,
+                                              onPressed: () {
+                                                if (loading) return;
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                create({'name': search});
+                                              })
+                                          : Container(
+                                              width: 90,
+                                              alignment: Alignment(0, 0),
+                                              child:
+                                                  CircularProgressIndicator()),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                    ),
+                                    SizedBox(
+                                      height: 200,
+                                    )
+                                  ])),
+                    ))));
         break;
       default:
         return Container(
-            height: mediaSize.height - 150,
+            height: mediaSize.height - 198,
             child: UserList(
                 search: search,
+                key: _peopleKey,
                 renderAction: (User user) => CreateState.OneToOne == state
                     ? Container()
-                    : CheckBox(
-                        onPressed: () => setState(() => users.contains(user)
-                            ? users.remove(user)
-                            : users.add(user)),
-                        isChecked: users.contains(user)),
+                    : CheckBox(isChecked: users.contains(user)),
                 onClick: CreateState.OneToOne == state
                     ? (User user) => Navigator.push(
                         context,
@@ -245,7 +258,9 @@ class CreateConversationState extends State<CreateConversation> {
                                   user: user,
                                 ))).then(
                         (dynamic value) => Navigator.pop(context))
-                    : null));
+                    : (User user) => setState(() => users.contains(user)
+                        ? users.remove(user)
+                        : users.add(user))));
         break;
     }
   }
@@ -253,7 +268,9 @@ class CreateConversationState extends State<CreateConversation> {
   @override
   Widget build(BuildContext context) {
     Size mediaSize = MediaQuery.of(context).size;
-    return Scaffold(
+    return RootPage(
+        resizable: false,
+        scrollable: false,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(60.0),
             child: AppBar(
@@ -287,8 +304,7 @@ class CreateConversationState extends State<CreateConversation> {
                     : Container()
               ],
             )),
-        body: RootPage(
-            child: Column(
+        child: Column(
           children: [
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -307,8 +323,11 @@ class CreateConversationState extends State<CreateConversation> {
                 decoration: BoxDecoration(
                     border: Border(bottom: BorderSide(color: Style.border))),
                 child: _renderActions(mediaSize)),
+            SizedBox(
+              height: 10,
+            ),
             _renderList(mediaSize)
           ],
-        )));
+        ));
   }
 }

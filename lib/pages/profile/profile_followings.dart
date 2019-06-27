@@ -23,40 +23,39 @@ class ProfileFollowings extends StatefulWidget {
 class ProfileFollowingsState extends State<ProfileFollowings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return RootPage(
         appBar: AppBar(
           backgroundColor: Colors.white,
           centerTitle: true,
           title: Text('Followings', style: Style.titleStyle),
           elevation: 0,
         ),
-        body: RootPage(
-            child: Tabs(
-                tabs: [
-                  Text(
-                    'People',
-                    textAlign: TextAlign.center,
-                  ),
-                  Text('Channels', textAlign: TextAlign.center),
-                ],
-                widget: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Input(
-                    height: 50.0,
-                    color: Style.veryLightGrey,
-                    shadow: false,
-                    icon: Icons.search,
-                    placeholder: "Search",
-                  ),
-                ),
-                tabsContent: [
-                  UserList(
-                    following: true,
-                    user_id: widget.user_id,
-                  ),
-                  HashtagList(user_id: widget.user_id)
-                ])),
-        bottomNavigationBar: BottomNav(
+        child: Tabs(
+            tabs: [
+              Text(
+                'People',
+                textAlign: TextAlign.center,
+              ),
+              Text('Channels', textAlign: TextAlign.center),
+            ],
+            widget: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Input(
+                height: 50.0,
+                color: Style.veryLightGrey,
+                shadow: false,
+                icon: Icons.search,
+                placeholder: "Search",
+              ),
+            ),
+            tabsContent: [
+              UserList(
+                following: true,
+                user_id: widget.user_id,
+              ),
+              HashtagList(user_id: widget.user_id)
+            ]),
+        bottomBar: BottomNav(
           current: ButtonEnum.Profile,
           refresh: setState,
         ));

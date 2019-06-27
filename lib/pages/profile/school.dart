@@ -23,7 +23,6 @@ class SchoolProfile extends StatefulWidget {
 }
 
 class SchoolProfileState extends State<SchoolProfile> {
-
   @override
   void initState() {
     super.initState();
@@ -31,20 +30,20 @@ class SchoolProfileState extends State<SchoolProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: RootPage(
-            scrollable: false,
-            child: Schools.get(
-                id: widget.school_id,
-                builder: (School school) => SchoolProfileContent(
-                      logo: school?.logo?.href(),
-                      name: school.name,
-                      id: school.id,
-                    ))),
-        bottomNavigationBar: BottomNav(
-          current: ButtonEnum.Profile,
-          refresh: setState,
-        ));
+    return RootPage(
+      scrollable: false,
+      child: Schools.get(
+          id: widget.school_id,
+          builder: (School school) => SchoolProfileContent(
+                logo: school?.logo?.href(),
+                name: school.name,
+                id: school.id,
+              )),
+      bottomBar: BottomNav(
+        current: ButtonEnum.Profile,
+        refresh: setState,
+      ),
+    );
   }
 }
 

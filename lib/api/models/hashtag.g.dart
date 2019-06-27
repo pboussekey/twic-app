@@ -10,7 +10,7 @@ Hashtag _$HashtagFromJson(Map<String, dynamic> json) {
   return Hashtag(
       id: json['id'] == null ? null : AbstractModel.parseId(json['id']),
       name: json['name'] as String,
-      nbfollowers: json['nbfollowers'] as int,
+      nbFollowers: json['nbFollowers'] as int,
       followed: json['followed'] as bool,
       picture: json['picture'] == null
           ? null
@@ -20,7 +20,7 @@ Hashtag _$HashtagFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$HashtagToJson(Hashtag instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'nbfollowers': instance.nbfollowers,
+      'nbFollowers': instance.nbFollowers,
       'followed': instance.followed,
       'picture': instance.picture?.toJson()
     };

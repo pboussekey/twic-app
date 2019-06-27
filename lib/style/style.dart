@@ -50,7 +50,7 @@ abstract class Style {
   TextStyle(fontSize: 12.0, color: Style.lightGrey, fontFamily: 'Rubik');
 
   static TextStyle smallGreyText =
-  TextStyle(fontSize: 11.0, color: Style.grey, fontFamily: 'Rubik');
+  TextStyle(fontSize: 12.0, color: Style.grey, fontFamily: 'Rubik');
   static TextStyle smallLightText =
   TextStyle(fontSize: 11.0, color: Style.lightGrey, fontFamily: 'Rubik');
   static TextStyle verySmallWhiteText =

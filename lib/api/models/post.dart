@@ -11,8 +11,11 @@ class Post extends AbstractModel {
   String content;
   String privacy;
   DateTime createdAt;
+  @JsonKey(defaultValue : 0)
   int nbComments;
+  @JsonKey(defaultValue : 0)
   int nbLikes;
+  @JsonKey(defaultValue : false)
   bool isLiked;
   User user;
   List<TwicFile> files = [];

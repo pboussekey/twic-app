@@ -41,7 +41,9 @@ class Textarea extends StatelessWidget {
             key: key,
             decoration: InputDecoration(
               border: InputBorder.none,
+              counterText: (maxLength - controller.text.length).toString()
             ),
+
             maxLines: null,
             controller: controller,
             onSaved: onSaved,

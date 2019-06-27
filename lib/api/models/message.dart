@@ -9,6 +9,7 @@ part 'message.g.dart';
 @JsonSerializable()
 class Message extends AbstractModel {
   String text;
+  String type;
   User user;
   DateTime createdAt;
   TwicFile attachment;

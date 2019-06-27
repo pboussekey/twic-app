@@ -56,4 +56,6 @@ class TwicFont {
   static const IconData chat_empty =
       const IconData(0xf0e6, fontFamily: _kFontFam);
   static const IconData sliders = const IconData(0xf1de, fontFamily: _kFontFam);
+
+  static const IconData group = const IconData(0xe813, fontFamily: _kFontFam);
 }

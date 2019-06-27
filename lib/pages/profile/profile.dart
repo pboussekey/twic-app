@@ -29,32 +29,31 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: RootPage(
-            child: Users.get(
-                id: widget.user_id,
-                builder: (User user) => ProfileContent(
-                      avatar: user.avatar?.href(),
-                      description: user.description,
-                      firstname: user.firstname,
-                      lastname: user.lastname,
-                      major: user.major?.name,
-                      minor: user.minor?.name,
-                      nb_followers: user.nbFollowers,
-                      nb_followings: user.nbFollowings,
-                      nb_posts: user.nbPosts,
-                      classYear: user.classYear,
-                      school: user.school?.name,
-                      university: user.institution.name,
-                      university_id: user.institution.id,
-                      university_logo:
-                      user.institution.logo.href(),
-                      user_id: user.id,
-                    ))),
-        bottomNavigationBar: BottomNav(
-          current: ButtonEnum.Profile,
-          refresh: setState,
-        ));
+    return RootPage(
+      child: Users.get(
+          id: widget.user_id,
+          builder: (User user) => ProfileContent(
+                avatar: user.avatar?.href(),
+                description: user.description,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                major: user.major?.name,
+                minor: user.minor?.name,
+                nb_followers: user.nbFollowers,
+                nb_followings: user.nbFollowings,
+                nb_posts: user.nbPosts,
+                classYear: user.classYear,
+                school: user.school?.name,
+                university: user.institution.name,
+                university_id: user.institution.id,
+                university_logo: user.institution.logo.href(),
+                user_id: user.id,
+              )),
+      bottomBar: BottomNav(
+        current: ButtonEnum.Profile,
+        refresh: setState,
+      ),
+    );
   }
 }
 
@@ -91,7 +90,7 @@ class ProfileContent extends StatefulWidget {
       this.classYear,
       this.university,
       this.university_logo,
-        this.university_id,
+      this.university_id,
       this.user_id});
 
   @override
@@ -164,42 +163,50 @@ class ProfileContentState extends State<ProfileContent> {
                 Button(
                     background: Colors.transparent,
                     padding: EdgeInsets.all(0),
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SchoolProfile(school_id: widget.university_id,) )),
-                    child : Row(children: [
-                  null != widget.university_logo
-                      ? Container(
-                          padding: EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4)),
-                              border: Border.all(
-                                  width: 1,
-                                  color: Style.border,
-                                  style: BorderStyle.solid)),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.university_logo,
-                            height: 12.0,
-                            width: 12.0,
-                            fit: BoxFit.fill,
-                            fadeOutDuration: new Duration(seconds: 1),
-                            fadeInDuration: new Duration(seconds: 1),
-                          ))
-                      : Container(),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Text(widget.university, style: Style.hashtagStyle),
-                      null != widget.school && widget.school != widget.university
-                          ? Text(widget.school, style: Style.smallGreyText)
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SchoolProfile(
+                                  school_id: widget.university_id,
+                                ))),
+                    child: Row(children: [
+                      null != widget.university_logo
+                          ? Container(
+                              padding: EdgeInsets.all(4.0),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Style.border,
+                                      style: BorderStyle.solid)),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.university_logo,
+                                height: 12.0,
+                                width: 12.0,
+                                fit: BoxFit.fill,
+                                fadeOutDuration: new Duration(seconds: 1),
+                                fadeInDuration: new Duration(seconds: 1),
+                              ))
                           : Container(),
-                    ],
-                  )
-                ])),
-                null != widget.major || null != widget.minor ? SizedBox(
-                  height: 10.0,
-                ) : Container(),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Text(widget.university, style: Style.hashtagStyle),
+                          null != widget.school &&
+                                  widget.school != widget.university
+                              ? Text(widget.school, style: Style.smallGreyText)
+                              : Container(),
+                        ],
+                      )
+                    ])),
+                null != widget.major || null != widget.minor
+                    ? SizedBox(
+                        height: 10.0,
+                      )
+                    : Container(),
                 Row(children: [
                   null != widget.major
                       ? Container(
@@ -235,9 +242,11 @@ class ProfileContentState extends State<ProfileContent> {
               ],
             ),
           ),
-          null != widget.major || null != widget.minor ? SizedBox(
-            height: 10.0,
-          ) : Container(),
+          null != widget.major || null != widget.minor
+              ? SizedBox(
+                  height: 10.0,
+                )
+              : Container(),
           null != widget.description
               ? Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -370,7 +379,12 @@ class ProfileContentState extends State<ProfileContent> {
           placeholder: Button(
             background: Colors.transparent,
             width: mediaSize.width,
-            onPressed: () => widget.user_id == Session.instance.user.id ? Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => CreatePost())) : null,
+            onPressed: () => widget.user_id == Session.instance.user.id
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => CreatePost()))
+                : null,
             padding: EdgeInsets.all(0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

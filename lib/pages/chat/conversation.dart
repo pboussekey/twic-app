@@ -11,6 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:twic_app/api/session.dart';
+import 'package:twic_app/api/services/conversations.dart';
+import 'dart:math';
 
 class ConversationPage extends StatefulWidget {
   Conversation conversation;
@@ -31,17 +33,16 @@ class ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: RootPage(
-            child: null != widget.conversation
-                ? _ConversationPage(
-                    conversation: widget.conversation,
-                    messages: _messages,
-                    onNewMessage: onNewMessage,
-                  )
-                : _ConversationPage(
-                    user: widget.user,
-                  )));
+    return RootPage(
+        child: null != widget.conversation
+            ? _ConversationPage(
+                conversation: widget.conversation,
+                messages: _messages,
+                onNewMessage: onNewMessage,
+              )
+            : _ConversationPage(
+                user: widget.user,
+              ));
   }
 }
 
@@ -53,7 +54,11 @@ class _ConversationPage extends StatefulWidget {
   ScrollController scroll;
 
   _ConversationPage(
-      {this.conversation, this.messages, this.onNewMessage, this.user, this.scroll});
+      {this.conversation,
+      this.messages,
+      this.onNewMessage,
+      this.user,
+      this.scroll});
 
   @override
   State<StatefulWidget> createState() => null != conversation
@@ -87,7 +92,7 @@ class _ConversationPageState extends State<_ConversationPage> {
   }
 
   String _printUsers(List<User> users) {
-    if (users.length == 1) {
+    if (null != users && users.length == 1) {
       return "${users[0].firstname} ${users[0].lastname}";
     }
     String name = "You";
@@ -285,13 +290,20 @@ class _ConversationPageState extends State<_ConversationPage> {
   @override
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
+    Messages.unread[widget.conversation.type] = max(
+        Messages.unread[widget.conversation.type] - widget.conversation.unread,
+        0);
+    widget.conversation.unread = 0;
+    Conversations.read(widget.conversation.id);
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       SizedBox(
         height: 20,
       ),
       Padding(
           padding: EdgeInsets.only(right: 20),
-          child: widget.conversation?.users?.length == 1
+          child: widget.conversation?.users?.length == 1 &&
+                  null == widget.conversation.hashtag &&
+                  null == widget.conversation.name
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,7 +350,10 @@ class _ConversationPageState extends State<_ConversationPage> {
                           child: Column(
                             children: <Widget>[
                               Flexible(
-                                  child: Text(widget.conversation.name,
+                                  child: Text(
+                                      null != widget.conversation.hashtag
+                                          ? "#${widget.conversation.hashtag.name}"
+                                          : widget.conversation.name,
                                       overflow: TextOverflow.ellipsis,
                                       style: Style.largeText)),
                               SizedBox(
@@ -346,26 +361,33 @@ class _ConversationPageState extends State<_ConversationPage> {
                               ),
                               Flexible(
                                   child: Text(
-                                      _printUsers(widget.conversation.users),
+                                      null != widget.conversation.users
+                                          ? _printUsers(
+                                              widget.conversation.users)
+                                          : "${widget.conversation.hashtag.nbFollowers} people",
                                       overflow: TextOverflow.ellipsis,
                                       style: Style.text)),
                             ],
                           )),
                       (null != widget.conversation.picture
-                          ? Avatar(href: widget.conversation.picture.href())
-                          : Container(
-                              width: 50,
-                              height: 50,
-                              alignment: Alignment(0, 0),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(25)),
-                                  color: Style.darkGrey),
-                              child: Text(
-                                  (widget.conversation.users.length + 1)
-                                      .toString(),
-                                  style: Style.whiteTitle),
-                            )),
+                          ? Avatar(href: widget.conversation.picture.href(), size: 40,)
+                          : null != widget.conversation.users
+                              ? Container(
+                                  width: 40,
+                                  height: 40,
+                                  alignment: Alignment(0, 0),
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(25)),
+                                      color: Style.darkGrey),
+                                  child: Text(
+                                      (widget.conversation.users.length + 1)
+                                          .toString(),
+                                      style: Style.whiteTitle),
+                                )
+                              : SizedBox(
+                                  width: 40,
+                                )),
                     ])),
       SizedBox(
         height: 10.0,
@@ -377,7 +399,7 @@ class _ConversationPageState extends State<_ConversationPage> {
             color: Style.greyBackground,
             padding:
                 EdgeInsets.only(left: 20.0, right: 20.0, top: 0, bottom: 70),
-            child: Messages.onMessage(
+            child: Messages.onConversationMessage(
                 conversation_id: widget.conversation.id,
                 builder: ({
                   dynamic error,
@@ -385,12 +407,18 @@ class _ConversationPageState extends State<_ConversationPage> {
                   dynamic payload,
                 }) {
                   if (null != payload && !loading) {
-                    Message message = Message.fromJson(payload['onMessage']);
+                    Message message =
+                        Message.fromJson(payload['onConversationMessage']);
                     if (message.user.id != Session.instance.user.id) {
                       widget.onNewMessage(message);
+                      Conversations.read(widget.conversation.id);
                     }
                   }
-                  return MessageList(list: widget.messages, fetch: _fetch, scroll: widget.scroll,);
+                  return MessageList(
+                    list: widget.messages,
+                    fetch: _fetch,
+                    scroll: widget.scroll,
+                  );
                 })),
         _renderMessageInput(context, mediaSize)
       ])

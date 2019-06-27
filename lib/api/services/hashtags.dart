@@ -22,7 +22,7 @@ class Hashtags extends ApiService<Hashtag> {
                 id
                 name
                 followed
-                nbfollowers
+                nbFollowers
             """,
             map: (dynamic json) => Hashtag.fromJson(json));
 
@@ -33,7 +33,7 @@ class Hashtags extends ApiService<Hashtag> {
                 id
                 name
                 followed
-                nbfollowers
+                nbFollowers
               }
           }
           """,

@@ -18,8 +18,11 @@ Future<ValueNotifier<GraphQLClient>> getClient() async {
   final AuthLink authLink = AuthLink(getToken: () => 'Bearer ${session.token}');
 
   final WebSocketLink websocketLink = WebSocketLink(
-    url: '${DotEnv().env['SUBSCRIPTION_URL']}/api',
-    config: SocketClientConfig(autoReconnect: true, inactivityTimeout: null),
+    url: '${DotEnv().env['SUBSCRIPTION_URL']}/subscriptions',
+    config: SocketClientConfig(
+        autoReconnect: true,
+        initPayload: {'Authorization': session.token},
+        inactivityTimeout: null),
   );
 
   final Link link = authLink.concat(httpLink as Link).concat(websocketLink);
@@ -39,14 +42,13 @@ Future<dynamic> execute(String query, Map<String, dynamic> params,
       return client.value.query(QueryOptions(
           document: query,
           variables: params,
-          fetchPolicy: cache ? FetchPolicy.cacheFirst : FetchPolicy.cacheAndNetwork));
+          fetchPolicy:
+              cache ? FetchPolicy.cacheFirst : FetchPolicy.cacheAndNetwork));
     },
   ).then((QueryResult result) => result.data);
 }
 
-Widget query<T>(
-    String query,
-    Map<String, dynamic> params,
+Widget query<T>(String query, Map<String, dynamic> params,
     {Function onComplete,
     bool cache: true,
     Widget whileLoading,

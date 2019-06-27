@@ -59,35 +59,34 @@ class PostView extends StatefulWidget {
 class PostViewState extends State<PostView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.more_horiz,
-                color: Style.lightGrey,
-              ),
-            )
-          ],
-        ),
-        body: RootPage(
-          backgroundColor: Style.lightGrey.withAlpha(25),
-          scrollable: false,
-          child: Posts.create(
-              builder: (RunMutation runMutation, QueryResult result) =>
-                  Posts.getList(
-                    parent_id: widget.post.id,
-                    builder: (List<Post> comments) {
-                      return _PostView(
-                        post: widget.post,
-                        comments: comments,
-                        addComment: runMutation,
-                      );
-                    },
-                  )),
-        ));
+    return RootPage(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.more_horiz,
+              color: Style.lightGrey,
+            ),
+          )
+        ],
+      ),
+      backgroundColor: Style.lightGrey.withAlpha(25),
+      scrollable: false,
+      child: Posts.create(
+          builder: (RunMutation runMutation, QueryResult result) =>
+              Posts.getList(
+                parent_id: widget.post.id,
+                builder: (List<Post> comments) {
+                  return _PostView(
+                    post: widget.post,
+                    comments: comments,
+                    addComment: runMutation,
+                  );
+                },
+              )),
+    );
   }
 }
 
@@ -150,9 +149,9 @@ class _PostViewState extends State<_PostView> {
                           ),
                     )
                   : Container(),
-                  SizedBox(
-                    height: 10,
-                  ),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Flex(
@@ -295,11 +294,11 @@ class _PostViewState extends State<_PostView> {
                   'parent_id': widget.post.id,
                   'content': content,
                 });
-                  widget.post.nbComments++;
-                  comments.add(Post(
-                      content: content,
-                      createdAt: DateTime.now(),
-                      user: Session.instance.user));
+                widget.post.nbComments++;
+                comments.add(Post(
+                    content: content,
+                    createdAt: DateTime.now(),
+                    user: Session.instance.user));
                 setState(() {});
                 content = "";
                 controller.text = "";

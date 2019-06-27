@@ -8,11 +8,13 @@ part 'hashtag.g.dart';
 @JsonSerializable()
 class Hashtag extends AbstractModel {
   String name;
-  int nbfollowers;
+  @JsonKey(defaultValue : 0)
+  int nbFollowers;
+  @JsonKey(defaultValue : false)
   bool followed;
   TwicFile picture;
 
-  Hashtag({id, this.name, this.nbfollowers, this.followed, this.picture}) : super(id : id);
+  Hashtag({id, this.name, this.nbFollowers, this.followed, this.picture}) : super(id : id);
 
   factory Hashtag.fromJson(Map<String, dynamic> json) => _$HashtagFromJson(json);
   Map<String, dynamic> toJson() => _$HashtagToJson(this);

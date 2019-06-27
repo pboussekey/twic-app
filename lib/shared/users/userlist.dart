@@ -108,19 +108,19 @@ class UserListState extends State<UserList> {
             background: Colors.transparent,
             radius: BorderRadius.all(Radius.circular(0)),
             padding: EdgeInsets.only(
-                top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
-            height: 51,
+                top: 7.0, bottom: 7, left: 20.0, right: 20.0),
+            height: 50,
             onPressed: () =>
                 null != widget.onClick ? widget.onClick(user) : null,
             child: Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Avatar(
                       href: user?.avatar?.href(),
-                      size: 30.0,
+                      size: 35.0,
                     ),
                     SizedBox(
                       width: 10,
@@ -130,9 +130,9 @@ class UserListState extends State<UserList> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text("${user.firstname} ${user.lastname}",
-                            style: Style.text),
+                            style: Style.get(fontSize: 14, fontWeight: FontWeight.w600, color: Style.darkGrey )),
                         Text("${user.institution.name}",
-                            style: Style.lightText),
+                            style: Style.smallGreyText),
                       ],
                     ))
                   ]),

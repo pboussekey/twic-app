@@ -26,7 +26,6 @@ class HashtagProfile extends StatefulWidget {
 }
 
 class HashtagProfileState extends State<HashtagProfile> {
-
   @override
   void initState() {
     super.initState();
@@ -34,17 +33,15 @@ class HashtagProfileState extends State<HashtagProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RootPage(
-          child: Hashtags.get(
-              id: widget.hashtag_id,
-              builder: (Hashtag hashtag) => HashtagProfileContent(
-                    hashtag_id: hashtag.id,
-                    name: hashtag.name,
-                    followed: hashtag.followed,
-                    nb_followers: hashtag.nbfollowers,
-                  ))),
-    );
+    return RootPage(
+        child: Hashtags.get(
+            id: widget.hashtag_id,
+            builder: (Hashtag hashtag) => HashtagProfileContent(
+                  hashtag_id: hashtag.id,
+                  name: hashtag.name,
+                  followed: hashtag.followed,
+                  nb_followers: hashtag.nbFollowers,
+                )));
   }
 }
 
@@ -55,10 +52,7 @@ class HashtagProfileContent extends StatefulWidget {
   bool followed;
 
   HashtagProfileContent(
-      {this.hashtag_id,
-      this.name,
-      this.nb_followers,
-      this.followed});
+      {this.hashtag_id, this.name, this.nb_followers, this.followed});
 
   @override
   State<HashtagProfileContent> createState() => HashtagProfileContentState();
