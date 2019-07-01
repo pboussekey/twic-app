@@ -9,7 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:twic_app/shared/locale/translations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:twic_app/api/services/api_rest.dart' as api;
+import 'package:twic_app/api/services/api_rest.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 
@@ -43,6 +43,11 @@ class TwicApp extends StatefulWidget {
 class _TwicApp extends State<TwicApp> {
   Timer timer;
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Future<void> checkRequest(BuildContext context) async {
     if (null != timer) {
       timer.cancel();
@@ -53,17 +58,10 @@ class _TwicApp extends State<TwicApp> {
       time++;
       String requestToken = await Session.getRequest();
       if (time == 1 && null != requestToken && requestToken.isNotEmpty) {
-        Map<String, dynamic> data = await api
-            .request(cmd: 'login', params: {'request_token': requestToken});
-        if (null != data['token'] || null != Session.instance) {
-          timer.cancel();
-          Session.setRequest('');
-          await Session.set(data);
-          restartApp();
-        }
+        ApiRest.login(requestToken: requestToken, onLogged: restartApp);
       }
       _retrieveDynamicLink(context);
-      if(time == 5){
+      if (time == 5) {
         time = 0;
       }
     });
@@ -103,15 +101,8 @@ class _TwicApp extends State<TwicApp> {
         await FirebaseDynamicLinks.instance.retrieveDynamicLink();
     final Uri deepLink = data?.link;
     if (null != deepLink && null != deepLink.queryParameters['token']) {
-      final Map<String, dynamic> data = await api.request(
-          cmd: 'login',
-          params: {'magic_token': deepLink.queryParameters['token']});
-
-      if (null != data['token']) {
-        await Session.set(data);
-        Session.setRequest('');
-        restartApp();
-      }
+      ApiRest.login(
+          magicToken: deepLink.queryParameters['token'], onLogged: restartApp);
     }
   }
 

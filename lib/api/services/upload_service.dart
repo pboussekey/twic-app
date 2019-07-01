@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 
 import 'package:twic_app/api/session.dart';
-import 'package:twic_app/api/services/api_rest.dart' as api;
+import 'package:twic_app/api/services/api_rest.dart';
 
 String url = "https://us-central1-twicapp-5d95f.cloudfunctions.net/upload";
 
@@ -35,7 +35,7 @@ Future<Map<String, dynamic>> upload({ File file, bool stopOnFailure : false }) a
       print(["WRONG STATUS", data["error"]]);
       if(!stopOnFailure && data["error"]["code"] == "auth/invalid-custom-token"){
         print("GET NEW TOKEN");
-        Map<String, dynamic> data = await api.request(cmd: 'fbtoken');
+        Map<String, dynamic> data = await ApiRest.request(cmd: 'fbtoken');
         session.fbtoken = data['fbtoken'];
         Session.set(session.toJson());
 

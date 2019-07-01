@@ -29,6 +29,9 @@ class OnboardingDetails extends OnboardingContentState {
                       (Session.instance.user.major != null &&
                           Session.instance.user.minor != null));
             }) {
+    this.onNext = () {
+      Session.update({'isActive': true});
+    };
     this.child = Fields.getList(
         school_id: Session.instance.user.institution.id,
         builder: (List<Field> fields) {
@@ -76,128 +79,135 @@ class _OnboardingDetails extends StatefulWidget {
 class _OnboardingDetailsState extends State<_OnboardingDetails> {
   GlobalKey majorKey;
   GlobalKey minorKey;
-  TextEditingController _majorController =
-      TextEditingController(text: Session.instance.user?.major?.name);
-  TextEditingController _minorController =
-      TextEditingController(text: Session.instance.user?.minor?.name);
+  TextEditingController _majorController;
+  TextEditingController _minorController;
 
   @override
   void initState() {
     super.initState();
     majorKey = Autocomplete.getKey();
     minorKey = Autocomplete.getKey();
+    _majorController =
+        TextEditingController(text: Session.instance.user?.major?.name);
+    _minorController =
+        TextEditingController(text: Session.instance.user?.minor?.name);
   }
 
   @override
-  Widget build(BuildContext context) => Column(children: [
-        'UNDERGRADUATE' == Session.instance.user.degree
-            ? Autocomplete(
-                fieldKey: majorKey,
-                controller: _majorController,
-                placeholder: 'What is your major ?',
-                suggestions: widget.fields,
-                minLength: 0,
-                itemSubmitted: (AutoCompleteElement item) {
-                  setState(() {
-                    _majorController.text = item.name;
-                    Session.update({
-                      'major': (item.data as Field).toJson(),
-                      'isActive': widget.isCompleted()
-                    });
-                    widget.update({
-                      'major_id': item.data.id,
-                      'isActive': widget.isCompleted()
-                    });
+  Widget build(BuildContext context) {
+    Size mediaSize = MediaQuery.of(context).size;
+    return Column(children: [
+      'UNDERGRADUATE' == Session.instance.user.degree
+          ? Autocomplete(
+              fieldKey: majorKey,
+              controller: _majorController,
+              placeholder: 'What is your major ?',
+              suggestions: widget.fields,
+              minLength: 0,
+              itemSubmitted: (AutoCompleteElement item) {
+                setState(() {
+                  _majorController.text = item.name;
+                  Session.update({
+                    'major': (item.data as Field).toJson(),
+                    'isActive': widget.isCompleted()
                   });
-                },
-                textChanged: (String text) {
-                  if (null != Session.instance.user.major) {
-                    this.setState(() {
-                      Session.update({'major': null});
-                    });
-                  }
-                },
-              )
-            : Container(),
-        'UNDERGRADUATE' == Session.instance.user.degree
-            ? SizedBox(height: 10)
-            : Container(),
-        'UNDERGRADUATE' == Session.instance.user.degree
-            ? Autocomplete(
-                fieldKey: minorKey,
-                controller: _minorController,
-                placeholder: 'What is your minor ?',
-                suggestions: widget.fields,
-                minLength: 0,
-                itemSubmitted: (AutoCompleteElement item) {
-                  setState(() {
-                    _minorController.text = item.name;
-                    Session.update({
-                      'minor': (item.data as Field).toJson(),
-                      'isActive': widget.isCompleted()
-                    });
-                    widget.update({
-                      'minor_id': item.data.id,
-                      'isActive': widget.isCompleted()
-                    });
+                  widget.update({
+                    'major_id': item.data.id,
+                    'isActive': widget.isCompleted()
                   });
-                },
-                textChanged: (String text) {
-                  if (null != Session.instance.user.minor) {
-                    this.setState(() {
-                      Session.update({'minor': null});
+                });
+              },
+              textChanged: (String text) {
+                if (null != Session.instance.user.major) {
+                  this.setState(() {
+                    Session.update({'major': null});
+                  });
+                }
+              },
+            )
+          : Container(),
+      'UNDERGRADUATE' == Session.instance.user.degree
+          ? SizedBox(height: 10)
+          : Container(),
+      'UNDERGRADUATE' == Session.instance.user.degree
+          ? Autocomplete(
+              fieldKey: minorKey,
+              controller: _minorController,
+              placeholder: 'What is your minor ?',
+              suggestions: widget.fields,
+              minLength: 0,
+              itemSubmitted: (AutoCompleteElement item) {
+                setState(() {
+                  _minorController.text = item.name;
+                  Session.update({
+                    'minor': (item.data as Field).toJson(),
+                    'isActive': widget.isCompleted()
+                  });
+                  widget.update({
+                    'minor_id': item.data.id,
+                    'isActive': widget.isCompleted()
+                  });
+                });
+              },
+              textChanged: (String text) {
+                if (null != Session.instance.user.minor) {
+                  this.setState(() {
+                    Session.update({'minor': null});
+                  });
+                }
+              },
+            )
+          : Container(),
+      'UNDERGRADUATE' == Session.instance.user.degree
+          ? SizedBox(height: 10)
+          : Container(),
+      widget.schools.length > 0
+          ? Dropdown<School>(
+              value: Session.instance.user.school,
+              size: mediaSize.width - 40,
+              hint: Text('UNDERGRADUATE' == Session.instance.user.degree
+                  ? "Residential college"
+                  : "Graduate school"),
+              items: widget.schools
+                  .map<DropdownMenuItem<School>>(
+                      (School value) => DropdownMenuItem(
+                            child: Container(
+                                width: mediaSize.width - 40,
+                                child: Row(
+                                  children: <Widget>[
+                                    null != value.logo
+                                        ? CachedNetworkImage(
+                                            imageUrl: value.logo?.href(),
+                                            height: 12.0,
+                                            width: 12.0,
+                                            fit: BoxFit.fill,
+                                            fadeOutDuration:
+                                                new Duration(seconds: 1),
+                                            fadeInDuration:
+                                                new Duration(seconds: 1),
+                                          )
+                                        : Container(),
+                                    null != value.logo
+                                        ? SizedBox(
+                                            width: 5,
+                                          )
+                                        : Container(),
+                                    Text(value.name)
+                                  ],
+                                )),
+                            value: value,
+                          ))
+                  .toList(),
+              onChanged: (School s) => widget.updateState(() {
+                    Session.update({
+                      'school': s.toJson(),
+                      'isActive': widget.isCompleted()
                     });
-                  }
-                },
-              )
-            : Container(),
-        'UNDERGRADUATE' == Session.instance.user.degree
-            ? SizedBox(height: 10)
-            : Container(),
-        widget.schools.length > 0
-            ? Dropdown<School>(
-                value: Session.instance.user.school,
-                size: double.maxFinite,
-                hint: Text('UNDERGRADUATE' == Session.instance.user.degree
-                    ? "Residential college"
-                    : "Graduate school"),
-                items: widget.schools
-                    .map<DropdownMenuItem<School>>((School value) =>
-                        DropdownMenuItem(
-                          child: Row(
-                            children: <Widget>[
-                              null != value.logo
-                                  ? CachedNetworkImage(
-                                      imageUrl: value.logo?.href(),
-                                      height: 12.0,
-                                      width: 12.0,
-                                      fit: BoxFit.fill,
-                                      fadeOutDuration: new Duration(seconds: 1),
-                                      fadeInDuration: new Duration(seconds: 1),
-                                    )
-                                  : Container(),
-                              null != value.logo
-                                  ? SizedBox(
-                                      width: 5,
-                                    )
-                                  : Container(),
-                              Text(value.name)
-                            ],
-                          ),
-                          value: value,
-                        ))
-                    .toList(),
-                onChanged: (School s) => widget.updateState(() {
-                      Session.update({
-                        'school': s.toJson(),
-                        'isActive': widget.isCompleted()
-                      });
-                      widget.update({
-                        'school_id': s.id,
-                        'isActive': widget.isCompleted()
-                      });
-                    }),
-              )
-            : Container(),
-      ]);
+                    widget.update(
+                        {'school_id': s.id, 'isActive': widget.isCompleted()});
+                  }),
+            )
+          : Container(),
+    ]);
+  }
 }

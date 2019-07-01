@@ -135,9 +135,9 @@ class Messages {
             }
           """, {}, onComplete: (dynamic data) {
         unread = {
-          'MESSAGE': data['unread']['MESSAGE'] as int,
-          'GROUP': data['unread']['GROUP'] as int,
-          'CHANNEL': data['unread']['CHANNEL'] as int
+          'MESSAGE': data['unread']['MESSAGE'] as int ?? 0,
+          'GROUP': data['unread']['GROUP'] as int ?? 0,
+          'CHANNEL': data['unread']['CHANNEL'] as int ?? 0
         };
       print([data, unread]);
       return unread;

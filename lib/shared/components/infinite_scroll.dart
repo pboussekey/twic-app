@@ -73,6 +73,7 @@ class InfiniteScrollState extends State<InfiniteScroll> {
         physics: widget.shrink
             ? NeverScrollableScrollPhysics()
             : PageScrollPhysics(),
+        reverse: widget.reverse,
         itemBuilder: widget.builder,
         itemCount: widget.count,
       );

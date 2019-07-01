@@ -11,6 +11,7 @@ class OnboardingContentState extends State<OnboardingContent> {
   Function render;
   Widget child;
   final Function isCompleted;
+  Function onNext;
   final OnboardingState previous;
   final OnboardingState next;
   final EdgeInsetsGeometry padding;
@@ -21,6 +22,7 @@ class OnboardingContentState extends State<OnboardingContent> {
       this.text,
       this.isCompleted,
       this.padding,
+      this.onNext,
       this.render,
       this.child,
       this.previous,
@@ -53,6 +55,9 @@ class OnboardingContentState extends State<OnboardingContent> {
                         height: 40,
                         disabled: !isCompleted(),
                         onPressed: () {
+                          if(null != onNext){
+                            onNext();
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -83,7 +88,14 @@ class OnboardingContentState extends State<OnboardingContent> {
               SizedBox(
                 height: 20,
               ),
-              Padding(child: child ?? render((){ print("ALLO?!");if(this.mounted){setState((){});}}), padding: padding ?? EdgeInsets.all(20.0)),
+              Padding(
+                  child: child ??
+                      render(() {
+                        if (this.mounted) {
+                          setState(() {});
+                        }
+                      }),
+                  padding: padding ?? EdgeInsets.all(20.0)),
             ],
           ),
         ));

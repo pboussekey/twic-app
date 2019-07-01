@@ -28,7 +28,7 @@ class ConversationPageState extends State<ConversationPage> {
   List<Message> _messages = [];
 
   void onNewMessage(Message message) {
-    _messages.add(message);
+    _messages.insert(0,message);
   }
 
   @override
@@ -83,7 +83,7 @@ class _ConversationPageState extends State<_ConversationPage> {
             offset: widget.messages.length,
             count: 20)
         .then((List<Message> _messages) {
-      widget.messages.insertAll(0, _messages.reversed.toList());
+      widget.messages.insertAll(0, _messages.toList());
       finished = _messages.length == 0;
       loading = false;
       setState(() {});
@@ -397,6 +397,7 @@ class _ConversationPageState extends State<_ConversationPage> {
             width: mediaSize.width,
             height: mediaSize.height - 130,
             color: Style.greyBackground,
+            alignment: Alignment(0, 1),
             padding:
                 EdgeInsets.only(left: 20.0, right: 20.0, top: 0, bottom: 70),
             child: Messages.onConversationMessage(

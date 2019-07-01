@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:twic_app/api/services/api_rest.dart' as api;
+import 'package:twic_app/api/services/api_rest.dart';
 import 'package:twic_app/api/session.dart';
 
 import 'package:twic_app/style/style.dart';
@@ -132,7 +132,7 @@ class JoinFormState extends State<JoinForm> {
                                 'email': this.email.trim()
                               };
 
-                              final Map<String, dynamic> data = await api
+                              final Map<String, dynamic> data = await ApiRest
                                   .request(cmd: 'requestLink', params: params);
                               setState(() => _isLoading = false);
                               notifier.alert(

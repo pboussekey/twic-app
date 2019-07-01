@@ -7,20 +7,22 @@ export 'package:twic_app/api/services/api_graphql.dart';
 
 class Users extends ApiService<User> {
   Users()
-      : super(methodName: 'users', queryParams: {
-          "follower": "Boolean",
-          "following": "Boolean",
-          "search": "String",
-          "school_id": "ID",
-          "university_id": "ID",
-          "user_id": "ID",
-          "major_id": "ID",
-          "minor_id": "ID",
-          "hashtag_id": "ID",
-          "class_year": "Int",
-          "id": "[ID]"
-        },
-    queryFields : """
+      : super(
+            methodName: 'users',
+            queryParams: {
+              "follower": "Boolean",
+              "following": "Boolean",
+              "search": "String",
+              "school_id": "ID",
+              "university_id": "ID",
+              "user_id": "ID",
+              "major_id": "ID",
+              "minor_id": "ID",
+              "hashtag_id": "ID",
+              "class_year": "Int",
+              "id": "[ID]"
+            },
+            queryFields: """
                 id
                 firstname
                 lastname
@@ -35,11 +37,10 @@ class Users extends ApiService<User> {
                 isActive
                 degree
             """,
-    map : (dynamic json) => User.fromJson(json)
-  );
+            map: (dynamic json) => User.fromJson(json));
 
   static Widget get({int id, Function builder}) {
-    return api.query<User>( """      
+    return api.query<User>("""      
          query user(\$id : ID) {
           user(id : \$id){
                 id
@@ -59,8 +60,7 @@ class Users extends ApiService<User> {
                 university{ id name logo { name bucketname token } }
               }
           }
-          """,
-        {'id': id},
+          """, {'id': id},
         onComplete: (dynamic data) => User.fromJson(data['user']),
         builder: builder);
   }
@@ -108,7 +108,6 @@ class Users extends ApiService<User> {
           """, builder: builder, update: update, onCompleted: onCompleted);
   }
 
-
   static api.Mutation follow({Function builder}) {
     return api.mutation(query: """      
          mutation followUser(\$user_id: ID!) {
@@ -117,6 +116,16 @@ class Users extends ApiService<User> {
               }
           }
           """, builder: builder);
+  }
+
+  static Future<bool> registerFcmToken(String token) {
+    api.execute("""      
+         mutation registerFcmToken(\$token: String!) {
+          registerFcmToken(token: \$token){
+                success
+              }
+          }
+          """, {"token": token}).then((dynamic data) => true);
   }
 
   static api.Mutation unfollow({Function builder}) {

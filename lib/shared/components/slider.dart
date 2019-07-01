@@ -53,7 +53,7 @@ class FileSliderState extends State<FileSlider>
     files.forEach((file) => pictures.add(widget.builder(file)));
     return files.length == 1
         ? ConstrainedBox(
-            constraints: new BoxConstraints(
+            constraints:  BoxConstraints(
               minHeight: width * 0.6,
               minWidth: width,
               maxHeight: width * 0.6,
@@ -66,7 +66,7 @@ class FileSliderState extends State<FileSlider>
             child: Stack(children: [
               Column(children: <Widget>[
                 ConstrainedBox(
-                  constraints: new BoxConstraints(
+                  constraints:  BoxConstraints(
                     minHeight: width * 0.6,
                     minWidth: width,
                     maxHeight: width * 0.6,

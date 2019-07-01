@@ -188,7 +188,7 @@ class PostWidgetState extends State<PostWidget>
                                       videoPlayerController:
                                           VideoPlayerController.network(
                                               f.href()),
-                                      autoPlay: true,
+                                      autoPlay: false,
                                       looping: true,
                                       placeholder: null != f.preview
                                           ?

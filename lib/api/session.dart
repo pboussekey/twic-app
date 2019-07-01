@@ -7,7 +7,7 @@ import 'dart:async';
 class Session{
 
   static Session instance;
-  static void set(Map<String, dynamic> data) async{
+  static Future<void> set(Map<String, dynamic> data) async{
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('session', json.encode(data));
       Session.instance = await Session.init();
