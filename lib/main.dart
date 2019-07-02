@@ -16,7 +16,7 @@ import 'dart:async';
 bool firstTime = false;
 
 void main() async {
-  await DotEnv().load('conf.env');
+  await DotEnv().load('dev.env');
   await Session.init();
 
   await translations.init();

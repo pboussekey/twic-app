@@ -41,7 +41,6 @@ class ForgotPasswordFormState extends State<ForgotPasswordForm> {
   bool _isLoading = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey fieldKey = Autocomplete.getKey();
 
   @override
   Widget build(BuildContext context) {

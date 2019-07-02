@@ -53,7 +53,6 @@ class _OnboardingInterestsContent extends StatefulWidget {
 
 class _OnboardingInterestsContentState
     extends State<_OnboardingInterestsContent> {
-  GlobalKey hashtagKey;
   String search = "";
   UniqueKey _key = UniqueKey();
   TextEditingController _controller = TextEditingController();
@@ -100,7 +99,6 @@ class _OnboardingInterestsContentState
               Hashtags.follow(
                   builder: (RunMutation runMutation, QueryResult result) =>
                       Autocomplete(
-                        fieldKey: hashtagKey,
                         placeholder: 'Search for a #Channel',
                         suggestions: hashtags
                             .map((Hashtag hashtag) => AutoCompleteElement(

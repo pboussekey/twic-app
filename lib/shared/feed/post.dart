@@ -29,7 +29,6 @@ class PostWidget extends StatefulWidget {
 
 class PostWidgetState extends State<PostWidget>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
   int index = 0;
   bool dragging = false;
 
@@ -37,8 +36,6 @@ class PostWidgetState extends State<PostWidget>
   void initState() {
     super.initState();
 
-    _controller = new TabController(
-        length: widget.post.files.length, vsync: this, initialIndex: 0);
   }
 
   RichText postText(String content) {

@@ -28,7 +28,9 @@ class ConversationPageState extends State<ConversationPage> {
   List<Message> _messages = [];
 
   void onNewMessage(Message message) {
-    _messages.insert(0,message);
+    setState((){
+      _messages.insert(0,message);
+    });
   }
 
   @override
@@ -42,6 +44,7 @@ class ConversationPageState extends State<ConversationPage> {
               )
             : _ConversationPage(
                 user: widget.user,
+                onNewMessage: onNewMessage,
               ));
   }
 }
@@ -263,6 +266,7 @@ class _ConversationPageState extends State<_ConversationPage> {
     send(params);
     params["user"] = Session.instance.user.toJson();
     params["createdAt"] = DateTime.now().toIso8601String();
+    print(["SENDING", params]);
     widget.onNewMessage(Message.fromJson(params));
   }
 
@@ -291,7 +295,7 @@ class _ConversationPageState extends State<_ConversationPage> {
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
     Messages.unread[widget.conversation.type] = max(
-        Messages.unread[widget.conversation.type] - widget.conversation.unread,
+        Messages.unread[widget.conversation.type] ?? 0 - widget.conversation.unread ?? 0,
         0);
     widget.conversation.unread = 0;
     Conversations.read(widget.conversation.id);

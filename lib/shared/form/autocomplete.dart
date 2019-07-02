@@ -28,13 +28,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
   final int minLength;
   final int suggestionsAmount;
   final double size;
-  final GlobalKey<AutoCompleteTextFieldState<T>> fieldKey;
-
   final TextEditingController controller;
-
-  static GlobalKey<AutoCompleteTextFieldState<AutoCompleteElement>> getKey() {
-    return GlobalKey<AutoCompleteTextFieldState<AutoCompleteElement>>();
-  }
 
   Autocomplete(
       {this.placeholder,
@@ -49,7 +43,6 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
       this.suggestions,
       this.controller,
       this.validator,
-      this.fieldKey,
       this.suggestionsAmount,
       this.minLength,
       this.size,
@@ -57,6 +50,7 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(["CONTROLLER", controller, controller.text]);
     final Size mediaSize = MediaQuery.of(context).size;
     AutoCompleteTextField<T> autocomplete = AutoCompleteTextField<T>(
       clearOnSubmit: true,
@@ -95,7 +89,6 @@ class Autocomplete<T extends AutoCompleteElement> extends StatelessWidget {
       itemSubmitted: itemSubmitted,
       textChanged: textChanged,
       keyboardType: TextInputType.text,
-      key: fieldKey,
       suggestions: suggestions,
       controller: controller,
       suggestionsAmount: this.suggestions.length,

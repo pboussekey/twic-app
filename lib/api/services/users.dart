@@ -20,6 +20,8 @@ class Users extends ApiService<User> {
               "minor_id": "ID",
               "hashtag_id": "ID",
               "class_year": "Int",
+              "page": "Int",
+              "count": "Int",
               "id": "[ID]"
             },
             queryFields: """

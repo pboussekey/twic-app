@@ -42,7 +42,6 @@ class JoinFormState extends State<JoinForm> {
   bool _requested = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey fieldKey = Autocomplete.getKey();
 
 
   @override

@@ -76,37 +76,46 @@ class _OnboardingDetails extends StatefulWidget {
   State<StatefulWidget> createState() => _OnboardingDetailsState();
 }
 
+TextEditingController _majorController =
+    TextEditingController(text: Session.instance.user?.major?.name);
+TextEditingController _minorController =
+    TextEditingController(text: Session.instance.user?.minor?.name);
+
 class _OnboardingDetailsState extends State<_OnboardingDetails> {
-  GlobalKey majorKey;
-  GlobalKey minorKey;
-  TextEditingController _majorController;
-  TextEditingController _minorController;
+  Key majorKey = UniqueKey();
+  Key minorKey = UniqueKey();
 
   @override
   void initState() {
     super.initState();
-    majorKey = Autocomplete.getKey();
-    minorKey = Autocomplete.getKey();
-    _majorController =
-        TextEditingController(text: Session.instance.user?.major?.name);
-    _minorController =
-        TextEditingController(text: Session.instance.user?.minor?.name);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(["???", _majorController.text]);
+    if(null != Session.instance.user.major){
+      _majorController.text = Session.instance.user.major.name;
+    }
+    if(null != Session.instance.user.minor){
+      _minorController.text = Session.instance.user.minor.name;
+    }
     Size mediaSize = MediaQuery.of(context).size;
     return Column(children: [
       'UNDERGRADUATE' == Session.instance.user.degree
           ? Autocomplete(
-              fieldKey: majorKey,
               controller: _majorController,
               placeholder: 'What is your major ?',
               suggestions: widget.fields,
               minLength: 0,
               itemSubmitted: (AutoCompleteElement item) {
-                setState(() {
+                widget.updateState(() {
                   _majorController.text = item.name;
+                  print([
+                    "SUBMITTED",
+                    item.name,
+                    item.data.toJson(),
+                    _majorController.text
+                  ]);
                   Session.update({
                     'major': (item.data as Field).toJson(),
                     'isActive': widget.isCompleted()
@@ -131,13 +140,12 @@ class _OnboardingDetailsState extends State<_OnboardingDetails> {
           : Container(),
       'UNDERGRADUATE' == Session.instance.user.degree
           ? Autocomplete(
-              fieldKey: minorKey,
               controller: _minorController,
               placeholder: 'What is your minor ?',
               suggestions: widget.fields,
               minLength: 0,
               itemSubmitted: (AutoCompleteElement item) {
-                setState(() {
+                widget.updateState(() {
                   _minorController.text = item.name;
                   Session.update({
                     'minor': (item.data as Field).toJson(),

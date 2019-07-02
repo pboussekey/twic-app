@@ -81,6 +81,7 @@ class UserCardListState extends State<UserCardList> {
       users.addAll(_users);
       loading = false;
       setState(() {});
+      print([users.length, page]);
     });
     page++;
   }
