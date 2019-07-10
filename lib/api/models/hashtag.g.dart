@@ -10,8 +10,8 @@ Hashtag _$HashtagFromJson(Map<String, dynamic> json) {
   return Hashtag(
       id: json['id'] == null ? null : AbstractModel.parseId(json['id']),
       name: json['name'] as String,
-      nbFollowers: json['nbFollowers'] as int,
-      followed: json['followed'] as bool,
+      nbFollowers: json['nbFollowers'] as int ?? 0,
+      followed: json['followed'] as bool ?? false,
       picture: json['picture'] == null
           ? null
           : TwicFile.fromJson(json['picture'] as Map<String, dynamic>));

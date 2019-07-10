@@ -33,9 +33,7 @@ class HomeState extends State<Home> {
               preferredSize: Size.fromHeight(1.0)),
         ),
         child: Feed(),
-        bottomBar: BottomNav(
-          current: ButtonEnum.Home,
-          refresh: setState,
-        ));
+        navBar: ButtonEnum.Home,
+    );
   }
 }

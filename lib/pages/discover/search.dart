@@ -180,9 +180,6 @@ class SearchState extends State<SearchPage> {
                             ));
                       })))
         ]),
-        bottomBar: BottomNav(
-          current: ButtonEnum.Discover,
-          refresh: setState,
-        ));
+      navBar:  ButtonEnum.Discover,);
   }
 }

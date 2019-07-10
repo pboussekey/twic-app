@@ -25,43 +25,27 @@ class ConversationPage extends StatefulWidget {
 }
 
 class ConversationPageState extends State<ConversationPage> {
-  List<Message> _messages = [];
-
-  void onNewMessage(Message message) {
-    setState((){
-      _messages.insert(0,message);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    Messages.refresh = (){ if(mounted)setState((){});};
     return RootPage(
         child: null != widget.conversation
             ? _ConversationPage(
                 conversation: widget.conversation,
-                messages: _messages,
-                onNewMessage: onNewMessage,
               )
-            : _ConversationPage(
-                user: widget.user,
-                onNewMessage: onNewMessage,
-              ));
+            : _ConversationPage(user: widget.user));
   }
 }
 
 class _ConversationPage extends StatefulWidget {
   final Conversation conversation;
   final User user;
-  List<Message> messages;
-  final Function onNewMessage;
-  ScrollController scroll;
 
-  _ConversationPage(
-      {this.conversation,
-      this.messages,
-      this.onNewMessage,
-      this.user,
-      this.scroll});
+  _ConversationPage({this.conversation, this.user}) {
+    if (null == Messages.messages[conversation.id]) {
+      Messages.messages[conversation.id] = [];
+    }
+  }
 
   @override
   State<StatefulWidget> createState() => null != conversation
@@ -83,10 +67,10 @@ class _ConversationPageState extends State<_ConversationPage> {
     loading = true;
     Messages.load(
             conversation_id: widget.conversation.id,
-            offset: widget.messages.length,
+            offset: Messages.messages[widget.conversation.id].length,
             count: 20)
         .then((List<Message> _messages) {
-      widget.messages.insertAll(0, _messages.toList());
+      Messages.messages[widget.conversation.id].addAll(_messages.toList());
       finished = _messages.length == 0;
       loading = false;
       setState(() {});
@@ -267,7 +251,9 @@ class _ConversationPageState extends State<_ConversationPage> {
     params["user"] = Session.instance.user.toJson();
     params["createdAt"] = DateTime.now().toIso8601String();
     print(["SENDING", params]);
-    widget.onNewMessage(Message.fromJson(params));
+    Messages.messages[widget.conversation.id]
+        .insert(0, Message.fromJson(params));
+    setState(() {});
   }
 
   void onFileUpload(File file, Function send) {
@@ -295,7 +281,7 @@ class _ConversationPageState extends State<_ConversationPage> {
   Widget build(BuildContext context) {
     final Size mediaSize = MediaQuery.of(context).size;
     Messages.unread[widget.conversation.type] = max(
-        Messages.unread[widget.conversation.type] ?? 0 - widget.conversation.unread ?? 0,
+        Messages.unread[widget.conversation.type] - widget.conversation.unread,
         0);
     widget.conversation.unread = 0;
     Conversations.read(widget.conversation.id);
@@ -374,7 +360,10 @@ class _ConversationPageState extends State<_ConversationPage> {
                             ],
                           )),
                       (null != widget.conversation.picture
-                          ? Avatar(href: widget.conversation.picture.href(), size: 40,)
+                          ? Avatar(
+                              href: widget.conversation.picture.href(),
+                              size: 40,
+                            )
                           : null != widget.conversation.users
                               ? Container(
                                   width: 40,
@@ -402,29 +391,11 @@ class _ConversationPageState extends State<_ConversationPage> {
             height: mediaSize.height - 130,
             color: Style.greyBackground,
             alignment: Alignment(0, 1),
-            padding:
-                EdgeInsets.only(left: 20.0, right: 20.0, top: 0, bottom: 70),
-            child: Messages.onConversationMessage(
-                conversation_id: widget.conversation.id,
-                builder: ({
-                  dynamic error,
-                  bool loading,
-                  dynamic payload,
-                }) {
-                  if (null != payload && !loading) {
-                    Message message =
-                        Message.fromJson(payload['onConversationMessage']);
-                    if (message.user.id != Session.instance.user.id) {
-                      widget.onNewMessage(message);
-                      Conversations.read(widget.conversation.id);
-                    }
-                  }
-                  return MessageList(
-                    list: widget.messages,
-                    fetch: _fetch,
-                    scroll: widget.scroll,
-                  );
-                })),
+            padding: EdgeInsets.only(top: 0, bottom: 70),
+            child: MessageList(
+              list: Messages.messages[widget.conversation.id],
+              fetch: _fetch,
+            )),
         _renderMessageInput(context, mediaSize)
       ])
     ]);

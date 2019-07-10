@@ -35,7 +35,7 @@ abstract class ApiService<T extends AbstractModel> {
   List<int> requesting = [];
   List<Function> _onCompleted = [];
 
-  Future<List> _load(
+  Future<List> load(
       {Map<String, dynamic> params,
       bool loadModel = false,
       bool cache = true,
@@ -85,7 +85,7 @@ abstract class ApiService<T extends AbstractModel> {
           .where((int id) => null == list[id] && -1 == requesting.indexOf(id))
           .toList();
       if (toLoad.length > 0) {
-        _load(
+        load(
             params: Map.fromIterable(queryParams.keys,
                 key: (dynamic key) => key.toString(),
                 value: (dynamic key) => key.toString() == 'id' ? toLoad : null),
@@ -101,7 +101,7 @@ abstract class ApiService<T extends AbstractModel> {
       {Map<String, dynamic> params,
       bool cache = true,
       Function onCompleted}) async {
-    return _load(
+    return load(
             params: Map.fromIterable(queryParams.keys,
                 key: (dynamic key) => key.toString(),
                 value: (dynamic key) => params[key.toString()]),
@@ -112,7 +112,7 @@ abstract class ApiService<T extends AbstractModel> {
       List<int> toLoad = ids.where((int id) => null == list[id]).toList();
       if (toLoad.length > 0) {
         print(["LOAD", toLoad]);
-        _load(
+        load(
             params: Map.fromIterable(queryParams.keys,
                 key: (dynamic key) => key.toString(),
                 value: (dynamic key) => key.toString() == 'id' ? toLoad : null),

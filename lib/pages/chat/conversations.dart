@@ -184,10 +184,7 @@ class ConversationsState extends State<ConversationsList> {
                           ConversationList(list: conversations)),
                 ])
           ]),
-      bottomBar: BottomNav(
-        current: ButtonEnum.Chat,
-        refresh: setState,
-      ),
+      navBar:  ButtonEnum.Chat
     );
   }
 }

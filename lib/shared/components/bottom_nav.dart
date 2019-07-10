@@ -4,7 +4,6 @@ import 'package:twic_app/pages/home.dart';
 import 'package:twic_app/pages/profile/profile.dart';
 import 'package:twic_app/pages/discover/discover.dart';
 import 'package:twic_app/pages/chat/conversations.dart';
-import 'package:twic_app/api/services/messages.dart';
 import 'package:twic_app/pages/posts/create.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/shared/users/avatar.dart';
@@ -17,12 +16,17 @@ class BottomNav extends StatelessWidget {
   final ButtonEnum current;
   final Function refresh;
   final Map<String, dynamic> filters = {};
+  final bool hasUnread;
+  final bool hasNtf;
 
-  BottomNav({this.current, this.refresh});
+
+  BottomNav({this.current, this.refresh, this.hasUnread = false, this.hasNtf = false, Key key}) : super(key : key){
+    print(["ALLO?!",hasUnread,key]);
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(Messages.unread);
+    print(["BUILD NAV", hasUnread, key]);
     return Container(
         color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 24),
@@ -118,9 +122,7 @@ class BottomNav extends StatelessWidget {
                                   ConversationsList()));
                 },
               ),
-              Messages.unread['MESSAGE'] > 0 ||
-                      Messages.unread['GROUP'] > 0 ||
-                      Messages.unread['CHANNEL'] > 0
+              hasUnread
                   ? Container(
                       width: 30,
                       height: 30,

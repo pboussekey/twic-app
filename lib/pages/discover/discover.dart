@@ -505,10 +505,7 @@ class DiscoverState extends State<Discover> {
             ])),
         _renderContent(mediaSize)
       ]),
-      bottomBar: BottomNav(
-        current: ButtonEnum.Discover,
-        refresh: setState,
-      ),
+      navBar: ButtonEnum.Discover,
     );
   }
 }

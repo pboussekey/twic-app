@@ -35,69 +35,74 @@ class OnboardingContentState extends State<OnboardingContent> {
         onTap: () {
           FocusScope.of(context).requestFocus((FocusNode()));
         },
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: mediaSize.height,
+            ),
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  previous == null
-                      ? Container()
-                      : IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () => Navigator.pop(context)),
-                  Spacer(),
+                  Row(
+                    children: <Widget>[
+                      previous == null
+                          ? Container()
+                          : IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => Navigator.pop(context)),
+                      Spacer(),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Button(
+                            text: "Next",
+                            height: 40,
+                            disabled: !isCompleted(),
+                            onPressed: () {
+                              if (null != onNext) {
+                                onNext();
+                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        next != null
+                                            ? Onboarding(state: next)
+                                            : Home(),
+                                  ));
+                            },
+                          ))
+                    ],
+                  ),
                   Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Button(
-                        text: "Next",
-                        height: 40,
-                        disabled: !isCompleted(),
-                        onPressed: () {
-                          if(null != onNext){
-                            onNext();
-                          }
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => next != null
-                                    ? Onboarding(state: next)
-                                    : Home(),
-                              ));
-                        },
-                      ))
+                    child: Text(
+                      title,
+                      style: Style.hugeTitle,
+                      textAlign: TextAlign.start,
+                    ),
+                    padding: EdgeInsets.only(
+                        right: 20.0, left: 20.0, bottom: 5.0, top: 20.0),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    child: Text(text, style: Style.greyText),
+                    padding: EdgeInsets.only(right: 20.0, left: 20.0),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                      child: child ??
+                          render(() {
+                            if (this.mounted) {
+                              setState(() {});
+                            }
+                          }),
+                      padding: padding ?? EdgeInsets.all(20.0)),
                 ],
               ),
-              Padding(
-                child: Text(
-                  title,
-                  style: Style.hugeTitle,
-                  textAlign: TextAlign.start,
-                ),
-                padding: EdgeInsets.only(
-                    right: 20.0, left: 20.0, bottom: 5.0, top: 20.0),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Padding(
-                child: Text(text, style: Style.greyText),
-                padding: EdgeInsets.only(right: 20.0, left: 20.0),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                  child: child ??
-                      render(() {
-                        if (this.mounted) {
-                          setState(() {});
-                        }
-                      }),
-                  padding: padding ?? EdgeInsets.all(20.0)),
-            ],
-          ),
-        ));
+            )));
   }
 }

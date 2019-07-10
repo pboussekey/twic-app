@@ -36,6 +36,16 @@ class AppCache {
     return services[T].list[id] as T;
   }
 
+  static void loadModel<T>(int id, {Function callback}) async {
+    if (null != services[T].list[id]) {
+      callback();
+    } else {
+      services[T].load(params: {
+        "id": [id]
+      }, loadModel: true, onCompleted: callback);
+    }
+  }
+
   static Cache get() {
     if (null == instance) {
       instance = InMemoryCache();

@@ -7,6 +7,7 @@ import 'package:twic_app/shared/components/round_picture.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:twic_app/shared/form/form.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 class CommentWidget extends StatefulWidget {
   final Post post;
@@ -102,7 +103,7 @@ class CommentWidgetState extends State<CommentWidget> {
                                 width: 25,
                                 height: 25,
                                 child: Icon(
-                                  Icons.favorite,
+                                  TwicFont.plain_heart,
                                   color: Style.red,
                                   size: 12.5,
                                 ),
@@ -122,7 +123,7 @@ class CommentWidgetState extends State<CommentWidget> {
                                 width: 25,
                                 height: 25,
                                 child: Icon(
-                                  Icons.favorite_border,
+                                  TwicFont.empty_heart,
                                   color: Style.red,
                                   size: 12.5,
                                 ),

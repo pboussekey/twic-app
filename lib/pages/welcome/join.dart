@@ -134,10 +134,7 @@ class JoinFormState extends State<JoinForm> {
                               final Map<String, dynamic> data = await ApiRest
                                   .request(cmd: 'requestLink', params: params);
                               setState(() => _isLoading = false);
-                              notifier.alert(
-                                  content: Text('Email sent! Please check your inbox.', style : Style.whiteText, textAlign: TextAlign.center,),
-                                  background: Style.mainColor,
-                                  context: context);
+
                               if (data['type'] != 'error') {
                                 await Session.setRequest(data['request_token']);
                                 setState(() {

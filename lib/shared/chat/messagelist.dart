@@ -10,9 +10,9 @@ import 'package:twic_app/shared/components/infinite_scroll.dart';
 class MessageList extends StatefulWidget {
   List<Message> list;
   final Function fetch;
-  final ScrollController scroll;
 
-  MessageList({this.fetch, this.list, @required this.scroll});
+  MessageList({this.fetch, this.list, Key key})
+      : super(key: key);
 
   @override
   MessageListState createState() => MessageListState();
@@ -25,7 +25,7 @@ class MessageListState extends State<MessageList> {
   void _scrollBottom() {
     if (_isBottom) {
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 100,
+        0,
         duration: const Duration(milliseconds: 1000),
         curve: Curves.easeOut,
       );
@@ -44,12 +44,13 @@ class MessageListState extends State<MessageList> {
 
   @override
   Widget build(BuildContext context) {
+    print(["MESSAGELIST", widget.key, widget.list.length]);
     Size mediaSize = MediaQuery.of(context).size;
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _scrollBottom();
     });
     return Container(
-        width: mediaSize.width - 40.0,
+        width: mediaSize.width,
         child: InfiniteScroll(
           fetch: widget.fetch,
           reverse: true,
@@ -62,6 +63,11 @@ class MessageListState extends State<MessageList> {
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                 children: <Widget>[
+                  index == 0
+                      ? SizedBox(
+                          height: 10,
+                        )
+                      : Container(),
                   Row(children: [
                     widget.list[index].user.id == Session.instance.user.id
                         ? Expanded(child: Container())
@@ -81,7 +87,7 @@ class MessageListState extends State<MessageList> {
                                     _renderDate(
                                         widget.list[index - 1].createdAt))
                         ? Padding(
-                            padding: EdgeInsets.only(bottom: 5),
+                            padding: EdgeInsets.only(bottom: 5, right: 20),
                             child: Text(
                                 _renderDate(widget.list[index].createdAt),
                                 style: Style.lightText))
@@ -92,32 +98,34 @@ class MessageListState extends State<MessageList> {
                         ? Expanded(child: Container())
                         : SizedBox(width: 25.0),
                     widget.list[index].user.id == Session.instance.user.id
-                        ? Container(
-                            width: mediaSize.width * 0.55,
-                            padding: null != widget.list[index].text
-                                ? EdgeInsets.only(
-                                    left: 10.0,
-                                    right: 10.0,
-                                    top: 5.0,
-                                    bottom: 5.0)
-                                : EdgeInsets.all(0),
-                            decoration: BoxDecoration(
-                                color: null != widget.list[index].text
-                                    ? Style.mainColor
-                                    : Colors.transparent,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8.0))),
-                            child: null != widget.list[index].text
-                                ? Text(
-                                    widget.list[index].text,
-                                    style: Style.whiteText,
-                                    textAlign: TextAlign.start,
-                                  )
-                                : RoundPicture(
-                                    picture:
-                                        widget.list[index].attachment.href(),
-                                  ),
-                          )
+                        ? Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: Container(
+                              width: mediaSize.width * 0.55,
+                              padding: null != widget.list[index].text
+                                  ? EdgeInsets.only(
+                                      left: 10.0,
+                                      right: 10.0,
+                                      top: 5.0,
+                                      bottom: 5.0)
+                                  : EdgeInsets.all(0),
+                              decoration: BoxDecoration(
+                                  color: null != widget.list[index].text
+                                      ? Style.mainColor
+                                      : Colors.transparent,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8.0))),
+                              child: null != widget.list[index].text
+                                  ? Text(
+                                      widget.list[index].text,
+                                      style: Style.whiteText,
+                                      textAlign: TextAlign.start,
+                                    )
+                                  : RoundPicture(
+                                      picture:
+                                          widget.list[index].attachment.href(),
+                                    ),
+                            ))
                         : Container(
                             width: mediaSize.width * 0.55,
                             padding: EdgeInsets.only(
@@ -155,8 +163,7 @@ class MessageListState extends State<MessageList> {
           count: widget.list.length,
           scroll: _scrollController,
           onScroll: () {
-            _isBottom = _scrollController.position.pixels >
-                _scrollController.position.maxScrollExtent - 100;
+            _isBottom = _scrollController.position.pixels < 100;
           },
         ));
   }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:twic_app/api/session.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:twic_app/api/services/firebase.dart';
 import 'package:twic_app/api/services/users.dart';
 
 class ApiRest {
@@ -16,10 +16,7 @@ class ApiRest {
     if (null != data['token']) {
       await Session.set(data);
       Session.setRequest('');
-      _fcm.configure(onMessage: (Map<String, dynamic> msg) {
-        print(msg);
-      });
-      _fcm.requestNotificationPermissions(IosNotificationSettings(
+      Firebase.instance.requestNotificationPermissions(IosNotificationSettings(
         sound: true,
         alert: true,
         badge: true,
@@ -27,7 +24,7 @@ class ApiRest {
       _fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
         print('IOS SETTINGS REGISTERED');
       });
-      await Users.registerFcmToken(await _fcm.getToken());
+      await Users.registerFcmToken(await Firebase.instance.getToken());
       onLogged();
     }
     else if(null != onError){

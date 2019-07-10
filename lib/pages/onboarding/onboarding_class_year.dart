@@ -192,6 +192,9 @@ class OnboardingClassYear extends OnboardingContentState {
                   height: 40,
                 ),
                 _renderButtons(runMutation, mediaSize.width),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ));
   }

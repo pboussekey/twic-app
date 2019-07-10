@@ -39,10 +39,8 @@ class InfiniteScrollState extends State<InfiniteScroll> {
   void _listener() {
     double maxScroll = widget.scroll.position.maxScrollExtent;
     double currentScroll = widget.scroll.offset;
-    bool scrolled = widget.reverse
-        ? widget.scroll.offset < previousScroll
-        : widget.scroll.offset > previousScroll;
-    double scroll = widget.reverse ? currentScroll : maxScroll - currentScroll;
+    bool scrolled =  widget.scroll.offset > previousScroll;
+    double scroll =  maxScroll - currentScroll;
     if (scrolled && scroll <= widget.delta) {
       widget.fetch();
     }

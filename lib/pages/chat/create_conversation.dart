@@ -167,7 +167,7 @@ class CreateConversationState extends State<CreateConversation> {
     switch (state) {
       case CreateState.Channel:
         return Container(
-            height: mediaSize.height - 206,
+            height: mediaSize.height - 208,
             child: Conversations.join(
                 onCompleted: (dynamic data) {
                   loading = false;
@@ -183,7 +183,7 @@ class CreateConversationState extends State<CreateConversation> {
                   }
                 },
                 builder: (RunMutation join, QueryResult result) => Container(
-                    height: mediaSize.height - 194,
+                    height: mediaSize.height - 196,
                     child: HashtagList(
                       key: _channelKey,
                       search: search,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:twic_app/shared/feed/comment.dart';
 import 'package:twic_app/api/models/models.dart';
 import 'package:twic_app/api/services/posts.dart';
 import 'package:twic_app/style/style.dart';
@@ -11,6 +10,7 @@ import 'package:twic_app/shared/components/round_picture.dart';
 import 'package:twic_app/shared/feed/comments_list.dart';
 import 'package:intl/intl.dart';
 import 'package:twic_app/api/session.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
 
 String _renderDate(DateTime date) {
   Duration since = DateTime.now().difference(date);
@@ -137,16 +137,16 @@ class _PostViewState extends State<_PostView> {
                   ? FileSlider(
                       files: widget.post.files,
                       builder: (TwicFile f) => CachedNetworkImage(
-                            width: mediaSize.width,
-                            height: mediaSize.width * 0.6,
-                            fit: BoxFit.cover,
-                            imageUrl: f.href(),
-                            placeholder: (context, url) => Center(
-                                child: Container(
-                                    child: CircularProgressIndicator())),
-                            fadeOutDuration: new Duration(seconds: 1),
-                            fadeInDuration: new Duration(seconds: 1),
-                          ),
+                        width: mediaSize.width,
+                        height: mediaSize.width * 0.6,
+                        fit: BoxFit.cover,
+                        imageUrl: f.href(),
+                        placeholder: (context, url) => Center(
+                            child:
+                                Container(child: CircularProgressIndicator())),
+                        fadeOutDuration: new Duration(seconds: 1),
+                        fadeInDuration: new Duration(seconds: 1),
+                      ),
                     )
                   : Container(),
               SizedBox(
@@ -216,27 +216,45 @@ class _PostViewState extends State<_PostView> {
                 height: 10,
               ),
               Row(children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.only(right: 5.0, left: 20),
-                  child: Icon(
-                    widget.post.isLiked
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: Style.red,
-                  ),
+                (widget.post.isLiked ? Posts.unlike : Posts.like)(
+                  builder: (RunMutation action, QueryResult result) => Button(
+                      background: Colors.transparent,
+                      padding: const EdgeInsets.all(0),
+                      radius: BorderRadius.all(Radius.circular(0)),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                        Container(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Icon(
+                            widget.post.isLiked
+                                ? TwicFont.plain_heart
+                                : TwicFont.empty_heart,
+                            color: Style.red,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            padding: const EdgeInsets.only(right: 5.0),
+                            child: Text(
+                              widget.post.nbLikes.toString(),
+                              style: Style.text,
+                            ))
+                      ]),
+                      onPressed: () {
+                        setState(() {
+                          widget.post.isLiked = !widget.post.isLiked;
+                          widget.post.nbLikes += widget.post.isLiked ? 1 : -1;
+                          action({"post_id": widget.post.id});
+                        });
+                      }),
                 ),
                 Container(
                   padding: const EdgeInsets.only(right: 5.0),
-                  child: Text(
-                    widget.post.nbLikes.toString(),
-                    style: Style.text,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(right: 5.0),
                   child: Icon(
-                    Icons.mode_comment,
+                    TwicFont.comment,
                     color: Style.blue,
+                    size: 18,
                   ),
                 ),
                 Container(

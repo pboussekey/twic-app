@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 export 'package:twic_app/api/services/api_graphql.dart';
 
 class Messages {
-  static Map<String, int> unread = { "MESSAGE" : 0, "GROUP" : 0, "CHANNEL" : 0};
-  static int lastMessage;
+  static bool inited = false;
+  static Map<int, List<Message>> messages = {};
+  static Function refresh;
+  static Map<String, int> unread = {"MESSAGE": 0, "GROUP": 0, "CHANNEL": 0};
 
   api.SocketClient socketClient =
       api.SocketClient('ws://10.0.2.2:3000/subscriptions');
@@ -108,7 +110,6 @@ class Messages {
                   id
                   firstname 
                   lastname 
-                  avatar{ name bucketname token } 
                 }
                 attachment{ name bucketname token } 
               }
@@ -124,8 +125,9 @@ class Messages {
     });
   }
 
-  static Widget getUnread({Function builder, BuildContext context}) {
-    return api.query<Map<String, int>>("""    
+  static void loadUnread(Function callback) {
+    if (false == inited) {
+      api.execute("""    
              query unread{
                 unread{
                 MESSAGE
@@ -133,14 +135,17 @@ class Messages {
                 CHANNEL
               }
             }
-          """, {}, onComplete: (dynamic data) {
+          """, {}).then((dynamic data) {
         unread = {
           'MESSAGE': data['unread']['MESSAGE'] as int ?? 0,
           'GROUP': data['unread']['GROUP'] as int ?? 0,
           'CHANNEL': data['unread']['CHANNEL'] as int ?? 0
         };
-      print([data, unread]);
-      return unread;
-    }, builder: builder);
+        inited = true;
+        callback();
+      });
+    } else {
+      callback();
+    }
   }
 }
