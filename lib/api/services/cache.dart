@@ -11,7 +11,7 @@ class AppCache {
   static Map<Type, ApiService> services = {
     User: Users(),
     Hashtag: Hashtags(),
-    Conversation: Conversations()
+    Conversation: Conversations(),
   };
 
   static Future<List<int>> getId<T>(

@@ -6,6 +6,7 @@ import 'package:share/receive_share_state.dart';
 import 'package:share/share.dart';
 import 'package:twic_app/pages/posts/create.dart';
 import 'package:twic_app/api/services/messages.dart';
+import 'package:twic_app/api/services/notifications.dart';
 import 'package:twic_app/api/services/cache.dart';
 import 'package:twic_app/api/session.dart';
 import 'package:twic_app/api/services/firebase.dart';
@@ -73,13 +74,11 @@ class _RootPageState extends ReceiveShareState<RootPage> {
               Message message = Message.fromJson(fcmMessage.data);
               Conversation conversation =
               AppCache.getModel<Conversation>(message.conversation_id);
-              print(["BEFORE", conversation?.toJson()]);
               if (null != conversation) {
                 conversation.unread++;
                 conversation.last = message.text;
                 conversation.lastId = message.id;
                 conversation.lastDate = message.createdAt;
-                print(["AFTER", conversation?.toJson()]);
               }
               if (message.user.id != Session.instance.user.id) {
                 Messages.unread[message.type]++;
@@ -102,7 +101,10 @@ class _RootPageState extends ReceiveShareState<RootPage> {
 
               break;
             default:
-              print("DEFAULT");
+              setState(() {
+                _navKey = UniqueKey();
+                Notifications.hasNotification = true;
+              });
               break;
           }
         } catch (error) {
@@ -129,6 +131,7 @@ class _RootPageState extends ReceiveShareState<RootPage> {
           default:
             break;
         }
+        return;
       },
       onResume: (Map<String, dynamic> _msg) {
         FcmMessage fcmMessage = FcmMessage.fromJson(_msg['data']);
@@ -149,6 +152,7 @@ class _RootPageState extends ReceiveShareState<RootPage> {
           default:
             break;
         }
+        return;
       },
     );
   }
@@ -192,6 +196,7 @@ class _RootPageState extends ReceiveShareState<RootPage> {
                           current: widget.navBar,
                           refresh: setState,
                           hasUnread: hasUnread,
+                          hasNotification: Notifications.hasNotification,
                           key: _navKey,
                         )
                             : widget.bottomBar)))))

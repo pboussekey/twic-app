@@ -14,7 +14,10 @@ class ApiRest {
         await request(cmd: 'login', params: {'magic_token': magicToken, 'request_token' : requestToken});
 
     if (null != data['token']) {
+      print("LOGIN");
       await Session.set(data);
+      await Session.init();
+      print("SESSION INITED");
       Session.setRequest('');
       Firebase.instance.requestNotificationPermissions(IosNotificationSettings(
         sound: true,
@@ -25,6 +28,7 @@ class ApiRest {
         print('IOS SETTINGS REGISTERED');
       });
       await Users.registerFcmToken(await Firebase.instance.getToken());
+      print("ON LOGGED");
       onLogged();
     }
     else if(null != onError){

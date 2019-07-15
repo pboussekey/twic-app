@@ -11,12 +11,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:twic_app/api/services/api_rest.dart';
 import 'package:flutter/services.dart';
+import 'package:twic_app/api/services/users.dart';
+import 'package:twic_app/api/services/firebase.dart';
 import 'dart:async';
 
 bool firstTime = false;
 
 void main() async {
-  await DotEnv().load('dev.env');
+  await DotEnv().load('conf.env');
   await Session.init();
 
   await translations.init();
@@ -31,6 +33,7 @@ void main() async {
 
 class TwicApp extends StatefulWidget {
   static restartApp(BuildContext context) {
+    print("RESTART APP");
     final _TwicApp state =
         context.ancestorStateOfType(const TypeMatcher<_TwicApp>());
     state.restartApp();
@@ -43,9 +46,16 @@ class TwicApp extends StatefulWidget {
 class _TwicApp extends State<TwicApp> {
   Timer timer;
 
+  void registerFcmToken() async{
+    await Users.registerFcmToken(await Firebase.instance.getToken());
+  }
+
   @override
   void initState() {
     super.initState();
+    if(null != Session.instance?.user){
+      registerFcmToken();
+    }
   }
 
   Future<void> checkRequest(BuildContext context) async {

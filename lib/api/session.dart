@@ -52,6 +52,13 @@ class Session{
 
   }
 
+  static Future<void> destroy() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('session', null);
+    Session.instance = null;
+  }
+
+
   User user;
   String token;
   String fbtoken;

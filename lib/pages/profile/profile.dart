@@ -13,9 +13,13 @@ import 'package:twic_app/shared/components/bottom_nav.dart';
 import 'package:twic_app/pages/profile/profile_followers.dart';
 import 'package:twic_app/pages/profile/profile_followings.dart';
 import 'package:twic_app/pages/profile/profile_edition.dart';
+import 'package:twic_app/pages/profile/notifications.dart';
+import 'package:twic_app/pages/profile/settings.dart';
 import 'package:twic_app/pages/profile/school.dart';
 import 'package:twic_app/pages/posts/create.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:twic_app/style/twic_font_icons.dart';
+import 'package:twic_app/api/services/notifications.dart';
 
 class Profile extends StatefulWidget {
   final int user_id;
@@ -107,17 +111,75 @@ class ProfileContentState extends State<ProfileContent> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Session.instance?.user?.id == widget.user_id
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Stack(children: [
+                            Button(
+                              width: 20,
+                              background: Colors.transparent,
+                              padding: EdgeInsets.all(0),
+                              child: Icon(
+                                TwicFont.notification,
+                                size: 18,
+                                color: Style.lightGrey,
+                              ),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          NotificationsPage())),
+                            ),
+                            Notifications.hasNotification
+                                ? Container(
+                                    width: 16,
+                                    height: 28,
+                                    alignment: Alignment(3, 2),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      height: 10,
+                                      width: 10,
+                                    ),
+                                  )
+                                : Container(
+                                    width: 0,
+                                    height: 0,
+                                  )
+                          ]),
+                          Button(
+                            width: 20,
+                            background: Colors.transparent,
+                            padding: EdgeInsets.all(0),
+                            child: Icon(
+                              TwicFont.settings,
+                              size: 18,
+                              color: Style.lightGrey,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        Settings())),
+                          )
+                        ],
+                      )
+                    : Container(),
+                SizedBox(height: 20),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Avatar(
                         href: widget.avatar,
                       ),
-                      Session.instance.user.id == widget.user_id
+                      Session.instance?.user?.id == widget.user_id
                           ? Button(
                               text: "Edit profile",
                               height: 40,
@@ -130,20 +192,18 @@ class ProfileContentState extends State<ProfileContent> {
                                           builder: (BuildContext context) =>
                                               ProfileEdition())).then(
                                     (dynamic value) => setState(() {
-                                          widget.firstname = value['avatar'];
-                                          widget.lastname = value['lastname'];
-                                          widget.description =
-                                              value['description'];
-                                          widget.classYear = value['classYear'];
-                                          widget.avatar = value['avatar'];
-                                          widget.school = value['school'];
-                                          widget.university =
-                                              value['university'];
-                                          widget.university_logo =
-                                              value['university_logo'];
-                                          widget.minor = value['minor'];
-                                          widget.major = value['major'];
-                                        }),
+                                      widget.firstname = value['avatar'];
+                                      widget.lastname = value['lastname'];
+                                      widget.description = value['description'];
+                                      widget.classYear = value['classYear'];
+                                      widget.avatar = value['avatar'];
+                                      widget.school = value['school'];
+                                      widget.university = value['university'];
+                                      widget.university_logo =
+                                          value['university_logo'];
+                                      widget.minor = value['minor'];
+                                      widget.major = value['major'];
+                                    }),
                                   ))
                           : Container()
                     ]),
@@ -400,12 +460,12 @@ class ProfileContentState extends State<ProfileContent> {
                   height: 20,
                 ),
                 Text(
-                    widget.user_id == Session.instance.user.id
+                    widget.user_id == Session.instance?.user?.id
                         ? "You have no posts"
                         : "No posts",
                     style: Style.titleStyle),
                 Text(
-                    widget.user_id == Session.instance.user.id
+                    widget.user_id == Session.instance?.user?.id
                         ? "Create your first post."
                         : "${widget.firstname} hasn’t shared anything on TWIC yet.",
                     style: Style.greyText),

@@ -8,3 +8,4 @@ export 'twic_file.dart';
 export 'user.dart';
 export 'abstract_model.dart';
 export 'fcm_message.dart';
+export 'twic_notification.dart';

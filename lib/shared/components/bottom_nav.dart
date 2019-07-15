@@ -17,11 +17,16 @@ class BottomNav extends StatelessWidget {
   final Function refresh;
   final Map<String, dynamic> filters = {};
   final bool hasUnread;
-  final bool hasNtf;
+  final bool hasNotification;
 
-
-  BottomNav({this.current, this.refresh, this.hasUnread = false, this.hasNtf = false, Key key}) : super(key : key){
-    print(["ALLO?!",hasUnread,key]);
+  BottomNav(
+      {this.current,
+      this.refresh,
+      this.hasUnread = false,
+      this.hasNotification = false,
+      Key key})
+      : super(key: key) {
+    print(["ALLO?!", hasUnread, key]);
   }
 
   @override
@@ -87,21 +92,41 @@ class BottomNav extends StatelessWidget {
                     color: Style.mainColor,
                     borderRadius: BorderRadius.all(Radius.circular(12))),
               ),
-              IconButton(
-                icon: Avatar(
-                  size: 22.0,
-                  href: Session.instance.user.avatar?.href(),
+              Stack(children: [
+                IconButton(
+                  icon: Avatar(
+                    size: 22.0,
+                    href: Session.instance.user.avatar?.href(),
+                  ),
+                  onPressed: () {
+                    current == ButtonEnum.Profile
+                        ? refresh(() {})
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => Profile(
+                                    user_id: Session.instance.user.id)));
+                  },
                 ),
-                onPressed: () {
-                  current == ButtonEnum.Profile
-                      ? refresh(() {})
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  Profile(user_id: Session.instance.user.id)));
-                },
-              ),
+                hasNotification
+                    ? Container(
+                        width: 25,
+                        height: 28,
+                        alignment: Alignment(3, 2),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          height: 10,
+                          width: 10,
+                        ),
+                      )
+                    : Container(
+                        width: 0,
+                        height: 0,
+                      )
+              ]),
             ]),
             Stack(children: [
               IconButton(
@@ -136,7 +161,10 @@ class BottomNav extends StatelessWidget {
                         width: 10,
                       ),
                     )
-                  : Container(width: 0, height: 0,)
+                  : Container(
+                      width: 0,
+                      height: 0,
+                    )
             ]),
           ],
         ));
